@@ -104,3 +104,10 @@ cd SurroundLab
 ./gradlew assembleDebug
 ```
 Die Universal-APK landet unter `app/build/outputs/apk/debug/app-debug.apk` (Android 8.0 / API 26+).
+
+---
+
+## Transparenz-Hinweis
+
+Diese App – einschließlich Kotlin/Compose-Quellcode, Echtzeit-Audio-Engine, Übersetzungen und Vorschaubildern – wurde mit KI-Unterstützung entwickelt und anschließend im eigenen Heimkino (Chromecast mit Google TV, AV-Receiver und Android-Smartphone) getestet und verfeinert.
+

@@ -73,3 +73,10 @@ AV アンプでホームシアターを組んだ方なら一度は経験する�
    *(直接 URL: `https://github.com/irohmaniac/SurroundLab/releases/latest/download/SurroundLab.apk`)*
 3. インストール許可を求められたら **「設定」→「許可」** をオンにして **「インストール」** を押します。
 4. テレビで **SurroundLab** を起動します。同じ Wi-Fi にあればスマホと自動的に接続されます。
+
+---
+
+## 透明性に関する注記
+
+本アプリ（Kotlin/Compose ソースコード、リアルタイム DSP オーディオエンジン、各言語翻訳、紹介用グラフィックを含む）は AI の支援を受けて開発され、実際のホームシアター環境（Chromecast with Google TV、AV アンプ、Android スマートフォン）で検証・調整されています。
+

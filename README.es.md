@@ -73,3 +73,10 @@ En lugar de vídeos comprimidos, SurroundLab abre en tiempo real un flujo **PCM 
    *(Enlace directo: `https://github.com/irohmaniac/SurroundLab/releases/latest/download/SurroundLab.apk`)*
 3. Si tu TV solicita permiso para instalar apps desde Downloader, selecciona **Ajustes → Permitir** y pulsa **Instalar**.
 4. Abre **SurroundLab** en el televisor. Cuando la TV y el móvil estén en el mismo Wi-Fi, se conectarán automáticamente.
+
+---
+
+## Nota de transparencia
+
+Esta aplicación —incluyendo su código Kotlin/Compose, el motor de audio en tiempo real, las traducciones y los gráficos de presentación— ha sido desarrollada con asistencia de IA y probada y ajustada en un equipo real de cine en casa (Chromecast con Google TV, receptor AV y smartphone Android).
+
