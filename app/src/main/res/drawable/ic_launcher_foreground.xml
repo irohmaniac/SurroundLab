@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Soft ambient cyan aura behind active Front-Left speaker -->
+    <path android:pathData="M35.5,35.5m-20,0a20,20 0 1,1 40,0a20,20 0 1,1 -40,0">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:centerX="35.5"
+                android:centerY="35.5"
+                android:endColor="#0038F2C4"
+                android:gradientRadius="20"
+                android:startColor="#5538F2C4"
+                android:type="radial" />
+        </aapt:attr>
+    </path>
+
+    <!-- Subtle circular 360 surround stage guide ring inside safe zone -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M54,54m-24.5,0a24.5,24.5 0 1,1 49,0a24.5,24.5 0 1,1 -49,0"
+        android:strokeAlpha="0.16"
+        android:strokeColor="#7EA5A6"
+        android:strokeWidth="1.0" />
+
+    <!-- Central Sweet-Spot Sofa Silhouette (M3 crisp rounded forms) -->
+    <!-- Backrest -->
+    <path
+        android:fillColor="#22363B"
+        android:pathData="M47,49.5L61,49.5A2.5,2.5 0 0,1 63.5,52L63.5,56.5L44.5,56.5L44.5,52A2.5,2.5 0 0,1 47,49.5Z"
+        android:strokeColor="#DCEAEA"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="1.7" />
+    <!-- Seat Cushion -->
+    <path
+        android:fillColor="#2A4247"
+        android:pathData="M45,55.5L63,55.5A1.2,1.2 0 0,1 64.2,56.7L64.2,58.8A1.5,1.5 0 0,1 62.7,60.3L45.3,60.3A1.5,1.5 0 0,1 43.8,58.8L43.8,56.7A1.2,1.2 0 0,1 45,55.5Z"
+        android:strokeColor="#DCEAEA"
+        android:strokeLineJoin="round"
+        android:strokeWidth="1.6" />
+    <!-- Left Armrest -->
+    <path
+        android:fillColor="#22363B"
+        android:pathData="M43.8,53.2A1.8,1.8 0 0,1 45.6,55L45.6,59A1.3,1.3 0 0,1 44.3,60.3L43.3,60.3A1.3,1.3 0 0,1 42,59L42,55A1.8,1.8 0 0,1 43.8,53.2Z"
+        android:strokeColor="#DCEAEA"
+        android:strokeWidth="1.6" />
+    <!-- Right Armrest -->
+    <path
+        android:fillColor="#22363B"
+        android:pathData="M64.2,53.2A1.8,1.8 0 0,1 66,55L66,59A1.3,1.3 0 0,1 64.7,60.3L63.7,60.3A1.3,1.3 0 0,1 62.4,59L62.4,55A1.8,1.8 0 0,1 64.2,53.2Z"
+        android:strokeColor="#DCEAEA"
+        android:strokeWidth="1.6" />
+    <!-- Couch Feet -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M44.5,60.6L44.5,62.4M63.5,60.6L63.5,62.4"
+        android:strokeColor="#DCEAEA"
+        android:strokeLineCap="round"
+        android:strokeWidth="1.6" />
+
+    <!-- Radiating Acoustic Waves from Active Front-Left Speaker -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M43.21,38.30A8.2,8.2 0 0,1 38.30,43.21"
+        android:strokeAlpha="0.98"
+        android:strokeColor="#5DFAD3"
+        android:strokeLineCap="round"
+        android:strokeWidth="1.8" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M46.31,39.43A11.5,11.5 0 0,1 39.43,46.31"
+        android:strokeAlpha="0.82"
+        android:strokeColor="#4DDAD5"
+        android:strokeLineCap="round"
+        android:strokeWidth="1.7" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M49.41,40.56A14.8,14.8 0 0,1 40.56,49.41"
+        android:strokeAlpha="0.58"
+        android:strokeColor="#4DDAD5"
+        android:strokeLineCap="round"
+        android:strokeWidth="1.5" />
+
+    <!-- ACTIVE Speaker: Front-Left (FL) at (35.5, 35.5), rotated +45 deg -->
+    <group
+        android:rotation="45"
+        android:translateX="35.5"
+        android:translateY="35.5">
+        <path
+            android:fillColor="#163F3B"
+            android:pathData="M-2.7,-6.0L2.7,-6.0A1.5,1.5 0 0,1 4.2,-4.5L4.2,4.5A1.5,1.5 0 0,1 2.7,6.0L-2.7,6.0A1.5,1.5 0 0,1 -4.2,4.5L-4.2,-4.5A1.5,1.5 0 0,1 -2.7,-6.0Z"
+            android:strokeColor="#5DFAD3"
+            android:strokeWidth="1.7" />
+        <path
+            android:fillColor="#5DFAD3"
+            android:pathData="M0,-2.8m-0.95,0a0.95,0.95 0 1,1 1.9,0a0.95,0.95 0 1,1 -1.9,0" />
+        <path
+            android:fillColor="#00000000"
+            android:pathData="M0,1.9m-2.1,0a2.1,2.1 0 1,1 4.2,0a2.1,2.1 0 1,1 -4.2,0"
+            android:strokeColor="#5DFAD3"
+            android:strokeWidth="1.2" />
+        <path
+            android:fillColor="#5DFAD3"
+            android:pathData="M0,1.9m-0.8,0a0.8,0.8 0 1,1 1.6,0a0.8,0.8 0 1,1 -1.6,0" />
+    </group>
+
+    <!-- Passive Speaker: Center (C) at (54, 29.0) -->
+    <group
+        android:rotation="0"
+        android:translateX="54"
+        android:translateY="29.0">
+        <path
+            android:fillColor="#19282C"
+            android:pathData="M-2.7,-6.0L2.7,-6.0A1.5,1.5 0 0,1 4.2,-4.5L4.2,4.5A1.5,1.5 0 0,1 2.7,6.0L-2.7,6.0A1.5,1.5 0 0,1 -4.2,4.5L-4.2,-4.5A1.5,1.5 0 0,1 -2.7,-6.0Z"
+            android:strokeColor="#8EB0B3"
+            android:strokeWidth="1.5" />
+        <path
+            android:fillColor="#8EB0B3"
+            android:pathData="M0,-2.8m-0.85,0a0.85,0.85 0 1,1 1.7,0a0.85,0.85 0 1,1 -1.7,0" />
+        <path
+            android:fillColor="#00000000"
+            android:pathData="M0,1.9m-2.0,0a2.0,2.0 0 1,1 4.0,0a2.0,2.0 0 1,1 -4.0,0"
+            android:strokeColor="#8EB0B3"
+            android:strokeWidth="1.15" />
+        <path
+            android:fillColor="#8EB0B3"
+            android:pathData="M0,1.9m-0.75,0a0.75,0.75 0 1,1 1.5,0a0.75,0.75 0 1,1 -1.5,0" />
+    </group>
+
+    <!-- Passive Speaker: Front-Right (FR) at (72.5, 35.5), rotated -45 deg -->
+    <group
+        android:rotation="-45"
+        android:translateX="72.5"
+        android:translateY="35.5">
+        <path
+            android:fillColor="#19282C"
+            android:pathData="M-2.7,-6.0L2.7,-6.0A1.5,1.5 0 0,1 4.2,-4.5L4.2,4.5A1.5,1.5 0 0,1 2.7,6.0L-2.7,6.0A1.5,1.5 0 0,1 -4.2,4.5L-4.2,-4.5A1.5,1.5 0 0,1 -2.7,-6.0Z"
+            android:strokeColor="#8EB0B3"
+            android:strokeWidth="1.5" />
+        <path
+            android:fillColor="#8EB0B3"
+            android:pathData="M0,-2.8m-0.85,0a0.85,0.85 0 1,1 1.7,0a0.85,0.85 0 1,1 -1.7,0" />
+        <path
+            android:fillColor="#00000000"
+            android:pathData="M0,1.9m-2.0,0a2.0,2.0 0 1,1 4.0,0a2.0,2.0 0 1,1 -4.0,0"
+            android:strokeColor="#8EB0B3"
+            android:strokeWidth="1.15" />
+        <path
+            android:fillColor="#8EB0B3"
+            android:pathData="M0,1.9m-0.75,0a0.75,0.75 0 1,1 1.5,0a0.75,0.75 0 1,1 -1.5,0" />
+    </group>
+
+    <!-- Compact LFE Subwoofer at (29.0, 55.0) with warm amber accent -->
+    <group
+        android:translateX="29.0"
+        android:translateY="55.0">
+        <path
+            android:fillColor="#212224"
+            android:pathData="M-3.1,-4.4L3.1,-4.4A1.4,1.4 0 0,1 4.5,-3.0L4.5,3.0A1.4,1.4 0 0,1 3.1,4.4L-3.1,4.4A1.4,1.4 0 0,1 -4.5,3.0L-4.5,-3.0A1.4,1.4 0 0,1 -3.1,-4.4Z"
+            android:strokeAlpha="0.88"
+            android:strokeColor="#FFB77B"
+            android:strokeWidth="1.4" />
+        <path
+            android:fillColor="#00000000"
+            android:pathData="M0,0m-2.3,0a2.3,2.3 0 1,1 4.6,0a2.3,2.3 0 1,1 -4.6,0"
+            android:strokeAlpha="0.85"
+            android:strokeColor="#FFB77B"
+            android:strokeWidth="1.15" />
+        <path
+            android:fillColor="#FFB77B"
+            android:pathData="M0,0m-0.9,0a0.9,0.9 0 1,1 1.8,0a0.9,0.9 0 1,1 -1.8,0" />
+    </group>
+
+    <!-- Passive Speaker: Surround-Left (SL) at (35.5, 72.5), rotated -45 deg -->
+    <group
+        android:rotation="-45"
+        android:translateX="35.5"
+        android:translateY="72.5">
+        <path
+            android:fillColor="#172326"
+            android:pathData="M-2.7,-6.0L2.7,-6.0A1.5,1.5 0 0,1 4.2,-4.5L4.2,4.5A1.5,1.5 0 0,1 2.7,6.0L-2.7,6.0A1.5,1.5 0 0,1 -4.2,4.5L-4.2,-4.5A1.5,1.5 0 0,1 -2.7,-6.0Z"
+            android:strokeAlpha="0.85"
+            android:strokeColor="#749496"
+            android:strokeWidth="1.5" />
+        <path
+            android:fillAlpha="0.85"
+            android:fillColor="#749496"
+            android:pathData="M0,-2.8m-0.85,0a0.85,0.85 0 1,1 1.7,0a0.85,0.85 0 1,1 -1.7,0" />
+        <path
+            android:fillColor="#00000000"
+            android:pathData="M0,1.9m-2.0,0a2.0,2.0 0 1,1 4.0,0a2.0,2.0 0 1,1 -4.0,0"
+            android:strokeAlpha="0.85"
+            android:strokeColor="#749496"
+            android:strokeWidth="1.15" />
+        <path
+            android:fillAlpha="0.85"
+            android:fillColor="#749496"
+            android:pathData="M0,1.9m-0.75,0a0.75,0.75 0 1,1 1.5,0a0.75,0.75 0 1,1 -1.5,0" />
+    </group>
+
+    <!-- Passive Speaker: Surround-Right (SR) at (72.5, 72.5), rotated +45 deg -->
+    <group
+        android:rotation="45"
+        android:translateX="72.5"
+        android:translateY="72.5">
+        <path
+            android:fillColor="#172326"
+            android:pathData="M-2.7,-6.0L2.7,-6.0A1.5,1.5 0 0,1 4.2,-4.5L4.2,4.5A1.5,1.5 0 0,1 2.7,6.0L-2.7,6.0A1.5,1.5 0 0,1 -4.2,4.5L-4.2,-4.5A1.5,1.5 0 0,1 -2.7,-6.0Z"
+            android:strokeAlpha="0.85"
+            android:strokeColor="#749496"
+            android:strokeWidth="1.5" />
+        <path
+            android:fillAlpha="0.85"
+            android:fillColor="#749496"
+            android:pathData="M0,-2.8m-0.85,0a0.85,0.85 0 1,1 1.7,0a0.85,0.85 0 1,1 -1.7,0" />
+        <path
+            android:fillColor="#00000000"
+            android:pathData="M0,1.9m-2.0,0a2.0,2.0 0 1,1 4.0,0a2.0,2.0 0 1,1 -4.0,0"
+            android:strokeAlpha="0.85"
+            android:strokeColor="#749496"
+            android:strokeWidth="1.15" />
+        <path
+            android:fillAlpha="0.85"
+            android:fillColor="#749496"
+            android:pathData="M0,1.9m-0.75,0a0.75,0.75 0 1,1 1.5,0a0.75,0.75 0 1,1 -1.5,0" />
+    </group>
+</vector>

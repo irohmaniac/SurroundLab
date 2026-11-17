@@ -1,0 +1,29 @@
+# Gradle & Kotlin caches / build outputs
+.gradle/
+.kotlin/
+**/build/
+build/
+
+# Android Studio / IntelliJ IDEA
+.idea/
+*.iml
+.navigation/
+captures/
+.cxx/
+.externalNativeBuild/
+
+# Local environment & signing keys
+local.properties
+*.jks
+*.keystore
+
+# Compiled binaries / packages
+*.apk
+*.ap_
+*.aab
+*.dex
+
+# Log files & OS metadata
+*.log
+.DS_Store
+Thumbs.db
