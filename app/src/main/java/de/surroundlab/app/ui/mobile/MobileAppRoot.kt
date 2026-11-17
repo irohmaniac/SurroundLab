@@ -45,6 +45,7 @@ fun MobileAppRoot(
     val localAudioLibrary by vm.localAudioLibrary.collectAsStateWithLifecycle()
     val audioSyncStatus by vm.audioSyncStatus.collectAsStateWithLifecycle()
     val onboardingCompleted by vm.onboardingCompleted.collectAsStateWithLifecycle()
+    val updateState by vm.updateState.collectAsStateWithLifecycle()
 
     LaunchedEffect(statusToast) {
         if (statusToast != null) {
@@ -96,7 +97,12 @@ fun MobileAppRoot(
                     onSpeakerLayoutPresetChange = { preset -> vm.setSpeakerLayoutPreset(preset) },
                     onLanguageChange = { lang -> vm.setAppLanguage(lang) },
                     onOpenSpeakerSetup = { overlay = MobileSubOverlay.SETUP },
-                    onOpenGuide = { vm.reopenOnboarding() }
+                    onOpenGuide = { vm.reopenOnboarding() },
+                    updateState = updateState,
+                    currentVersion = vm.currentAppVersion,
+                    onCheckForUpdates = { vm.checkForUpdates() },
+                    onDownloadUpdate = { vm.downloadAndInstallUpdate() },
+                    onInstallUpdate = { vm.installDownloadedUpdate() }
                 )
             }
             state.activeMode == TestMode.HUB -> {

@@ -3,7 +3,11 @@ package de.surroundlab.app.ui
 import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import de.surroundlab.app.SurroundLabApp
+import de.surroundlab.app.network.AppUpdateManager
+import de.surroundlab.app.network.UpdateState
+import kotlinx.coroutines.launch
 import de.surroundlab.app.domain.model.AppLanguage
 import de.surroundlab.app.domain.model.AudioSyncStatus
 import de.surroundlab.app.domain.model.ConnectionStatus
@@ -27,6 +31,10 @@ import kotlinx.coroutines.flow.StateFlow
 class SurroundViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repo = (application as SurroundLabApp).repository
+    private val updateManager = AppUpdateManager(application.applicationContext)
+
+    val updateState: StateFlow<UpdateState> = updateManager.state
+    val currentAppVersion: String = updateManager.currentVersionClean
 
     val isTvDevice: Boolean = repo.isTvDevice
     val uiState: StateFlow<SurroundAppState> = repo.uiState
@@ -111,4 +119,27 @@ class SurroundViewModel(application: Application) : AndroidViewModel(application
     fun completeOnboarding() = repo.completeOnboarding()
 
     fun reopenOnboarding() = repo.reopenOnboarding()
+
+    fun checkForUpdates() {
+        viewModelScope.launch {
+            updateManager.checkForUpdates()
+        }
+    }
+
+    fun downloadAndInstallUpdate() {
+        val current = updateState.value
+        if (current is UpdateState.UpdateAvailable) {
+            viewModelScope.launch {
+                updateManager.downloadAndInstall(current.downloadUrl, current.latestVersion)
+            }
+        }
+    }
+
+    fun installDownloadedUpdate() {
+        when (val current = updateState.value) {
+            is UpdateState.ReadyToInstall -> updateManager.launchApkInstaller(current.apkFile, current.version)
+            is UpdateState.PermissionRequired -> updateManager.launchApkInstaller(current.apkFile, current.version)
+            else -> Unit
+        }
+    }
 }

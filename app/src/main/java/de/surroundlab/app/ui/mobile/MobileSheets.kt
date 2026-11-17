@@ -44,6 +44,7 @@ import androidx.compose.material.icons.rounded.LibraryMusic
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material.icons.rounded.SpeakerGroup
+import androidx.compose.material.icons.rounded.SystemUpdate
 import androidx.compose.material.icons.rounded.Tv
 import androidx.compose.material.icons.rounded.UploadFile
 import androidx.compose.material3.Button
@@ -52,6 +53,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -86,6 +88,7 @@ import de.surroundlab.app.domain.model.DiscoveredHost
 import de.surroundlab.app.domain.model.SpeakerLayoutPreset
 import de.surroundlab.app.domain.model.SurroundAppState
 import de.surroundlab.app.domain.model.TrackSyncStatus
+import de.surroundlab.app.network.UpdateState
 import de.surroundlab.app.ui.components.OnboardingSlide
 import de.surroundlab.app.ui.i18n.AFTVNEWS_DOWNLOADER_CODE
 import de.surroundlab.app.ui.i18n.GITHUB_LATEST_APK_URL
@@ -538,7 +541,12 @@ fun MobileConnectionSettingsScreen(
     onSpeakerLayoutPresetChange: (SpeakerLayoutPreset) -> Unit,
     onLanguageChange: (AppLanguage) -> Unit,
     onOpenSpeakerSetup: () -> Unit,
-    onOpenGuide: () -> Unit
+    onOpenGuide: () -> Unit,
+    updateState: UpdateState,
+    currentVersion: String,
+    onCheckForUpdates: () -> Unit,
+    onDownloadUpdate: () -> Unit,
+    onInstallUpdate: () -> Unit
 ) {
     val s = LocalAppStrings.current
     BackHandler { onBack() }
@@ -935,6 +943,150 @@ fun MobileConnectionSettingsScreen(
                                 fontWeight = FontWeight.Bold,
                                 color = if (selected) SurroundColors.OnPrimaryContainer else SurroundColors.OnSurfaceVariant
                             )
+                        }
+                    }
+                }
+            }
+
+            // In-App GitHub Update Checker & Installer
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(24.dp))
+                    .background(SurroundColors.SurfaceContainer)
+                    .padding(18.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.SystemUpdate,
+                        contentDescription = null,
+                        tint = SurroundColors.Primary
+                    )
+                    Column {
+                        Text(
+                            text = s.updateSectionTitle,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = SurroundColors.OnSurface
+                        )
+                        Text(
+                            text = s.updateCurrentVersion(currentVersion),
+                            fontFamily = MonoFontFamily,
+                            fontSize = 12.sp,
+                            color = SurroundColors.OnSurfaceVariant
+                        )
+                    }
+                }
+
+                when (updateState) {
+                    UpdateState.Idle -> Unit
+                    UpdateState.Checking -> {
+                        Text(
+                            text = s.updateCheckingText,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = SurroundColors.Primary
+                        )
+                    }
+                    is UpdateState.UpToDate -> {
+                        Text(
+                            text = s.updateUpToDateText(updateState.currentVersion),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = SurroundColors.Primary
+                        )
+                    }
+                    is UpdateState.UpdateAvailable -> {
+                        Text(
+                            text = s.updateAvailableText(updateState.latestVersion),
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = SurroundColors.Primary
+                        )
+                    }
+                    is UpdateState.Downloading -> {
+                        Text(
+                            text = s.updateDownloadingText(updateState.progressPercent),
+                            fontFamily = MonoFontFamily,
+                            fontSize = 12.sp,
+                            color = SurroundColors.Primary
+                        )
+                        LinearProgressIndicator(
+                            progress = { updateState.progressPercent / 100f },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(6.dp)
+                                .clip(CircleShape),
+                            color = SurroundColors.Primary,
+                            trackColor = SurroundColors.SurfaceContainerHigh
+                        )
+                    }
+                    is UpdateState.ReadyToInstall -> {
+                        Text(
+                            text = s.updateAvailableText(updateState.version),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = SurroundColors.Primary
+                        )
+                    }
+                    is UpdateState.PermissionRequired -> {
+                        Text(
+                            text = s.updatePermissionHint,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = SurroundColors.Tertiary
+                        )
+                    }
+                    is UpdateState.Error -> {
+                        Text(
+                            text = s.updateErrorText(updateState.message),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = SurroundColors.Error
+                        )
+                    }
+                }
+
+                when (updateState) {
+                    is UpdateState.UpdateAvailable -> {
+                        Button(
+                            onClick = onDownloadUpdate,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(46.dp),
+                            shape = CircleShape,
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = SurroundColors.Primary,
+                                contentColor = SurroundColors.OnPrimary
+                            )
+                        ) {
+                            Text(s.updateDownloadInstallBtn, fontWeight = FontWeight.Bold)
+                        }
+                    }
+                    is UpdateState.ReadyToInstall, is UpdateState.PermissionRequired -> {
+                        Button(
+                            onClick = onInstallUpdate,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(46.dp),
+                            shape = CircleShape,
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = SurroundColors.Primary,
+                                contentColor = SurroundColors.OnPrimary
+                            )
+                        ) {
+                            Text(s.updateInstallNowBtn, fontWeight = FontWeight.Bold)
+                        }
+                    }
+                    UpdateState.Checking, is UpdateState.Downloading -> Unit
+                    else -> {
+                        OutlinedButton(
+                            onClick = onCheckForUpdates,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(46.dp),
+                            shape = CircleShape
+                        ) {
+                            Text(s.updateCheckBtn, fontWeight = FontWeight.SemiBold)
                         }
                     }
                 }

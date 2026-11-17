@@ -53,6 +53,7 @@ import de.surroundlab.app.domain.model.AppLanguage
 import de.surroundlab.app.domain.model.CustomAudioTrack
 import de.surroundlab.app.domain.model.SpeakerLayoutPreset
 import de.surroundlab.app.domain.model.SurroundAppState
+import de.surroundlab.app.network.UpdateState
 import de.surroundlab.app.ui.components.QrCodeGenerator
 import de.surroundlab.app.ui.i18n.LocalAppStrings
 import de.surroundlab.app.ui.theme.MonoFontFamily
@@ -194,6 +195,11 @@ fun TvSettingsDialog(
     onOpenSpeakerSetup: () -> Unit,
     onRefreshNetwork: () -> Unit,
     onOpenGuide: () -> Unit,
+    updateState: UpdateState,
+    currentVersion: String,
+    onCheckForUpdates: () -> Unit,
+    onDownloadUpdate: () -> Unit,
+    onInstallUpdate: () -> Unit,
     onDismiss: () -> Unit
 ) {
     val s = LocalAppStrings.current
@@ -532,6 +538,74 @@ fun TvSettingsDialog(
                     }
                 ) {
                     Text(s.guideBtnShort)
+                }
+            }
+
+            // In-App GitHub Update Checker on TV (D-Pad friendly)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(18.dp))
+                    .background(SurroundColors.SurfaceContainer)
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
+                ) {
+                    Text(
+                        text = "${s.updateSectionTitle} • v$currentVersion",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = SurroundColors.OnSurface
+                    )
+                    val statusMsg = when (updateState) {
+                        UpdateState.Idle -> s.updateCurrentVersion(currentVersion)
+                        UpdateState.Checking -> s.updateCheckingText
+                        is UpdateState.UpToDate -> s.updateUpToDateText(updateState.currentVersion)
+                        is UpdateState.UpdateAvailable -> s.updateAvailableText(updateState.latestVersion)
+                        is UpdateState.Downloading -> s.updateDownloadingText(updateState.progressPercent)
+                        is UpdateState.ReadyToInstall -> s.updateAvailableText(updateState.version)
+                        is UpdateState.PermissionRequired -> s.updatePermissionHint
+                        is UpdateState.Error -> s.updateErrorText(updateState.message)
+                    }
+                    Text(
+                        text = statusMsg,
+                        fontSize = 12.5.sp,
+                        color = if (updateState is UpdateState.Error) SurroundColors.Error else SurroundColors.Primary
+                    )
+                }
+                when (updateState) {
+                    is UpdateState.UpdateAvailable -> {
+                        TvPillSurface(
+                            onClick = onDownloadUpdate,
+                            containerColor = SurroundColors.Primary,
+                            focusedContainerColor = SurroundColors.Primary,
+                            contentColor = SurroundColors.OnPrimary,
+                            focusedContentColor = SurroundColors.OnPrimary
+                        ) {
+                            Text(s.updateDownloadInstallBtn, fontWeight = FontWeight.Bold)
+                        }
+                    }
+                    is UpdateState.ReadyToInstall, is UpdateState.PermissionRequired -> {
+                        TvPillSurface(
+                            onClick = onInstallUpdate,
+                            containerColor = SurroundColors.Primary,
+                            focusedContainerColor = SurroundColors.Primary,
+                            contentColor = SurroundColors.OnPrimary,
+                            focusedContentColor = SurroundColors.OnPrimary
+                        ) {
+                            Text(s.updateInstallNowBtn, fontWeight = FontWeight.Bold)
+                        }
+                    }
+                    UpdateState.Checking, is UpdateState.Downloading -> Unit
+                    else -> {
+                        TvPillSurface(onClick = onCheckForUpdates) {
+                            Text(s.updateCheckBtn)
+                        }
+                    }
                 }
             }
         }

@@ -384,5 +384,17 @@ val StringsJa = AppStrings(
     tvInstallCopyUrlBtn = "GitHub URL をコピー",
     tvInstallUrlCopiedToast = "ダウンロード URL をコピーしました",
     tvInstallCloseBtn = "閉じる",
-    donatePaypalBtn = "開発を支援する (PayPal)"
+    donatePaypalBtn = "開発を支援する (PayPal)",
+
+    updateSectionTitle = "アップデート確認 (GitHub)",
+    updateCurrentVersion = { v -> "現在のバージョン: v$v" },
+    updateCheckBtn = "アップデートを確認",
+    updateCheckingText = "GitHub で最新バージョンを確認中…",
+    updateUpToDateText = { v -> "最新バージョンです (v$v)。" },
+    updateAvailableText = { v -> "新しいバージョン v$v が利用可能です！" },
+    updateDownloadInstallBtn = "ダウンロードしてインストール",
+    updateDownloadingText = { pct -> "APK をダウンロード中… $pct%" },
+    updateInstallNowBtn = "今すぐインストール",
+    updatePermissionHint = "提供元不明アプリのインストール許可を一度オンにしてから、もう一度「今すぐインストール」を押してください。",
+    updateErrorText = { err -> "確認に失敗しました ($err)" }
 )

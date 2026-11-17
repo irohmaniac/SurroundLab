@@ -384,5 +384,17 @@ val StringsPt = AppStrings(
     tvInstallCopyUrlBtn = "Copiar link do GitHub",
     tvInstallUrlCopiedToast = "Link copiado para a área de transferência",
     tvInstallCloseBtn = "Fechar",
-    donatePaypalBtn = "Apoiar o projeto (PayPal)"
+    donatePaypalBtn = "Apoiar o projeto (PayPal)",
+
+    updateSectionTitle = "Atualizações (GitHub)",
+    updateCurrentVersion = { v -> "Versão instalada: v$v" },
+    updateCheckBtn = "Verificar atualizações",
+    updateCheckingText = "Verificando novas versões no GitHub…",
+    updateUpToDateText = { v -> "Tudo atualizado (v$v)." },
+    updateAvailableText = { v -> "Nova versão v$v disponível!" },
+    updateDownloadInstallBtn = "Baixar e instalar",
+    updateDownloadingText = { pct -> "Baixando APK… $pct%" },
+    updateInstallNowBtn = "Instalar agora",
+    updatePermissionHint = "Permita a instalação desta fonte uma vez e toque novamente em “Instalar agora”.",
+    updateErrorText = { err -> "Falha ao verificar ($err)" }
 )

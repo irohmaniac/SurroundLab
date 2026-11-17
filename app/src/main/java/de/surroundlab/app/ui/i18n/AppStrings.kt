@@ -293,7 +293,20 @@ data class AppStrings(
     val tvInstallCloseBtn: String,
 
     // Donation
-    val donatePaypalBtn: String
+    val donatePaypalBtn: String,
+
+    // In-App GitHub Updater
+    val updateSectionTitle: String,
+    val updateCurrentVersion: (version: String) -> String,
+    val updateCheckBtn: String,
+    val updateCheckingText: String,
+    val updateUpToDateText: (version: String) -> String,
+    val updateAvailableText: (version: String) -> String,
+    val updateDownloadInstallBtn: String,
+    val updateDownloadingText: (percent: Int) -> String,
+    val updateInstallNowBtn: String,
+    val updatePermissionHint: String,
+    val updateErrorText: (detail: String) -> String
 )
 
 const val AFTVNEWS_DOWNLOADER_CODE = "7281113"

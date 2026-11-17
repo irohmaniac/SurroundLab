@@ -22,6 +22,7 @@ fun TvAppRoot(
     var showSettingsDialog by remember { mutableStateOf(false) }
     var showLibraryDialog by remember { mutableStateOf(false) }
     val onboardingCompleted by vm.onboardingCompleted.collectAsStateWithLifecycle()
+    val updateState by vm.updateState.collectAsStateWithLifecycle()
 
     Box(modifier = Modifier.fillMaxSize()) {
         when {
@@ -95,6 +96,11 @@ fun TvAppRoot(
                 onOpenSpeakerSetup = { showSetupScreen = true },
                 onRefreshNetwork = { vm.refreshNetworkAddress() },
                 onOpenGuide = { vm.reopenOnboarding() },
+                updateState = updateState,
+                currentVersion = vm.currentAppVersion,
+                onCheckForUpdates = { vm.checkForUpdates() },
+                onDownloadUpdate = { vm.downloadAndInstallUpdate() },
+                onInstallUpdate = { vm.installDownloadedUpdate() },
                 onDismiss = { showSettingsDialog = false }
             )
         }
