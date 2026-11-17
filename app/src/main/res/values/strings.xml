@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SurroundLab</string>
+    <string name="host_service_channel_name">SurroundLab Audio Host</string>
+    <string name="host_service_channel_description">Hält den Mehrkanal-Audio-Host und WebSocket-Server im lokalen WLAN aktiv.</string>
+    <string name="host_notification_title">SurroundLab TV-Host aktiv</string>
+    <string name="host_notification_text">Mehrkanal-Audio-Engine und Controller-Server laufen</string>
+</resources>

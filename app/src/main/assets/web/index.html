@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>SurroundLab — Web &amp; iOS Controller</title>
+  <link rel="stylesheet" href="/web/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-badge">SL</div>
+        <div>
+          <h1>SurroundLab</h1>
+          <div class="subline" id="connSubtitle">Connecting to TV host...</div>
+        </div>
+      </div>
+      <div class="header-pills">
+        <span class="pill" id="connBadge"><span class="dot"></span><span id="connText">Offline</span></span>
+        <select id="setupSelect" class="pill-select" title="Speaker Setup">
+          <option value="2.0">2.0 Stereo</option>
+          <option value="2.1">2.1 Audio</option>
+          <option value="3.1">3.1 Stage</option>
+          <option value="5.0">5.0 Surround</option>
+          <option value="5.1">5.1 Cinema</option>
+          <option value="7.1">7.1 Extended</option>
+        </select>
+      </div>
+    </header>
+
+    <div id="tokenBanner" class="token-banner hidden">
+      <span data-i18n="tokenPrompt">Enter Session Token (shown on TV):</span>
+      <div class="token-row">
+        <input id="tokenInput" type="text" maxlength="6" placeholder="TOKEN" />
+        <button id="tokenConnectBtn" class="btn-primary" data-i18n="connect">Connect</button>
+      </div>
+    </div>
+
+    <!-- Hub-and-Spoke View Switcher -->
+    <main id="viewHub" class="view">
+      <div class="card-grid">
+        <button class="mode-card" data-mode="SINGLE_SPEAKER">
+          <span class="badge teal">01 TEST</span>
+          <h2 data-i18n="mode1Title">Single Speaker Test</h2>
+          <p data-i18n="mode1Desc">Isolate individual channels, verify speaker wiring, and choose Pink Noise, Sine Wave, or custom audio.</p>
+        </button>
+
+        <button class="mode-card" data-mode="GENERATOR">
+          <span class="badge amber">02 SINE</span>
+          <h2 data-i18n="mode2Title">Frequency &amp; Preset Generator</h2>
+          <p data-i18n="mode2Desc">20 Hz – 20 kHz sine wave or pink noise across selected channels &amp; subwoofer presets.</p>
+        </button>
+
+        <button class="mode-card" data-mode="PUCK_2D">
+          <span class="badge blue">03 SPATIAL</span>
+          <h2 data-i18n="mode3Title">2D Spatial Sound Puck</h2>
+          <p data-i18n="mode3Desc">Real-time room panner via touch/mouse with Virtual Object, Speaker Focus, and Auto-Orbit.</p>
+        </button>
+      </div>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h3 data-i18n="masterLevelTitle">Master Level (Hearing Protection)</h3>
+          <span class="mono" id="masterGainLabel">-12 dBFS</span>
+        </div>
+        <input id="masterGainSlider" type="range" min="-30" max="0" step="1" value="-12" />
+        <label class="switch-label" style="margin-top:4px;color:var(--on-bg);">
+          <input type="checkbox" id="swap71Toggle" />
+          <span data-i18n="swap71Label">Swap 7.1 Surround &amp; Back (HDMI-HAL)</span>
+        </label>
+        <div class="panel-head" style="margin-top:10px;">
+          <span class="muted" data-i18n="layoutAnglesLabel">Placement Angles</span>
+          <select id="layoutPresetSelect" class="pill-select">
+            <option value="COMPACT" data-i18n="presetCompact">Narrow (±22°)</option>
+            <option value="STANDARD" data-i18n="presetStandard">Standard (±30°)</option>
+            <option value="WIDE" data-i18n="presetWide">Wide (±40°)</option>
+          </select>
+        </div>
+        <p class="muted" id="layoutPresetDesc" style="margin:4px 0 0 0;font-size:12px;"></p>
+        <div class="panel-head" style="margin-top:12px;">
+          <span class="muted" data-i18n="languageLabel">Language</span>
+          <select id="langSelect" class="pill-select">
+            <option value="AUTO" id="langAutoOption">Auto</option>
+            <option value="DE">Deutsch</option>
+            <option value="EN">English</option>
+            <option value="ES">Español</option>
+            <option value="FR">Français</option>
+            <option value="PT">Português</option>
+            <option value="JA">日本語</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h3><span data-i18n="audioLibHeading">Audio Library</span> (<span id="libCount">0</span>)</h3>
+          <label class="btn-primary upload-label">
+            <span data-i18n="uploadBtn">+ Upload Audio</span>
+            <input id="audioUploadInput" type="file" accept="audio/*" hidden />
+          </label>
+        </div>
+        <p class="muted" id="uploadStatus">Supports .wav, .mp3, .flac, .ogg up to 30 MB.</p>
+        <div id="audioLibraryList" class="track-list"></div>
+      </section>
+    </main>
+
+    <!-- Mode 1: Single Speaker -->
+    <main id="viewSingle" class="view hidden">
+      <div class="subview-head">
+        <button class="btn-tonal back-hub" data-i18n="backHub">← Hub</button>
+        <h2 data-i18n="mode1Title">Single Speaker Test</h2>
+      </div>
+      <div id="singleSpeakerList" class="speaker-list"></div>
+    </main>
+
+    <!-- Mode 2: Frequency Generator -->
+    <main id="viewGenerator" class="view hidden">
+      <div class="subview-head">
+        <button class="btn-tonal back-hub" data-i18n="backHub">← Hub</button>
+        <h2 data-i18n="genShortTitle">Frequency Generator</h2>
+      </div>
+
+      <div class="chip-row" id="genPresets"></div>
+      <div class="chip-row hidden" id="genCustomChannels"></div>
+
+      <div class="segmented" id="genSignals">
+        <button data-sig="SINE" class="seg-btn active" data-i18n="sine">Sine</button>
+        <button data-sig="PINK_NOISE" class="seg-btn" data-i18n="pinkNoise">Pink Noise</button>
+      </div>
+
+      <div class="panel freq-box">
+        <div class="mono freq-big" id="genFreqDisplay">400 Hz</div>
+        <input id="genFreqSlider" type="range" min="20" max="20000" step="1" value="400" />
+        <div class="step-row">
+          <button class="btn-tonal gen-step" data-delta="-50">-50</button>
+          <button class="btn-tonal gen-step" data-delta="-10">-10</button>
+          <button class="btn-tonal gen-step" data-delta="-1">-1</button>
+          <button class="btn-tonal gen-step" data-delta="1">+1</button>
+          <button class="btn-tonal gen-step" data-delta="10">+10</button>
+          <button class="btn-tonal gen-step" data-delta="50">+50</button>
+        </div>
+        <div class="chip-row">
+          <button class="chip-btn gen-preset-hz" data-hz="40">40 Hz</button>
+          <button class="chip-btn gen-preset-hz" data-hz="60">60 Hz</button>
+          <button class="chip-btn gen-preset-hz" data-hz="80">80 Hz</button>
+          <button class="chip-btn gen-preset-hz" data-hz="400">400 Hz</button>
+          <button class="chip-btn gen-preset-hz" data-hz="1000">1 kHz</button>
+          <button class="chip-btn gen-preset-hz" data-hz="10000">10 kHz</button>
+        </div>
+      </div>
+
+      <button id="genPlayBtn" class="btn-primary full-btn">Start</button>
+    </main>
+
+    <!-- Mode 3: 2D Spatial Puck -->
+    <main id="viewPuck" class="view hidden">
+      <div class="subview-head">
+        <button class="btn-tonal back-hub" data-i18n="backHub">← Hub</button>
+        <h2 data-i18n="mode3Title">2D Spatial Sound Puck</h2>
+        <span class="mono pill" id="puckCoords">X:0 Y:55</span>
+      </div>
+
+      <div class="segmented" id="puckPanning">
+        <button data-pan="SWEET_SPOT_VBAP" class="seg-btn active" data-i18n="panVirtual">Virtual Object</button>
+        <button data-pan="ROOM_DISTANCE" class="seg-btn" data-i18n="panSpeaker">Speaker Focus</button>
+      </div>
+
+      <div class="panel puck-controls">
+        <label class="switch-label">
+          <input type="checkbox" id="puckSubToggle" checked />
+          <span>.1 Subwoofer</span>
+        </label>
+        <button id="puckOrbitBtn" class="chip-btn" data-i18n="autoOrbit">Auto-Orbit</button>
+        <select id="puckSourceSelect" class="pill-select">
+          <option value="PINK_NOISE" data-i18n="pinkNoise">Pink Noise</option>
+          <option value="SINE" data-i18n="sine">Sine</option>
+          <option value="CUSTOM_AUDIO" data-i18n="customAudio">Custom Audio</option>
+        </select>
+        <select id="puckAudioSelect" class="pill-select hidden"></select>
+      </div>
+
+      <div id="puckOrbitSpeeds" class="segmented hidden">
+        <button data-speed="SLOW" class="seg-btn" data-i18n="speedSlow">Speed: Slow</button>
+        <button data-speed="MEDIUM" class="seg-btn active" data-i18n="speedMed">Speed: Medium</button>
+        <button data-speed="FAST" class="seg-btn" data-i18n="speedFast">Speed: Fast</button>
+      </div>
+
+      <div class="stage-wrap">
+        <canvas id="puckCanvas" width="420" height="420"></canvas>
+      </div>
+
+      <div id="puckMeters" class="meter-grid"></div>
+
+      <button id="puckPlayBtn" class="btn-primary full-btn">Start Spatial Audio</button>
+    </main>
+  </div>
+
+  <script src="/web/app.js"></script>
+</body>
+</html>

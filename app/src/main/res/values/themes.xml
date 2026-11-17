@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.SurroundLab" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/surround_bg</item>
+        <item name="android:statusBarColor">@color/surround_bg</item>
+        <item name="android:navigationBarColor">@color/surround_bg</item>
+    </style>
+
+    <color name="surround_bg">#0E1414</color>
+</resources>
