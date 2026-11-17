@@ -968,13 +968,13 @@ fun MobileConnectionSettingsScreen(
                     )
                     Column {
                         Text(
-                            text = s.updateSectionTitle,
+                            text = s.update.sectionTitle,
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                             color = SurroundColors.OnSurface
                         )
                         Text(
-                            text = s.updateCurrentVersion(currentVersion),
+                            text = s.update.currentVersion(currentVersion),
                             fontFamily = MonoFontFamily,
                             fontSize = 12.sp,
                             color = SurroundColors.OnSurfaceVariant
@@ -986,21 +986,21 @@ fun MobileConnectionSettingsScreen(
                     UpdateState.Idle -> Unit
                     UpdateState.Checking -> {
                         Text(
-                            text = s.updateCheckingText,
+                            text = s.update.checkingText,
                             style = MaterialTheme.typography.bodySmall,
                             color = SurroundColors.Primary
                         )
                     }
                     is UpdateState.UpToDate -> {
                         Text(
-                            text = s.updateUpToDateText(updateState.currentVersion),
+                            text = s.update.upToDateText(updateState.currentVersion),
                             style = MaterialTheme.typography.bodySmall,
                             color = SurroundColors.Primary
                         )
                     }
                     is UpdateState.UpdateAvailable -> {
                         Text(
-                            text = s.updateAvailableText(updateState.latestVersion),
+                            text = s.update.availableText(updateState.latestVersion),
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Bold,
                             color = SurroundColors.Primary
@@ -1008,7 +1008,7 @@ fun MobileConnectionSettingsScreen(
                     }
                     is UpdateState.Downloading -> {
                         Text(
-                            text = s.updateDownloadingText(updateState.progressPercent),
+                            text = s.update.downloadingText(updateState.progressPercent),
                             fontFamily = MonoFontFamily,
                             fontSize = 12.sp,
                             color = SurroundColors.Primary
@@ -1025,21 +1025,21 @@ fun MobileConnectionSettingsScreen(
                     }
                     is UpdateState.ReadyToInstall -> {
                         Text(
-                            text = s.updateAvailableText(updateState.version),
+                            text = s.update.availableText(updateState.version),
                             style = MaterialTheme.typography.bodySmall,
                             color = SurroundColors.Primary
                         )
                     }
                     is UpdateState.PermissionRequired -> {
                         Text(
-                            text = s.updatePermissionHint,
+                            text = s.update.permissionHint,
                             style = MaterialTheme.typography.bodySmall,
                             color = SurroundColors.Tertiary
                         )
                     }
                     is UpdateState.Error -> {
                         Text(
-                            text = s.updateErrorText(updateState.message),
+                            text = s.update.errorText(updateState.message),
                             style = MaterialTheme.typography.bodySmall,
                             color = SurroundColors.Error
                         )
@@ -1059,7 +1059,7 @@ fun MobileConnectionSettingsScreen(
                                 contentColor = SurroundColors.OnPrimary
                             )
                         ) {
-                            Text(s.updateDownloadInstallBtn, fontWeight = FontWeight.Bold)
+                            Text(s.update.downloadInstallBtn, fontWeight = FontWeight.Bold)
                         }
                     }
                     is UpdateState.ReadyToInstall, is UpdateState.PermissionRequired -> {
@@ -1074,7 +1074,7 @@ fun MobileConnectionSettingsScreen(
                                 contentColor = SurroundColors.OnPrimary
                             )
                         ) {
-                            Text(s.updateInstallNowBtn, fontWeight = FontWeight.Bold)
+                            Text(s.update.installNowBtn, fontWeight = FontWeight.Bold)
                         }
                     }
                     UpdateState.Checking, is UpdateState.Downloading -> Unit
@@ -1086,7 +1086,7 @@ fun MobileConnectionSettingsScreen(
                                 .height(46.dp),
                             shape = CircleShape
                         ) {
-                            Text(s.updateCheckBtn, fontWeight = FontWeight.SemiBold)
+                            Text(s.update.checkBtn, fontWeight = FontWeight.SemiBold)
                         }
                     }
                 }
@@ -1121,7 +1121,7 @@ fun MobileConnectionSettingsScreen(
             ) {
                 Icon(Icons.Rounded.Tv, contentDescription = null)
                 Spacer(Modifier.width(8.dp))
-                Text(s.tvInstallMenuBtn, fontWeight = FontWeight.Bold)
+                Text(s.tvInstall.menuBtn, fontWeight = FontWeight.Bold)
             }
 
             OutlinedButton(
@@ -1178,11 +1178,11 @@ fun MobileOnboardingDialog(
     var step by remember { mutableIntStateOf(0) }
     val slides = remember(s) {
         val tvInstallSlide = OnboardingSlide(
-            badge = s.tvInstallBadge,
-            title = s.tvInstallTitle,
-            subtitle = s.tvInstallSubtitle,
+            badge = s.tvInstall.badge,
+            title = s.tvInstall.title,
+            subtitle = s.tvInstall.subtitle,
             icon = Icons.Rounded.Tv,
-            bullets = s.tvInstallSteps
+            bullets = s.tvInstall.steps
         )
         listOf(
             s.onboardingSlides[0],
@@ -1387,7 +1387,7 @@ private fun TvInstallDownloadLinkCard() {
         OutlinedButton(
             onClick = {
                 clipboard.setText(AnnotatedString(GITHUB_LATEST_APK_URL))
-                Toast.makeText(context, s.tvInstallUrlCopiedToast, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, s.tvInstall.urlCopiedToast, Toast.LENGTH_SHORT).show()
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -1396,7 +1396,7 @@ private fun TvInstallDownloadLinkCard() {
         ) {
             Icon(Icons.Rounded.ContentCopy, contentDescription = null, modifier = Modifier.size(16.dp))
             Spacer(Modifier.width(8.dp))
-            Text(s.tvInstallCopyUrlBtn, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+            Text(s.tvInstall.copyUrlBtn, fontSize = 13.sp, fontWeight = FontWeight.Bold)
         }
     }
 }
@@ -1434,7 +1434,7 @@ fun MobileTvInstallGuideDialog(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text(
-                    text = s.tvInstallBadge,
+                    text = s.tvInstall.badge,
                     fontFamily = MonoFontFamily,
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Bold,
@@ -1461,13 +1461,13 @@ fun MobileTvInstallGuideDialog(
                     }
                     Column {
                         Text(
-                            text = s.tvInstallTitle,
+                            text = s.tvInstall.title,
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold,
                             color = SurroundColors.OnSurface
                         )
                         Text(
-                            text = s.tvInstallSubtitle,
+                            text = s.tvInstall.subtitle,
                             style = MaterialTheme.typography.bodySmall,
                             color = SurroundColors.OnSurfaceVariant
                         )
@@ -1475,7 +1475,7 @@ fun MobileTvInstallGuideDialog(
                 }
 
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    s.tvInstallSteps.forEach { (headline, desc) ->
+                    s.tvInstall.steps.forEach { (headline, desc) ->
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -1512,7 +1512,7 @@ fun MobileTvInstallGuideDialog(
                         contentColor = SurroundColors.OnPrimary
                     )
                 ) {
-                    Text(s.tvInstallCloseBtn, fontWeight = FontWeight.Bold)
+                    Text(s.tvInstall.closeBtn, fontWeight = FontWeight.Bold)
                 }
             }
         }

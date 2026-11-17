@@ -371,30 +371,34 @@ val StringsJa = AppStrings(
     onboardingNext = "次へ →",
     onboardingFinish = "はじめる",
 
-    tvInstallMenuBtn = "TV へのインストール手順を見る",
-    tvInstallBadge = "TV 導入ガイド •「DOWNLOADER」経由",
-    tvInstallTitle = "SurroundLab を TV にインストール",
-    tvInstallSubtitle = "PC なしで Chromecast / Android TV にアプリを入れる簡単な 4 ステップです:",
-    tvInstallSteps = listOf(
-        "1. TV に「Downloader」を入れる" to "テレビの Google Play ストアを開き、「Downloader by AFTVnews」（オレンジ色のアイコン）を検索してインストールします。",
-        "2. Downloader でコード 7281113 を入力" to "テレビで「Downloader」を開き、番号コード 7281113（または下の GitHub URL）を入力して「Go」を押します。",
-        "3. インストール許可を一度だけオン" to "「Downloader」からのインストール確認が出たら、「設定」→「許可」をオンにして「インストール」を押します。",
-        "4. 起動して自動接続" to "テレビで SurroundLab を開きます。テレビとスマホが同じ Wi-Fi にあれば、QR コードなしで自動的に接続されます。"
+    tvInstall = TvInstallStrings(
+        menuBtn = "TV へのインストール手順を見る",
+        badge = "TV 導入ガイド •「DOWNLOADER」経由",
+        title = "SurroundLab を TV にインストール",
+        subtitle = "PC なしで Chromecast / Android TV にアプリを入れる簡単な 4 ステップです:",
+        steps = listOf(
+            "1. TV に「Downloader」を入れる" to "テレビの Google Play ストアを開き、「Downloader by AFTVnews」（オレンジ色のアイコン）を検索してインストールします。",
+            "2. Downloader でコード 7281113 を入力" to "テレビで「Downloader」を開き、番号コード 7281113（または下の GitHub URL）を入力して「Go」を押します。",
+            "3. インストール許可を一度だけオン" to "「Downloader」からのインストール確認が出たら、「設定」→「許可」をオンにして「インストール」を押します。",
+            "4. 起動して自動接続" to "テレビで SurroundLab を開きます。テレビとスマホが同じ Wi-Fi にあれば、QR コードなしで自動的に接続されます。"
+        ),
+        copyUrlBtn = "GitHub URL をコピー",
+        urlCopiedToast = "ダウンロード URL をコピーしました",
+        closeBtn = "閉じる"
     ),
-    tvInstallCopyUrlBtn = "GitHub URL をコピー",
-    tvInstallUrlCopiedToast = "ダウンロード URL をコピーしました",
-    tvInstallCloseBtn = "閉じる",
     donatePaypalBtn = "開発を支援する (PayPal)",
 
-    updateSectionTitle = "アップデート確認 (GitHub)",
-    updateCurrentVersion = { v -> "現在のバージョン: v$v" },
-    updateCheckBtn = "アップデートを確認",
-    updateCheckingText = "GitHub で最新バージョンを確認中…",
-    updateUpToDateText = { v -> "最新バージョンです (v$v)。" },
-    updateAvailableText = { v -> "新しいバージョン v$v が利用可能です！" },
-    updateDownloadInstallBtn = "ダウンロードしてインストール",
-    updateDownloadingText = { pct -> "APK をダウンロード中… $pct%" },
-    updateInstallNowBtn = "今すぐインストール",
-    updatePermissionHint = "提供元不明アプリのインストール許可を一度オンにしてから、もう一度「今すぐインストール」を押してください。",
-    updateErrorText = { err -> "確認に失敗しました ($err)" }
+    update = UpdateStrings(
+        sectionTitle = "アップデート確認 (GitHub)",
+        currentVersion = { v -> "現在のバージョン: v$v" },
+        checkBtn = "アップデートを確認",
+        checkingText = "GitHub で最新バージョンを確認中…",
+        upToDateText = { v -> "最新バージョンです (v$v)。" },
+        availableText = { v -> "新しいバージョン v$v が利用可能です！" },
+        downloadInstallBtn = "ダウンロードしてインストール",
+        downloadingText = { pct -> "APK をダウンロード中… $pct%" },
+        installNowBtn = "今すぐインストール",
+        permissionHint = "提供元不明アプリのインストール許可を一度オンにしてから、もう一度「今すぐインストール」を押してください。",
+        errorText = { err -> "確認に失敗しました ($err)" }
+    )
 )

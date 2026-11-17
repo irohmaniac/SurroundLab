@@ -283,30 +283,38 @@ data class AppStrings(
     val onboardingFinish: String,
 
     // TV Installation Guide (Downloader by AFTVnews + GitHub Release)
-    val tvInstallMenuBtn: String,
-    val tvInstallBadge: String,
-    val tvInstallTitle: String,
-    val tvInstallSubtitle: String,
-    val tvInstallSteps: List<Pair<String, String>>,
-    val tvInstallCopyUrlBtn: String,
-    val tvInstallUrlCopiedToast: String,
-    val tvInstallCloseBtn: String,
+    val tvInstall: TvInstallStrings,
 
     // Donation
     val donatePaypalBtn: String,
 
     // In-App GitHub Updater
-    val updateSectionTitle: String,
-    val updateCurrentVersion: (version: String) -> String,
-    val updateCheckBtn: String,
-    val updateCheckingText: String,
-    val updateUpToDateText: (version: String) -> String,
-    val updateAvailableText: (version: String) -> String,
-    val updateDownloadInstallBtn: String,
-    val updateDownloadingText: (percent: Int) -> String,
-    val updateInstallNowBtn: String,
-    val updatePermissionHint: String,
-    val updateErrorText: (detail: String) -> String
+    val update: UpdateStrings
+)
+
+data class TvInstallStrings(
+    val menuBtn: String,
+    val badge: String,
+    val title: String,
+    val subtitle: String,
+    val steps: List<Pair<String, String>>,
+    val copyUrlBtn: String,
+    val urlCopiedToast: String,
+    val closeBtn: String
+)
+
+data class UpdateStrings(
+    val sectionTitle: String,
+    val currentVersion: (version: String) -> String,
+    val checkBtn: String,
+    val checkingText: String,
+    val upToDateText: (version: String) -> String,
+    val availableText: (version: String) -> String,
+    val downloadInstallBtn: String,
+    val downloadingText: (percent: Int) -> String,
+    val installNowBtn: String,
+    val permissionHint: String,
+    val errorText: (detail: String) -> String
 )
 
 const val AFTVNEWS_DOWNLOADER_CODE = "7281113"

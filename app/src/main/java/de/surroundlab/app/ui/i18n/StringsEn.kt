@@ -371,30 +371,34 @@ val StringsEn = AppStrings(
     onboardingNext = "Next →",
     onboardingFinish = "Get Started",
 
-    tvInstallMenuBtn = "Install App on Your TV (Guide)",
-    tvInstallBadge = "TV SETUP • VIA “DOWNLOADER”",
-    tvInstallTitle = "Install SurroundLab on Your TV",
-    tvInstallSubtitle = "Get the app onto your Chromecast / Android TV in 4 easy steps — no PC required:",
-    tvInstallSteps = listOf(
-        "1. Install “Downloader” on your TV" to "Open the Google Play Store on your TV, search for “Downloader by AFTVnews” (orange icon), and install the free app.",
-        "2. Enter code 7281113 in Downloader" to "Open “Downloader” on your TV, simply type the short code 7281113 (or the GitHub URL below), and press “Go”.",
-        "3. Allow installation once" to "If your TV asks for permission to install apps from “Downloader”, open Settings → Allow, then tap Install.",
-        "4. Open & connect automatically" to "Launch SurroundLab on your TV. As soon as your TV and phone share the same Wi-Fi, they discover each other automatically."
+    tvInstall = TvInstallStrings(
+        menuBtn = "Install App on Your TV (Guide)",
+        badge = "TV SETUP • VIA “DOWNLOADER”",
+        title = "Install SurroundLab on Your TV",
+        subtitle = "Get the app onto your Chromecast / Android TV in 4 easy steps — no PC required:",
+        steps = listOf(
+            "1. Install “Downloader” on your TV" to "Open the Google Play Store on your TV, search for “Downloader by AFTVnews” (orange icon), and install the free app.",
+            "2. Enter code 7281113 in Downloader" to "Open “Downloader” on your TV, simply type the short code 7281113 (or the GitHub URL below), and press “Go”.",
+            "3. Allow installation once" to "If your TV asks for permission to install apps from “Downloader”, open Settings → Allow, then tap Install.",
+            "4. Open & connect automatically" to "Launch SurroundLab on your TV. As soon as your TV and phone share the same Wi-Fi, they discover each other automatically."
+        ),
+        copyUrlBtn = "Copy GitHub Link",
+        urlCopiedToast = "Download link copied to clipboard",
+        closeBtn = "Close"
     ),
-    tvInstallCopyUrlBtn = "Copy GitHub Link",
-    tvInstallUrlCopiedToast = "Download link copied to clipboard",
-    tvInstallCloseBtn = "Close",
     donatePaypalBtn = "Support Project (PayPal)",
 
-    updateSectionTitle = "App Updates (GitHub)",
-    updateCurrentVersion = { v -> "Installed version: v$v" },
-    updateCheckBtn = "Check for Updates",
-    updateCheckingText = "Checking GitHub for a newer release…",
-    updateUpToDateText = { v -> "You're up to date (v$v)." },
-    updateAvailableText = { v -> "New version v$v available!" },
-    updateDownloadInstallBtn = "Download & Install",
-    updateDownloadingText = { pct -> "Downloading APK… $pct%" },
-    updateInstallNowBtn = "Install Now",
-    updatePermissionHint = "Please allow app installs from this source once, then tap “Install Now” again.",
-    updateErrorText = { err -> "Update check failed ($err)" }
+    update = UpdateStrings(
+        sectionTitle = "App Updates (GitHub)",
+        currentVersion = { v -> "Installed version: v$v" },
+        checkBtn = "Check for Updates",
+        checkingText = "Checking GitHub for a newer release…",
+        upToDateText = { v -> "You're up to date (v$v)." },
+        availableText = { v -> "New version v$v available!" },
+        downloadInstallBtn = "Download & Install",
+        downloadingText = { pct -> "Downloading APK… $pct%" },
+        installNowBtn = "Install Now",
+        permissionHint = "Please allow app installs from this source once, then tap “Install Now” again.",
+        errorText = { err -> "Update check failed ($err)" }
+    )
 )

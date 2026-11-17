@@ -372,30 +372,34 @@ val StringsDe = AppStrings(
     onboardingNext = "Weiter →",
     onboardingFinish = "Los geht's",
 
-    tvInstallMenuBtn = "App auf dem TV installieren (Anleitung)",
-    tvInstallBadge = "TV-INSTALLATION • VIA „DOWNLOADER“",
-    tvInstallTitle = "SurroundLab auf dem TV installieren",
-    tvInstallSubtitle = "So bringst du die App in 4 einfachen Schritten ohne PC auf deinen Chromecast / Android TV:",
-    tvInstallSteps = listOf(
-        "1. „Downloader“ auf dem TV laden" to "Öffne den Google Play Store auf deinem Fernseher, suche nach „Downloader by AFTVnews“ (oranges Symbol) und installiere die kostenlose App.",
-        "2. Code 7281113 im Downloader eingeben" to "Öffne „Downloader“ am TV, tippe einfach den Zahlencode 7281113 ein (oder die GitHub-Adresse unten) und drücke auf „Go“.",
-        "3. Installation einmalig erlauben" to "Falls dein Fernseher fragt, ob „Downloader“ Apps installieren darf, gehe kurz auf Einstellungen → Zulassen und tippe danach auf Installieren.",
-        "4. Öffnen & automatisch verbinden" to "Starte SurroundLab auf dem Fernseher. Sobald TV und Handy im selben WLAN sind, finden sich beide ganz ohne QR-Code automatisch."
+    tvInstall = TvInstallStrings(
+        menuBtn = "App auf dem TV installieren (Anleitung)",
+        badge = "TV-INSTALLATION • VIA „DOWNLOADER“",
+        title = "SurroundLab auf dem TV installieren",
+        subtitle = "So bringst du die App in 4 einfachen Schritten ohne PC auf deinen Chromecast / Android TV:",
+        steps = listOf(
+            "1. „Downloader“ auf dem TV laden" to "Öffne den Google Play Store auf deinem Fernseher, suche nach „Downloader by AFTVnews“ (oranges Symbol) und installiere die kostenlose App.",
+            "2. Code 7281113 im Downloader eingeben" to "Öffne „Downloader“ am TV, tippe einfach den Zahlencode 7281113 ein (oder die GitHub-Adresse unten) und drücke auf „Go“.",
+            "3. Installation einmalig erlauben" to "Falls dein Fernseher fragt, ob „Downloader“ Apps installieren darf, gehe kurz auf Einstellungen → Zulassen und tippe danach auf Installieren.",
+            "4. Öffnen & automatisch verbinden" to "Starte SurroundLab auf dem Fernseher. Sobald TV und Handy im selben WLAN sind, finden sich beide ganz ohne QR-Code automatisch."
+        ),
+        copyUrlBtn = "GitHub-Link kopieren",
+        urlCopiedToast = "Download-Link in die Zwischenablage kopiert",
+        closeBtn = "Schließen"
     ),
-    tvInstallCopyUrlBtn = "GitHub-Link kopieren",
-    tvInstallUrlCopiedToast = "Download-Link in die Zwischenablage kopiert",
-    tvInstallCloseBtn = "Schließen",
     donatePaypalBtn = "Projekt unterstützen (PayPal)",
 
-    updateSectionTitle = "App-Updates (GitHub)",
-    updateCurrentVersion = { v -> "Installierte Version: v$v" },
-    updateCheckBtn = "Auf Updates prüfen",
-    updateCheckingText = "Suche auf GitHub nach neuer Version…",
-    updateUpToDateText = { v -> "Alles aktuell (v$v)." },
-    updateAvailableText = { v -> "Neue Version v$v verfügbar!" },
-    updateDownloadInstallBtn = "Herunterladen & Installieren",
-    updateDownloadingText = { pct -> "Lade APK herunter… $pct%" },
-    updateInstallNowBtn = "Jetzt installieren",
-    updatePermissionHint = "Bitte erlaube einmalig die Installation aus dieser Quelle und tippe danach erneut auf „Jetzt installieren“.",
-    updateErrorText = { err -> "Update-Prüfung fehlgeschlagen ($err)" }
+    update = UpdateStrings(
+        sectionTitle = "App-Updates (GitHub)",
+        currentVersion = { v -> "Installierte Version: v$v" },
+        checkBtn = "Auf Updates prüfen",
+        checkingText = "Suche auf GitHub nach neuer Version…",
+        upToDateText = { v -> "Alles aktuell (v$v)." },
+        availableText = { v -> "Neue Version v$v verfügbar!" },
+        downloadInstallBtn = "Herunterladen & Installieren",
+        downloadingText = { pct -> "Lade APK herunter… $pct%" },
+        installNowBtn = "Jetzt installieren",
+        permissionHint = "Bitte erlaube einmalig die Installation aus dieser Quelle und tippe danach erneut auf „Jetzt installieren“.",
+        errorText = { err -> "Update-Prüfung fehlgeschlagen ($err)" }
+    )
 )

@@ -371,30 +371,34 @@ val StringsFr = AppStrings(
     onboardingNext = "Suivant →",
     onboardingFinish = "C'est parti",
 
-    tvInstallMenuBtn = "Installer l'app sur la TV (Guide)",
-    tvInstallBadge = "INSTALLATION TV • VIA « DOWNLOADER »",
-    tvInstallTitle = "Installer SurroundLab sur la TV",
-    tvInstallSubtitle = "Installez l'application sur votre Chromecast / Android TV en 4 étapes simples, sans PC :",
-    tvInstallSteps = listOf(
-        "1. Installer « Downloader » sur la TV" to "Ouvrez le Google Play Store sur votre TV, cherchez « Downloader by AFTVnews » (icône orange) et installez cette appli gratuite.",
-        "2. Saisir le code 7281113 dans Downloader" to "Ouvrez « Downloader » sur la TV, saisissez simplement le code 7281113 (ou l'adresse GitHub ci-dessous) puis validez sur « Go ».",
-        "3. Autoriser l'installation une fois" to "Si la TV demande l'autorisation pour « Downloader », ouvrez Paramètres → Autoriser, puis cliquez sur Installer.",
-        "4. Ouvrir & connexion automatique" to "Lancez SurroundLab sur la TV. Dès que la TV et le mobile sont sur le même Wi-Fi, ils se détectent automatiquement."
+    tvInstall = TvInstallStrings(
+        menuBtn = "Installer l'app sur la TV (Guide)",
+        badge = "INSTALLATION TV • VIA « DOWNLOADER »",
+        title = "Installer SurroundLab sur la TV",
+        subtitle = "Installez l'application sur votre Chromecast / Android TV en 4 étapes simples, sans PC :",
+        steps = listOf(
+            "1. Installer « Downloader » sur la TV" to "Ouvrez le Google Play Store sur votre TV, cherchez « Downloader by AFTVnews » (icône orange) et installez cette appli gratuite.",
+            "2. Saisir le code 7281113 dans Downloader" to "Ouvrez « Downloader » sur la TV, saisissez simplement le code 7281113 (ou l'adresse GitHub ci-dessous) puis validez sur « Go ».",
+            "3. Autoriser l'installation une fois" to "Si la TV demande l'autorisation pour « Downloader », ouvrez Paramètres → Autoriser, puis cliquez sur Installer.",
+            "4. Ouvrir & connexion automatique" to "Lancez SurroundLab sur la TV. Dès que la TV et le mobile sont sur le même Wi-Fi, ils se détectent automatiquement."
+        ),
+        copyUrlBtn = "Copier le lien GitHub",
+        urlCopiedToast = "Lien de téléchargement copié",
+        closeBtn = "Fermer"
     ),
-    tvInstallCopyUrlBtn = "Copier le lien GitHub",
-    tvInstallUrlCopiedToast = "Lien de téléchargement copié",
-    tvInstallCloseBtn = "Fermer",
     donatePaypalBtn = "Soutenir le projet (PayPal)",
 
-    updateSectionTitle = "Mises à jour (GitHub)",
-    updateCurrentVersion = { v -> "Version installée : v$v" },
-    updateCheckBtn = "Rechercher des mises à jour",
-    updateCheckingText = "Vérification sur GitHub en cours…",
-    updateUpToDateText = { v -> "Tout est à jour (v$v)." },
-    updateAvailableText = { v -> "Nouvelle version v$v disponible !" },
-    updateDownloadInstallBtn = "Télécharger & Installer",
-    updateDownloadingText = { pct -> "Téléchargement APK… $pct%" },
-    updateInstallNowBtn = "Installer maintenant",
-    updatePermissionHint = "Autorisez l'installation depuis cette source une fois, puis appuyez de nouveau sur « Installer maintenant ».",
-    updateErrorText = { err -> "Échec de la vérification ($err)" }
+    update = UpdateStrings(
+        sectionTitle = "Mises à jour (GitHub)",
+        currentVersion = { v -> "Version installée : v$v" },
+        checkBtn = "Rechercher des mises à jour",
+        checkingText = "Vérification sur GitHub en cours…",
+        upToDateText = { v -> "Tout est à jour (v$v)." },
+        availableText = { v -> "Nouvelle version v$v disponible !" },
+        downloadInstallBtn = "Télécharger & Installer",
+        downloadingText = { pct -> "Téléchargement APK… $pct%" },
+        installNowBtn = "Installer maintenant",
+        permissionHint = "Autorisez l'installation depuis cette source une fois, puis appuyez de nouveau sur « Installer maintenant ».",
+        errorText = { err -> "Échec de la vérification ($err)" }
+    )
 )

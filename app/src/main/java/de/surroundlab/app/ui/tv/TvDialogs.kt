@@ -556,20 +556,20 @@ fun TvSettingsDialog(
                     verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     Text(
-                        text = "${s.updateSectionTitle} • v$currentVersion",
+                        text = "${s.update.sectionTitle} • v$currentVersion",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         color = SurroundColors.OnSurface
                     )
                     val statusMsg = when (updateState) {
-                        UpdateState.Idle -> s.updateCurrentVersion(currentVersion)
-                        UpdateState.Checking -> s.updateCheckingText
-                        is UpdateState.UpToDate -> s.updateUpToDateText(updateState.currentVersion)
-                        is UpdateState.UpdateAvailable -> s.updateAvailableText(updateState.latestVersion)
-                        is UpdateState.Downloading -> s.updateDownloadingText(updateState.progressPercent)
-                        is UpdateState.ReadyToInstall -> s.updateAvailableText(updateState.version)
-                        is UpdateState.PermissionRequired -> s.updatePermissionHint
-                        is UpdateState.Error -> s.updateErrorText(updateState.message)
+                        UpdateState.Idle -> s.update.currentVersion(currentVersion)
+                        UpdateState.Checking -> s.update.checkingText
+                        is UpdateState.UpToDate -> s.update.upToDateText(updateState.currentVersion)
+                        is UpdateState.UpdateAvailable -> s.update.availableText(updateState.latestVersion)
+                        is UpdateState.Downloading -> s.update.downloadingText(updateState.progressPercent)
+                        is UpdateState.ReadyToInstall -> s.update.availableText(updateState.version)
+                        is UpdateState.PermissionRequired -> s.update.permissionHint
+                        is UpdateState.Error -> s.update.errorText(updateState.message)
                     }
                     Text(
                         text = statusMsg,
@@ -586,7 +586,7 @@ fun TvSettingsDialog(
                             contentColor = SurroundColors.OnPrimary,
                             focusedContentColor = SurroundColors.OnPrimary
                         ) {
-                            Text(s.updateDownloadInstallBtn, fontWeight = FontWeight.Bold)
+                            Text(s.update.downloadInstallBtn, fontWeight = FontWeight.Bold)
                         }
                     }
                     is UpdateState.ReadyToInstall, is UpdateState.PermissionRequired -> {
@@ -597,13 +597,13 @@ fun TvSettingsDialog(
                             contentColor = SurroundColors.OnPrimary,
                             focusedContentColor = SurroundColors.OnPrimary
                         ) {
-                            Text(s.updateInstallNowBtn, fontWeight = FontWeight.Bold)
+                            Text(s.update.installNowBtn, fontWeight = FontWeight.Bold)
                         }
                     }
                     UpdateState.Checking, is UpdateState.Downloading -> Unit
                     else -> {
                         TvPillSurface(onClick = onCheckForUpdates) {
-                            Text(s.updateCheckBtn)
+                            Text(s.update.checkBtn)
                         }
                     }
                 }
