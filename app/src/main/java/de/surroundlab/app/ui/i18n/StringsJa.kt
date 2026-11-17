@@ -383,5 +383,6 @@ val StringsJa = AppStrings(
     ),
     tvInstallCopyUrlBtn = "GitHub URL をコピー",
     tvInstallUrlCopiedToast = "ダウンロード URL をコピーしました",
-    tvInstallCloseBtn = "閉じる"
+    tvInstallCloseBtn = "閉じる",
+    donatePaypalBtn = "開発を支援する (PayPal)"
 )

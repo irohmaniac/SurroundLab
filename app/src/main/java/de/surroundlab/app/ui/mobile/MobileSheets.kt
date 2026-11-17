@@ -1,5 +1,7 @@
 package de.surroundlab.app.ui.mobile
 
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -37,6 +39,7 @@ import androidx.compose.material.icons.rounded.CloudSync
 import androidx.compose.material.icons.rounded.ContentCopy
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.ErrorOutline
+import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.LibraryMusic
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Schedule
@@ -87,6 +90,7 @@ import de.surroundlab.app.ui.components.OnboardingSlide
 import de.surroundlab.app.ui.i18n.AFTVNEWS_DOWNLOADER_CODE
 import de.surroundlab.app.ui.i18n.GITHUB_LATEST_APK_URL
 import de.surroundlab.app.ui.i18n.LocalAppStrings
+import de.surroundlab.app.ui.i18n.PAYPAL_DONATE_URL
 import de.surroundlab.app.ui.theme.MonoFontFamily
 import de.surroundlab.app.ui.theme.SurroundColors
 import kotlin.math.roundToInt
@@ -981,6 +985,24 @@ fun MobileConnectionSettingsScreen(
                 Text(s.guideShowBtn, fontWeight = FontWeight.SemiBold)
             }
 
+            val context = LocalContext.current
+            OutlinedButton(
+                onClick = { openPayPalDonate(context) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(46.dp),
+                shape = CircleShape
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Favorite,
+                    contentDescription = null,
+                    tint = SurroundColors.Tertiary,
+                    modifier = Modifier.size(18.dp)
+                )
+                Spacer(Modifier.width(8.dp))
+                Text(s.donatePaypalBtn, fontWeight = FontWeight.SemiBold)
+            }
+
             Spacer(Modifier.height(16.dp))
         }
     }
@@ -1342,5 +1364,17 @@ fun MobileTvInstallGuideDialog(
                 }
             }
         }
+    }
+}
+
+/**
+ * Opens the developer's PayPal.Me donation page safely in the device browser.
+ */
+internal fun openPayPalDonate(context: Context) {
+    runCatching {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(PAYPAL_DONATE_URL)).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        context.startActivity(intent)
     }
 }

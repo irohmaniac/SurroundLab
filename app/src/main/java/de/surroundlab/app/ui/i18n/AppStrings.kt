@@ -290,11 +290,15 @@ data class AppStrings(
     val tvInstallSteps: List<Pair<String, String>>,
     val tvInstallCopyUrlBtn: String,
     val tvInstallUrlCopiedToast: String,
-    val tvInstallCloseBtn: String
+    val tvInstallCloseBtn: String,
+
+    // Donation
+    val donatePaypalBtn: String
 )
 
 const val AFTVNEWS_DOWNLOADER_CODE = "7281113"
 const val GITHUB_LATEST_APK_URL = "https://github.com/irohmaniac/SurroundLab/releases/latest/download/SurroundLab.apk"
+const val PAYPAL_DONATE_URL = "https://www.paypal.me/ceddiemcleod"
 
 val LocalAppStrings = staticCompositionLocalOf { StringsDe }
 

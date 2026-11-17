@@ -383,5 +383,6 @@ val StringsPt = AppStrings(
     ),
     tvInstallCopyUrlBtn = "Copiar link do GitHub",
     tvInstallUrlCopiedToast = "Link copiado para a área de transferência",
-    tvInstallCloseBtn = "Fechar"
+    tvInstallCloseBtn = "Fechar",
+    donatePaypalBtn = "Apoiar o projeto (PayPal)"
 )
