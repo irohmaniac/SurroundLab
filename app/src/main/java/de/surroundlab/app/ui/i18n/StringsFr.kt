@@ -352,7 +352,8 @@ val StringsFr = AppStrings(
             bullets = listOf(
                 "Test par enceinte" to "Isolez chaque canal pour vérifier le câblage réel avec bruit rose, sinus ou pistes audio.",
                 "Générateur de fréquences" to "Explorez de 20 Hz à 20 kHz, repérez les résonances et réglez le raccord du caisson.",
-                "Spatialisation 2D (Puck)" to "Déplacez une source virtuelle ou ciblez chaque enceinte en temps réel autour du salon."
+                "Spatialisation 2D (Puck)" to "Déplacez une source virtuelle ou ciblez chaque enceinte en temps réel autour du salon.",
+                "Modes de pièce & Mesure" to "Mesurez la réponse en fréquence avec le micro de votre mobile Android sur plusieurs places, comparez vos placements et exportez en PDF A4."
             )
         ),
         OnboardingSlide(

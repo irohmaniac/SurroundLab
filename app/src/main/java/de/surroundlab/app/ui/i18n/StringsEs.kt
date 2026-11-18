@@ -352,7 +352,8 @@ val StringsEs = AppStrings(
             bullets = listOf(
                 "Prueba de altavoz individual" to "Aísla cada canal para verificar el cableado con ruido rosa, onda senoidal o tus propios audios.",
                 "Generador de frecuencias" to "Recorre de 20 Hz a 20 kHz, detecta resonancias de la sala y ajusta el subwoofer.",
-                "Puck espacial 2D" to "Desplaza un objeto sonoro virtual o enfoca altavoces en tiempo real por la sala."
+                "Puck espacial 2D" to "Desplaza un objeto sonoro virtual o enfoca altavoces en tiempo real por la sala.",
+                "Modos de sala y Barrido" to "Usa el micrófono de tu móvil Android para medir la respuesta en frecuencia en varios asientos, comparar ubicaciones y exportar PDF A4."
             )
         ),
         OnboardingSlide(

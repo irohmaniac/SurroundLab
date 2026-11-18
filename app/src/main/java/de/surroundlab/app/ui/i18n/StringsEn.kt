@@ -352,7 +352,8 @@ val StringsEn = AppStrings(
             bullets = listOf(
                 "Single Speaker Test" to "Isolate every channel to verify real speaker wiring using Pink Noise, Sine Wave, or custom tracks.",
                 "Frequency & Preset Generator" to "Sweep 20 Hz – 20 kHz, locate room resonances, and verify your subwoofer crossover.",
-                "2D Spatial Sound Puck" to "Move a virtual sound object or speaker focus smoothly around your room in real time."
+                "2D Spatial Sound Puck" to "Move a virtual sound object or speaker focus smoothly around your room in real time.",
+                "Room Modes & Sweep" to "Use your Android phone's mic to sweep frequencies across multiple seats, compare placements, and export A4 PDF reports."
             )
         ),
         OnboardingSlide(

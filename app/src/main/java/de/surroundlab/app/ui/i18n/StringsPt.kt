@@ -352,7 +352,8 @@ val StringsPt = AppStrings(
             bullets = listOf(
                 "Teste por Caixa" to "Isole cada canal para conferir fiação e equilíbrio com ruído rosa, senoide ou áudios próprios.",
                 "Gerador de Frequências" to "Varra de 20 Hz a 20 kHz, encontre ressonâncias da sala e ajuste o corte do subwoofer.",
-                "Puck Espacial 2D" to "Mova uma fonte virtual ou foque caixas individuais em tempo real ao redor da sala."
+                "Puck Espacial 2D" to "Mova uma fonte virtual ou foque caixas individuais em tempo real ao redor da sala.",
+                "Modos de Sala & Varredura" to "Use o microfone do seu celular Android para medir a resposta em frequência em vários assentos, comparar posições e exportar PDF A4."
             )
         ),
         OnboardingSlide(
