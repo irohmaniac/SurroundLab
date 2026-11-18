@@ -46,6 +46,10 @@ fun MobileAppRoot(
     val audioSyncStatus by vm.audioSyncStatus.collectAsStateWithLifecycle()
     val onboardingCompleted by vm.onboardingCompleted.collectAsStateWithLifecycle()
     val updateState by vm.updateState.collectAsStateWithLifecycle()
+    val roomGuideSeen by vm.roomGuideSeen.collectAsStateWithLifecycle()
+    val roomSessions by vm.roomSessions.collectAsStateWithLifecycle()
+    val roomLevelCheckState by vm.roomLevelCheckState.collectAsStateWithLifecycle()
+    val roomMeasurementProgress by vm.roomMeasurementProgress.collectAsStateWithLifecycle()
 
     LaunchedEffect(statusToast) {
         if (statusToast != null) {
@@ -93,6 +97,7 @@ fun MobileAppRoot(
                     onConnectHost = { ip, port, token -> vm.connectToHost(ip, port, token) },
                     onDisconnectHost = { vm.disconnectFromHost() },
                     onMasterGainChange = { db -> vm.setMasterGainDb(db) },
+                    onLfeLowPassChange = { hz -> vm.setLfeLowPassHz(hz) },
                     onSwap71Change = { enabled -> vm.setSwap71SurroundBack(enabled) },
                     onSpeakerLayoutPresetChange = { preset -> vm.setSpeakerLayoutPreset(preset) },
                     onLanguageChange = { lang -> vm.setAppLanguage(lang) },
@@ -141,6 +146,31 @@ fun MobileAppRoot(
                     onUpdatePuck = { x, y, pan, sub, orbit, speed, src, hz, audioId, play ->
                         vm.updatePuck(x, y, pan, sub, orbit, speed, src, hz, audioId, play)
                     }
+                )
+            }
+            state.activeMode == TestMode.ROOM_MEASUREMENT -> {
+                MobileRoomMeasurementScreen(
+                    state = state,
+                    roomGuideSeen = roomGuideSeen,
+                    savedSessions = roomSessions,
+                    levelCheckState = roomLevelCheckState,
+                    runProgress = roomMeasurementProgress,
+                    onMarkGuideSeen = { vm.markRoomGuideSeen() },
+                    onStartLevelCheck = { preset, custom, hz, withTone ->
+                        vm.startRoomLevelCheck(preset, custom, hz, withTone)
+                    },
+                    onStopLevelCheck = { vm.stopRoomLevelCheck() },
+                    onStartSweep = { preset, custom, startHz, endHz, stepMode, stepVal, speed, micErr, onDone ->
+                        vm.startRoomSweep(preset, custom, startHz, endHz, stepMode, stepVal, speed, micErr, onDone)
+                    },
+                    onCancelSweep = { vm.cancelRoomSweep() },
+                    onResetSweepProgress = { vm.resetRoomSweepProgress() },
+                    onSaveSession = { session -> vm.saveRoomSession(session) },
+                    onUpdateSessionMeta = { id, name, note -> vm.updateRoomSessionMeta(id, name, note) },
+                    onRenamePosition = { sid, pid, newName -> vm.renameRoomPosition(sid, pid, newName) },
+                    onDeletePosition = { sid, pid -> vm.deleteRoomPosition(sid, pid) },
+                    onDeleteSession = { sid -> vm.deleteRoomSession(sid) },
+                    onBack = { vm.setMode(TestMode.HUB) }
                 )
             }
         }

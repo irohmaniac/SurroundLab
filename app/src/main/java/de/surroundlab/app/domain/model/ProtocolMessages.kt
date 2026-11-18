@@ -25,6 +25,7 @@ data class WsMessage(
     val setup: String? = null,
     val mode: String? = null,
     val masterGainDb: Float? = null,
+    val lfeLowPassHz: Int? = null,
     val swap71SurroundBack: Boolean? = null,
     val speakerLayoutPreset: String? = null,
     val appLanguage: String? = null,
@@ -56,6 +57,7 @@ object WsMessageTypes {
     const val SET_SETUP = "SET_SETUP"
     const val SET_MODE = "SET_MODE"
     const val SET_MASTER_GAIN = "SET_MASTER_GAIN"
+    const val SET_LFE_LOW_PASS = "SET_LFE_LOW_PASS"
     const val SET_SWAP_71_SURROUND_BACK = "SET_SWAP_71_SURROUND_BACK"
     const val SET_SPEAKER_LAYOUT_PRESET = "SET_SPEAKER_LAYOUT_PRESET"
     const val SET_LANGUAGE = "SET_LANGUAGE"
@@ -63,6 +65,7 @@ object WsMessageTypes {
     const val UPDATE_CHANNEL_CONFIG = "UPDATE_CHANNEL_CONFIG"
     const val UPDATE_GENERATOR = "UPDATE_GENERATOR"
     const val UPDATE_PUCK = "UPDATE_PUCK"
+    const val UPDATE_MEASUREMENT_TONE = "UPDATE_MEASUREMENT_TONE"
     const val STOP_ALL = "STOP_ALL"
     const val ERROR = "ERROR"
 }

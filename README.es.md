@@ -34,10 +34,11 @@ En lugar de vídeos comprimidos, SurroundLab abre en tiempo real un flujo **PCM 
 
 <table>
   <tr>
-    <td align="center"><img src="docs/images/es-ES/phone_02_puck_2d_1080x1920.png" width="220" alt="Puck Espacial 2D" /></td>
-    <td align="center"><img src="docs/images/es-ES/phone_01_single_speaker_1080x1920.png" width="220" alt="Prueba por Altavoz" /></td>
-    <td align="center"><img src="docs/images/es-ES/phone_03_generator_1080x1920.png" width="220" alt="Generador 1 Hz" /></td>
-    <td align="center"><img src="docs/images/es-ES/phone_04_multi_device_sync_1080x1920.png" width="220" alt="Control Inalámbrico" /></td>
+    <td align="center"><img src="docs/images/es-ES/phone_02_puck_2d_1080x1920.png" width="175" alt="Puck Espacial 2D" /></td>
+    <td align="center"><img src="docs/images/es-ES/phone_01_single_speaker_1080x1920.png" width="175" alt="Prueba por Altavoz" /></td>
+    <td align="center"><img src="docs/images/es-ES/phone_03_generator_1080x1920.png" width="175" alt="Generador 1 Hz" /></td>
+    <td align="center"><img src="docs/images/es-ES/phone_05_room_sweep_1080x1920.png" width="175" alt="Modos de sala y Barrido" /></td>
+    <td align="center"><img src="docs/images/es-ES/phone_04_multi_device_sync_1080x1920.png" width="175" alt="Control Inalámbrico" /></td>
   </tr>
 </table>
 
@@ -50,11 +51,12 @@ En lugar de vídeos comprimidos, SurroundLab abre en tiempo real un flujo **PCM 
 
 ---
 
-## Los 3 Modos Principales
+## Los 4 Modos Principales
 
 - **01 — Prueba de Altavoz Individual:** Aísla cada canal de tu sistema `2.0`, `2.1`, `3.1`, `5.0`, `5.1` o `7.1`. Elige entre **Ruido Rosa**, **Onda Senoidal** o tu **propia pista de audio** para verificar cableado y niveles.
-- **02 — Generador de Frecuencias y Presets:** Recorre de **20 Hz a 20 kHz** en pasos finos de **1 Hz**. Localiza modos de sala y ajusta el corte de tu subwoofer (`40 Hz`, `60 Hz`, `80 Hz THX`, `400 Hz`, `1 kHz`, `10 kHz`).
+- **02 — Generador de Frecuencias y Presets:** Recorre de **20 Hz a 20 kHz** en pasos finos de **1 Hz**. Localiza modos de sala y ajusta el corte de tu subwoofer (`40 Hz`, `60 Hz`, `80 Hz THX`, `400 Hz`, `1 kHz`, `10 kHz`) con grupos de altavoces (incluyendo *Todos menos Subwoofer*).
 - **03 — Puck Espacial 2D:** Mueve un objeto sonoro en tiempo real por tu salón o activa la **Auto-Órbita** (Lento, Medio, Rápido) y alterna entre *Objeto Virtual* y *Foco de Altavoz*.
+- **04 — Modos de Sala y Barrido Automático (App Android):** Usa el micrófono de tu smartphone Android en tu asiento tanto conectado al TV como en modo autónomo (cable/Bluetooth). Incluye **comprobación previa de nivel**, análisis estrecho **Goertzel**, rango y paso configurables (lineal en Hz u octavas logarítmicas), múltiples **posiciones de escucha** con casillas para mostrar/ocultar curvas y **curva media**, cambio no destructivo **Lineal / dBA**, comparativa entre mediciones y **exportación PDF A4** (3 por página vertical o formato horizontal ancho para mediciones individuales). *(El control web en navegador/iOS deshabilita este modo porque los navegadores bloquean el micrófono en HTTP local.)*
 
 ---
 

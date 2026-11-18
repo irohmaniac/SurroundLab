@@ -7,7 +7,8 @@ enum class TestMode {
     HUB,
     SINGLE_SPEAKER,
     GENERATOR,
-    PUCK_2D
+    PUCK_2D,
+    ROOM_MEASUREMENT
 }
 
 @Serializable
@@ -20,6 +21,7 @@ enum class SignalSourceType(val label: String) {
 @Serializable
 enum class GeneratorPreset(val label: String) {
     ALL_ACTIVE("Alle aktiven Kanäle"),
+    ALL_WITHOUT_SUB("Alle außer Subwoofer"),
     P2_1("2.1 Stereo + Sub"),
     P2_0("2.0 Front"),
     P0_1_SUB("0.1 Nur Subwoofer"),
@@ -29,6 +31,7 @@ enum class GeneratorPreset(val label: String) {
         val active = setup.channels.toSet()
         return when (this) {
             ALL_ACTIVE -> active
+            ALL_WITHOUT_SUB -> active - SpeakerChannel.LFE
             P2_1 -> setOf(SpeakerChannel.FL, SpeakerChannel.FR, SpeakerChannel.LFE).intersect(active)
             P2_0 -> setOf(SpeakerChannel.FL, SpeakerChannel.FR).intersect(active)
             P0_1_SUB -> if (setup.hasSubwoofer) setOf(SpeakerChannel.LFE) else emptySet()
@@ -37,6 +40,7 @@ enum class GeneratorPreset(val label: String) {
     }
 
     fun isAvailableFor(setup: SpeakerSetup): Boolean = when (this) {
+        ALL_WITHOUT_SUB -> setup.hasSubwoofer
         P2_1 -> setup.hasSubwoofer
         P0_1_SUB -> setup.hasSubwoofer
         else -> true
@@ -143,11 +147,20 @@ data class HdmiAudioInfo(
 )
 
 @Serializable
+data class MeasurementToneState(
+    val preset: GeneratorPreset = GeneratorPreset.P2_0,
+    val customChannels: Set<SpeakerChannel> = setOf(SpeakerChannel.FL, SpeakerChannel.FR),
+    val frequencyHz: Int = 60,
+    val playing: Boolean = false
+)
+
+@Serializable
 data class SurroundAppState(
     val setup: SpeakerSetup = SpeakerSetup.S5_1,
     val setupCompleted: Boolean = false,
     val activeMode: TestMode = TestMode.HUB,
     val masterGainDb: Float = -12.0f,
+    val lfeLowPassHz: Int = 120,
     val swap71SurroundBack: Boolean = false,
     val speakerLayoutPreset: SpeakerLayoutPreset = SpeakerLayoutPreset.STANDARD,
     val tvUiScale: Float = 0.75f,
@@ -155,6 +168,7 @@ data class SurroundAppState(
     val singleSpeaker: SingleSpeakerState = SingleSpeakerState(),
     val generator: GeneratorState = GeneratorState(),
     val puck: PuckState = PuckState(),
+    val measurementTone: MeasurementToneState = MeasurementToneState(),
     val audioLibrary: List<CustomAudioTrack> = emptyList(),
     val hostName: String = "SurroundLab TV",
     val hostIp: String? = null,

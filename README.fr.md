@@ -34,10 +34,11 @@ Au lieu de vidéos compressées, SurroundLab ouvre en temps réel un flux **PCM 
 
 <table>
   <tr>
-    <td align="center"><img src="docs/images/fr-FR/phone_02_puck_2d_1080x1920.png" width="220" alt="Palet Spatial 2D" /></td>
-    <td align="center"><img src="docs/images/fr-FR/phone_01_single_speaker_1080x1920.png" width="220" alt="Test par Enceinte" /></td>
-    <td align="center"><img src="docs/images/fr-FR/phone_03_generator_1080x1920.png" width="220" alt="Générateur 1 Hz" /></td>
-    <td align="center"><img src="docs/images/fr-FR/phone_04_multi_device_sync_1080x1920.png" width="220" alt="Contrôle Sans Fil" /></td>
+    <td align="center"><img src="docs/images/fr-FR/phone_02_puck_2d_1080x1920.png" width="175" alt="Palet Spatial 2D" /></td>
+    <td align="center"><img src="docs/images/fr-FR/phone_01_single_speaker_1080x1920.png" width="175" alt="Test par Enceinte" /></td>
+    <td align="center"><img src="docs/images/fr-FR/phone_03_generator_1080x1920.png" width="175" alt="Générateur 1 Hz" /></td>
+    <td align="center"><img src="docs/images/fr-FR/phone_05_room_sweep_1080x1920.png" width="175" alt="Modes de pièce et Mesure" /></td>
+    <td align="center"><img src="docs/images/fr-FR/phone_04_multi_device_sync_1080x1920.png" width="175" alt="Contrôle Sans Fil" /></td>
   </tr>
 </table>
 
@@ -50,11 +51,12 @@ Au lieu de vidéos compressées, SurroundLab ouvre en temps réel un flux **PCM 
 
 ---
 
-## Les 3 Modes Principaux
+## Les 4 Modes Principaux
 
 - **01 — Test par Enceinte :** Isolez chaque canal de votre système `2.0`, `2.1`, `3.1`, `5.0`, `5.1` ou `7.1`. Choisissez entre **Bruit Rose**, **Onde Sinusoïdale** ou votre **propre piste audio** pour vérifier câblage et niveaux.
-- **02 — Générateur de Fréquences & Préréglages :** Balayez de **20 Hz à 20 kHz** par pas fins de **1 Hz**. Détectez les résonances de pièce et réglez la coupure caisson (`40 Hz`, `60 Hz`, `80 Hz THX`, `400 Hz`, `1 kHz`, `10 kHz`).
+- **02 — Générateur de Fréquences & Préréglages :** Balayez de **20 Hz à 20 kHz** par pas fins de **1 Hz**. Détectez les résonances de pièce et réglez la coupure caisson (`40 Hz`, `60 Hz`, `80 Hz THX`, `400 Hz`, `1 kHz`, `10 kHz`) avec groupes d'enceintes (dont *Toutes sauf caisson*).
 - **03 — Palet Spatial 2D :** Déplacez une source sonore en temps réel dans votre salon ou activez l'**Auto-Orbite** (Lent, Moyen, Rapide) et alternez entre *Objet Virtuel* et *Focus Enceinte*.
+- **04 — Modes de Pièce & Mesure Automatique (App Android) :** Transformez votre smartphone Android en microphone de mesure (connecté à la TV ou en mode autonome câble/Bluetooth). Inclut un **test de niveau préalable**, une analyse **Goertzel** résistante aux bruits ambiants, des balayages linéaires (Hz) ou logarithmiques (octaves), plusieurs **positions d'écoute** affichables/masquables par case à cocher + **courbe moyenne**, bascule **Linéaire / dBA**, comparaison de sessions et **export PDF A4** (3 mesures par page en portrait ou plein écran paysage pour une mesure unique). *(L'interface navigateur/iOS désactive ce mode car les navigateurs bloquent le micro sur HTTP local.)*
 
 ---
 

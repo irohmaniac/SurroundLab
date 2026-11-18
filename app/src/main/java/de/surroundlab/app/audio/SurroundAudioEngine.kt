@@ -64,6 +64,12 @@ class SurroundAudioEngine(
         val masterGainLinear: Float,
         val swap71SurroundBack: Boolean,
         val airFilterAlpha: Float,
+        val bypassLfeFilter: Boolean,
+        val lfeB0: Float,
+        val lfeB1: Float,
+        val lfeB2: Float,
+        val lfeA1: Float,
+        val lfeA2: Float,
         val channelGains: FloatArray, // length 8, indexed by SpeakerChannel.ordinal
         val customSamples: FloatArray?,
         val switchSignature: Long
@@ -76,18 +82,27 @@ class SurroundAudioEngine(
     )
 
     @Volatile
-    private var latestTarget: DspTarget = DspTarget(
-        setup = SpeakerSetup.S5_1,
-        playing = false,
-        sourceType = SignalSourceType.PINK_NOISE,
-        frequencyHz = 400f,
-        masterGainLinear = dbToLinear(-12f),
-        swap71SurroundBack = false,
-        airFilterAlpha = 1.0f,
-        channelGains = FloatArray(8),
-        customSamples = null,
-        switchSignature = 0L
-    )
+    private var latestTarget: DspTarget = run {
+        val c = computeButterworthLowPass(120.0)
+        DspTarget(
+            setup = SpeakerSetup.S5_1,
+            playing = false,
+            sourceType = SignalSourceType.PINK_NOISE,
+            frequencyHz = 400f,
+            masterGainLinear = dbToLinear(-12f),
+            swap71SurroundBack = false,
+            airFilterAlpha = 1.0f,
+            bypassLfeFilter = false,
+            lfeB0 = c[0],
+            lfeB1 = c[1],
+            lfeB2 = c[2],
+            lfeA1 = c[3],
+            lfeA2 = c[4],
+            channelGains = FloatArray(8),
+            customSamples = null,
+            switchSignature = 0L
+        )
+    }
 
     private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
     private val idleLock = Object()
@@ -243,6 +258,25 @@ class SurroundAudioEngine(
                 modeSig = 300L + sourceType.ordinal +
                     ((state.puck.audioId?.hashCode() ?: 0).toLong() and 0xFFFFFFL) * 1000L
             }
+            TestMode.ROOM_MEASUREMENT -> {
+                val tone = state.measurementTone
+                playing = tone.playing
+                sourceType = SignalSourceType.SINE
+                frequencyHz = tone.frequencyHz.toFloat()
+                val activeChannels = tone.preset.resolveChannels(
+                    state.setup,
+                    tone.customChannels
+                )
+                if (playing && activeChannels.isNotEmpty()) {
+                    val scale = if (activeChannels.size > 1) {
+                        (1.0f / kotlin.math.sqrt(activeChannels.size.toFloat())).coerceAtLeast(0.4f)
+                    } else 1.0f
+                    for (ch in activeChannels) {
+                        gains[ch.ordinal] = scale
+                    }
+                }
+                modeSig = 400L + tone.preset.ordinal * 10L
+            }
         }
 
         if (playing && lastWasPlaying && modeSig != lastModeSignature) {
@@ -250,6 +284,12 @@ class SurroundAudioEngine(
         }
         lastWasPlaying = playing
         lastModeSignature = modeSig
+
+        // Pure sine waves (e.g. frequency sweeps / room mode tests) bypass the noise/music LFE filter
+        // so the AVR/subwoofer's own crossover determines the rolloff.
+        val bypassLfe = sourceType == SignalSourceType.SINE || state.lfeLowPassHz <= 0
+        val lfeCutoff = if (state.lfeLowPassHz <= 0) 120.0 else state.lfeLowPassHz.coerceIn(60, 250).toDouble()
+        val lfeCoeff = computeButterworthLowPass(lfeCutoff)
 
         latestTarget = DspTarget(
             setup = state.setup,
@@ -259,6 +299,12 @@ class SurroundAudioEngine(
             masterGainLinear = dbToLinear(state.masterGainDb.coerceIn(-30f, 0f)),
             swap71SurroundBack = state.swap71SurroundBack,
             airFilterAlpha = airFilterAlpha,
+            bypassLfeFilter = bypassLfe,
+            lfeB0 = lfeCoeff[0],
+            lfeB1 = lfeCoeff[1],
+            lfeB2 = lfeCoeff[2],
+            lfeA1 = lfeCoeff[3],
+            lfeA2 = lfeCoeff[4],
             channelGains = gains,
             customSamples = customSamples,
             switchSignature = lastSignature
@@ -308,13 +354,7 @@ class SurroundAudioEngine(
         var b5 = 0f
         var b6 = 0f
 
-        // 2nd-order Butterworth 80 Hz LFE low-pass filter coefficients & state
-        val lfeCoeff = computeButterworthLowPass80Hz()
-        val lfeB0 = lfeCoeff[0]
-        val lfeB1 = lfeCoeff[1]
-        val lfeB2 = lfeCoeff[2]
-        val lfeA1 = lfeCoeff[3]
-        val lfeA2 = lfeCoeff[4]
+        // LFE 2nd-order Butterworth low-pass filter state (coefficients come dynamically from DspTarget)
         var lfeZ1 = 0f
         var lfeZ2 = 0f
 
@@ -427,6 +467,12 @@ class SurroundAudioEngine(
                 val swap71 = activeTarget.swap71SurroundBack
                 val targetChGains = activeTarget.channelGains
                 val sourceType = activeTarget.sourceType
+                val bypassLfe = activeTarget.bypassLfeFilter
+                val lfeB0 = activeTarget.lfeB0
+                val lfeB1 = activeTarget.lfeB1
+                val lfeB2 = activeTarget.lfeB2
+                val lfeA1 = activeTarget.lfeA1
+                val lfeA2 = activeTarget.lfeA2
 
                 val hasC = SpeakerChannel.C in currentSetup.channels
                 val hasSub = currentSetup.hasSubwoofer
@@ -512,16 +558,23 @@ class SurroundAudioEngine(
                     airLpState += smoothedAirAlpha * (scaledBase - airLpState)
                     val satBase = if (smoothedAirAlpha >= 0.99f) scaledBase else airLpState
 
-                    // 4. LFE 80 Hz 2nd-order Butterworth Low-Pass (Direct Form II Transposed)
+                    // 4. Configurable LFE 2nd-order Butterworth Low-Pass (bypassed for pure sine or Direct mode)
                     val lfeIn = scaledBase * smoothedChGains[SpeakerChannel.LFE.ordinal]
-                    val lfeFiltered = lfeB0 * lfeIn + lfeZ1
-                    lfeZ1 = lfeB1 * lfeIn - lfeA1 * lfeFiltered + lfeZ2
-                    lfeZ2 = lfeB2 * lfeIn - lfeA2 * lfeFiltered
+                    val lfeOutSignal = if (bypassLfe) {
+                        lfeZ1 = 0f
+                        lfeZ2 = 0f
+                        lfeIn
+                    } else {
+                        val lfeFiltered = lfeB0 * lfeIn + lfeZ1
+                        lfeZ1 = lfeB1 * lfeIn - lfeA1 * lfeFiltered + lfeZ2
+                        lfeZ2 = lfeB2 * lfeIn - lfeA2 * lfeFiltered
+                        lfeFiltered
+                    }
 
                     val sFl = softLimit(satBase * smoothedChGains[SpeakerChannel.FL.ordinal])
                     val sFr = softLimit(satBase * smoothedChGains[SpeakerChannel.FR.ordinal])
                     val sC = softLimit(satBase * smoothedChGains[SpeakerChannel.C.ordinal])
-                    val sLfe = softLimit(lfeFiltered)
+                    val sLfe = softLimit(lfeOutSignal)
                     val sSl = softLimit(satBase * smoothedChGains[SpeakerChannel.SL.ordinal])
                     val sSr = softLimit(satBase * smoothedChGains[SpeakerChannel.SR.ordinal])
                     val sSbl = softLimit(satBase * smoothedChGains[SpeakerChannel.SBL.ordinal])
@@ -726,8 +779,8 @@ class SurroundAudioEngine(
         return (sign * compressed).coerceIn(-0.98f, 0.98f)
     }
 
-    private fun computeButterworthLowPass80Hz(): FloatArray {
-        val fc = 80.0
+    private fun computeButterworthLowPass(cutoffHz: Double): FloatArray {
+        val fc = cutoffHz.coerceIn(40.0, 400.0)
         val k = kotlin.math.tan(PI * fc / SAMPLE_RATE.toDouble())
         val k2 = k * k
         val sqrt2 = kotlin.math.sqrt(2.0)

@@ -22,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.automirrored.rounded.VolumeUp
 import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.GraphicEq
 import androidx.compose.material.icons.rounded.LibraryMusic
 import androidx.compose.material.icons.rounded.Radar
 import androidx.compose.material.icons.rounded.Settings
@@ -225,6 +226,19 @@ fun MobileHomeHubScreen(
                 iconFg = SurroundColors.OnTertiaryContainer,
                 accent = SurroundColors.Tertiary,
                 onClick = { onSelectMode(TestMode.PUCK_2D) }
+            )
+
+            MobileModeCard(
+                badge = "04 SWEEP",
+                title = s.mode4Title,
+                description = s.mode4MobileDesc,
+                footerLeft = s.mobileCard4FooterLeft,
+                footerRight = s.mobileCard4FooterRight,
+                icon = Icons.Rounded.GraphicEq,
+                iconBg = SurroundColors.PrimaryContainer,
+                iconFg = SurroundColors.OnPrimaryContainer,
+                accent = SurroundColors.Primary,
+                onClick = { onSelectMode(TestMode.ROOM_MEASUREMENT) }
             )
 
             val context = LocalContext.current

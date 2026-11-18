@@ -61,6 +61,7 @@ val StringsJa = AppStrings(
     generatorPresetLabel = { preset ->
         when (preset) {
             GeneratorPreset.ALL_ACTIVE -> "有効な全チャンネル"
+            GeneratorPreset.ALL_WITHOUT_SUB -> "サブウーファー以外の全て"
             GeneratorPreset.P2_1 -> "2.1 ステレオ + サブ"
             GeneratorPreset.P2_0 -> "2.0 フロント"
             GeneratorPreset.P0_1_SUB -> "0.1 サブウーファー単体"
@@ -168,6 +169,11 @@ val StringsJa = AppStrings(
     mode3TvDesc = "リアルタイム空間パンナー。方向キーや自動オービットで音像を部屋中で滑らかに移動できます。",
     mode3MobileDesc = "リアルタイム空間パンナー。タッチ操作や自動オービットで音像を自在に定位できます。",
     mode3Footer = "バーチャル音源 & スピーカーフォーカス",
+    mode4Badge = "モード 04",
+    mode4Title = "ルーム音響・自動測定",
+    mode4TvDesc = "Android スマホのマイクを使い、部屋の定在波や周波数特性を自動測定します。",
+    mode4MobileDesc = "マイク自動スイープ測定：定在波ピークを可視化し、複数の試聴位置を比較して A4 PDF 出力できます。",
+    mode4Footer = "マイク測定 & PDF レポート",
     mobileConnConnected = { host -> "接続中: $host" },
     mobileConnConnecting = "TV に接続中...",
     mobileConnLocal = "ローカルモード (2.0)",
@@ -177,6 +183,8 @@ val StringsJa = AppStrings(
     mobileCard2FooterLeft = "周波数スイープ",
     mobileCard3FooterLeft = "サラウンドパンニング",
     mobileCard3FooterRight = "360° リアルタイム",
+    mobileCard4FooterLeft = "マイク音響解析",
+    mobileCard4FooterRight = "グラフ & PDF",
     mobileFooterTv = { ip -> "TV: $ip" },
     mobileFooterLocal = "ローカルダウンミックス有効",
     mobileFooterHeadroom = { db -> "ヘッドルーム $db dBFS" },
@@ -271,6 +279,9 @@ val StringsJa = AppStrings(
     tvSettingsTitle = "TV ホスト設定",
     tvSettingsSubtitle = "ヘッドルーム・高域保護設定 & HDMI 診断",
     masterLevelTitleTv = { def -> "マスター出力レベル（初期値: $def dBFS）" },
+    lfeLowPassTitle = "LFE ローパス（ノイズ & 音楽）",
+    lfeLowPassDesc = "サブウーファー (.1) 向けのピンクノイズ・独自音声の上限周波数を制限します。純粋なサイン波と自動測定は常に AV アンプ側へ直接出力されます。",
+    lfeDirectLabel = "スルー (無効)",
     swap71Title = "7.1 サラウンドとバックを入替 (HDMI-HAL)",
     swap71DescTv = "7.1ch で SL/SR と SBL/SBR が逆に鳴る機器（Chromecast / Amlogic 等）で有効にします。",
     swap71DescMobile = "7.1ch の SL/SR と SBL/SBR が入れ替わる場合の HDMI-HAL 補正。",
@@ -400,5 +411,117 @@ val StringsJa = AppStrings(
         installNowBtn = "今すぐインストール",
         permissionHint = "提供元不明アプリのインストール許可を一度オンにしてから、もう一度「今すぐインストール」を押してください。",
         errorText = { err -> "確認に失敗しました ($err)" }
+    ),
+
+    room = RoomMeasurementStrings(
+        screenTitle = "ルーム音響・自動測定",
+        screenSubtitle = "自動周波数スイープ解析",
+        guideBtn = "ガイド",
+        tabMeasure = "測定",
+        tabArchive = "保存済み",
+        tabCompare = "比較",
+        tvInfoBadge = "スマホのマイクが必要です",
+        tvInfoTitle = "Android スマホから測定を開始してください",
+        tvInfoBody = "自動ルーム測定では、試聴位置に置いた Android スマホのマイクで録音しながら、TV から正確なテストトーンを再生します。",
+        tvInfoSteps = listOf(
+            "1. Android スマホに SurroundLab を入れて起動します（同じ Wi-Fi なら自動接続されます）。",
+            "2. スマホで「ルーム音響・自動測定」を開き、マイク権限を許可します。",
+            "3. 耳の高さでスマホを静止させてスイープを開始します。グラフと PDF 出力はスマホ上で行えます。"
+        ),
+        tvActiveSweepStatus = { hz -> "スマホから測定実行中 • 再生中: $hz Hz" },
+        tvShowQrBtn = "接続情報 / QR を表示",
+        guideTitle = "ルーム音響測定の使い方",
+        guideSubtitle = "正確なグラフを得るためのポイント:",
+        guideItems = listOf(
+            "この機能でできること" to "周波数を順番に自動再生して試聴位置の音量を記録し、定在波のピークやディップ（谷）、設置変更による違いをグラフで確認できます。",
+            "Android アプリが必要" to "TV 接続時（5.1/7.1）でもスマホ単体（ケーブル/Bluetooth ステレオ）でも測定できます。ブラウザ版はローカル HTTP の仕様上マイクを使用できません。",
+            "静かな環境と姿勢" to "換気扇などを止め、測定中は動かず静かに、マイク穴を塞がないよう耳の高さでスマホを静止させてください。",
+            "アンプの音量設定" to "普段の視聴音量〜やや大きめに設定し、事前にレベルチェック（「最適 ✓」）を行ってください。",
+            "スマホマイクの特性" to "スマホのマイクは測定用マイクのように校正されていません（特に 40 Hz 以下は減衰しやすいです）。絶対 dB 値ではなく相対的な山・谷や配置比較にご活用ください。"
+        ),
+        guideGotIt = "理解して始める",
+        micPermissionTitle = "マイクの権限が必要です",
+        micPermissionDesc = "試聴位置の音響を測定するため、測定および事前チェック中のみマイクを使用します。",
+        micPermissionBtn = "マイクを許可",
+        micErrorMsg = "マイクを初期化できませんでした。権限を確認してください。",
+        levelCheckTitle = "事前レベルチェック",
+        levelCheckDesc = "アンプの音量が部屋の雑音より十分大きいか確認します:",
+        levelCheckStartBtn = "テスト音で確認",
+        levelCheckStopBtn = "確認を停止",
+        levelAmbientLabel = { db -> "暗騒音: $db dBFS" },
+        levelLiveLabel = { db, snr -> "信号: $db dBFS (S/N比 +$snr dB)" },
+        verdictIdle = "準備完了 — 「テスト音で確認」またはそのまま測定を開始してください。",
+        verdictCalibrating = "環境ノイズを測定中…少し静かにしてください。",
+        verdictTooQuiet = "音が小さすぎます！アンプの音量を少し上げてください。",
+        verdictOptimal = "音量バランス最適 ✓ — 雑音と明確に分離されています。",
+        verdictClipping = "マイクが音割れしています！音量を少し下げてください。",
+        speakersSectionTitle = "測定スピーカー",
+        speakerPresetHint = { preset ->
+            when (preset) {
+                GeneratorPreset.P2_0 -> "AV アンプでスピーカー設定が「Small」の場合に最適（低域管理が有効）：低音の二重加算がなく、音楽再生やクロスオーバー確認に最も現実的です。「Large」設定でサブウーファーが鳴らない場合は 0.1 または 2.1 を選択してください。"
+                GeneratorPreset.P0_1_SUB -> "サブウーファー (.1 LFE) のみを測定します。低域の定在波や設置場所の比較に最適です。"
+                GeneratorPreset.P2_1 -> "フロント + LFE を同時に出力します（AV アンプの低域管理なしや Large 設定向け。Small 設定ではクロスオーバー以下が加算されます）。"
+                GeneratorPreset.ALL_WITHOUT_SUB -> "LFE を除いた全スピーカーを鳴らします（AV アンプ側で低域管理が有効な場合はサブウーファーも動作します）。"
+                GeneratorPreset.ALL_ACTIVE -> "有効な全チャンネルを同時に鳴らします（複数スピーカー間の位相干渉・打ち消し合いが起きる場合があります）。"
+                GeneratorPreset.CUSTOM -> "センターのみなど、特定のチャンネルを自由に選んで測定できます。"
+            }
+        },
+        presetSectionTitle = "周波数範囲 & ステップ幅",
+        presetRoomModes = "定在波 (20–200 Hz)",
+        presetSubwoofer = "サブウーファー (20–120 Hz)",
+        presetFullRange = "全帯域 (20–20k)",
+        presetCustom = "カスタム",
+        startHzLabel = "開始 (Hz)",
+        endHzLabel = "終了 (Hz)",
+        stepModeLinear = "リニア (Hz)",
+        stepModeOctave = "対数 (オクターブ)",
+        stepHzLabel = "刻み幅 (Hz)",
+        stepOctaveLabel = { d -> "1/$d オクターブ" },
+        speedLabel = "測定速度",
+        speedFast = "高速",
+        speedStandard = "標準",
+        speedPrecise = "精密",
+        estimatedTimeLabel = { pts, sec -> "$pts 点 • 1 位置あたり約 ${sec}秒" },
+        positionNameLabel = "この試聴位置の名前",
+        defaultPositionName = { idx -> "試聴位置 $idx" },
+        startSweepBtn = "測定を開始",
+        addPositionSweepBtn = "この位置を測定",
+        countdownLabel = { sec -> "動かず静かに… $sec 秒後に開始" },
+        silenceCalibLabel = "部屋の環境ノイズを測定中…",
+        sweepingLabel = { cur, tot, hz -> "ステップ $cur / $tot • $hz Hz" },
+        cancelSweepBtn = "測定を中止",
+        activeSessionTitle = "現在の測定セッション",
+        defaultSessionName = { d -> "測定 $d" },
+        scaleLinearLabel = "リニア (フラット)",
+        scaleDbaLabel = "dBA (聴感補正)",
+        meanCurveLabel = "平均値",
+        smoothLabel = "平滑化",
+        addAnotherPositionBtn = "+ 別の試聴位置を追加",
+        saveSessionBtn = "測定を保存",
+        savedToast = "測定結果を保存しました",
+        renameSessionTitle = "測定名とメモ",
+        sessionNameHint = "例: サブウーファー左角配置",
+        sessionNoteHint = "メモ (例: クロスオーバー 80 Hz, 位相 0°)",
+        renamePositionTitle = "試聴位置の名前変更",
+        newPositionHint = "例: ソファ中央",
+        archiveEmptyTitle = "保存された測定はまだありません",
+        archiveEmptyBody = "「測定」タブで最初のスイープを実行して保存すると、比較や A4 PDF 出力ができます。",
+        positionsCountLabel = { c -> "$c 箇所" },
+        loadInEditorBtn = "開く / 追加測定",
+        exportPdfSingleBtn = "PDF",
+        exportPdfSelectedBtn = { c -> "PDF 出力 ($c)" },
+        selectForExportHint = "チェックを入れて複数の測定を 1 つの A4 PDF にまとめられます。",
+        compareHint = "2 つ以上の保存済み測定を選んでグラフを重ねて比較:",
+        compareMinTwoHint = "比較するには 2 つ以上保存してください。",
+        pdfReportTitle = "SurroundLab — ルーム音響測定レポート",
+        pdfGeneratedPrefix = "作成日時",
+        pdfPageLabel = { p, t -> "ページ $p / $t" },
+        pdfChannelsPrefix = "チャンネル",
+        pdfShareTitle = "測定レポート PDF を共有",
+        pdfErrorToast = "PDF の作成に失敗しました。",
+        pdfLayoutDialogTitle = "PDF の向きを選択",
+        pdfLayoutDialogBody = "全帯域スイープ（20 Hz – 20 kHz など）では横向きにするとグラフがより見やすくなります。",
+        pdfPortraitDefaultBtn = "縦向き（標準）",
+        pdfLandscapeWideBtn = "横向き（ワイド）"
     )
 )

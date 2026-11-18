@@ -42,7 +42,8 @@ class MainActivity : ComponentActivity() {
 
             val isPlayingAudio = state.singleSpeaker.playing ||
                 state.generator.playing ||
-                state.puck.playing
+                state.puck.playing ||
+                state.measurementTone.playing
 
             LaunchedEffect(vm.isTvDevice, isPlayingAudio) {
                 if (vm.isTvDevice || isPlayingAudio) {

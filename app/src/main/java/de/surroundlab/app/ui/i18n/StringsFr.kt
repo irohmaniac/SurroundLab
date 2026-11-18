@@ -61,6 +61,7 @@ val StringsFr = AppStrings(
     generatorPresetLabel = { preset ->
         when (preset) {
             GeneratorPreset.ALL_ACTIVE -> "Tous les canaux actifs"
+            GeneratorPreset.ALL_WITHOUT_SUB -> "Tous sauf caisson"
             GeneratorPreset.P2_1 -> "2.1 Stéréo + Caisson"
             GeneratorPreset.P2_0 -> "2.0 Avant"
             GeneratorPreset.P0_1_SUB -> "0.1 Caisson seul"
@@ -168,6 +169,11 @@ val StringsFr = AppStrings(
     mode3TvDesc = "Panner spatial temps réel. Déplacez la source autour de la pièce au D-Pad ou en Auto-Orbite.",
     mode3MobileDesc = "Panner temps réel. Glissez la source ou ciblez chaque enceinte au doigt et en Auto-Orbite.",
     mode3Footer = "Objet virtuel & Focus enceinte",
+    mode4Badge = "MODE 04",
+    mode4Title = "Modes de pièce & Mesure",
+    mode4TvDesc = "Mesure automatique de la réponse en fréquence avec votre smartphone Android comme microphone de mesure.",
+    mode4MobileDesc = "Balayage micro automatique : détectez les résonances, comparez les places d'écoute et exportez en PDF A4.",
+    mode4Footer = "Balayage micro & Rapport PDF",
     mobileConnConnected = { host -> "Connecté : $host" },
     mobileConnConnecting = "Connexion au téléviseur...",
     mobileConnLocal = "Mode local (2.0)",
@@ -177,6 +183,8 @@ val StringsFr = AppStrings(
     mobileCard2FooterLeft = "Spectre de fréquences",
     mobileCard3FooterLeft = "Spatialisation surround",
     mobileCard3FooterRight = "360° temps réel",
+    mobileCard4FooterLeft = "Analyse micro",
+    mobileCard4FooterRight = "Courbe & PDF",
     mobileFooterTv = { ip -> "TV : $ip" },
     mobileFooterLocal = "Downmix local actif",
     mobileFooterHeadroom = { db -> "Headroom $db dBFS" },
@@ -271,6 +279,9 @@ val StringsFr = AppStrings(
     tvSettingsTitle = "Paramètres de l'hôte TV",
     tvSettingsSubtitle = "Réserve numérique, protection tweeters & diagnostic HDMI",
     masterLevelTitleTv = { def -> "Niveau de sortie général (Défaut : $def dBFS)" },
+    lfeLowPassTitle = "Passe-bas LFE (Bruit & Musique)",
+    lfeLowPassDesc = "Limite le bruit rose et vos pistes sur le caisson (.1). Les sinus purs et mesures acoustiques passent toujours directement vers le crossover de l'ampli.",
+    lfeDirectLabel = "Direct (Off)",
     swap71Title = "Inverser 7.1 Surround & Arrière (HDMI-HAL)",
     swap71DescTv = "À activer si les canaux 7.1 SL/SR et SBL/SBR sont inversés (ex. Chromecast / Amlogic).",
     swap71DescMobile = "Correctif HDMI-HAL (ex. Chromecast / Amlogic) si SL/SR et SBL/SBR sont inversés.",
@@ -400,5 +411,117 @@ val StringsFr = AppStrings(
         installNowBtn = "Installer maintenant",
         permissionHint = "Autorisez l'installation depuis cette source une fois, puis appuyez de nouveau sur « Installer maintenant ».",
         errorText = { err -> "Échec de la vérification ($err)" }
+    ),
+
+    room = RoomMeasurementStrings(
+        screenTitle = "Modes de pièce & Mesure",
+        screenSubtitle = "BALAYAGE FRÉQUENTIEL AUTOMATIQUE",
+        guideBtn = "Guide",
+        tabMeasure = "Mesurer",
+        tabArchive = "Enregistrés",
+        tabCompare = "Comparer",
+        tvInfoBadge = "MICROPHONE SMARTPHONE REQUIS",
+        tvInfoTitle = "Lancer la mesure depuis votre smartphone Android",
+        tvInfoBody = "La mesure automatique utilise le micro de votre téléphone Android à votre position d'écoute pendant que la TV diffuse les tonalités sur votre installation.",
+        tvInfoSteps = listOf(
+            "1. Installez et ouvrez SurroundLab sur votre smartphone Android (connexion auto sur le même Wi-Fi).",
+            "2. Touchez « Modes de pièce & Mesure » sur le mobile et autorisez le micro.",
+            "3. Tenez le téléphone immobile à hauteur d'oreille et lancez le balayage : graphiques et PDF restent sur le mobile."
+        ),
+        tvActiveSweepStatus = { hz -> "Mesure en cours depuis le mobile • Tonalité : $hz Hz" },
+        tvShowQrBtn = "Infos connexion / QR",
+        guideTitle = "Comment fonctionne la mesure",
+        guideSubtitle = "Conseils clés pour des courbes exploitables :",
+        guideItems = listOf(
+            "À quoi sert cet outil ?" to "L'app diffuse automatiquement une suite de sinus et mesure le niveau à votre place d'écoute pour repérer les résonances (pics) et creux, et comparer vos placements.",
+            "App Android requise" to "Fonctionne reliée à la TV (5.1/7.1) ou en mode autonome (câble/Bluetooth sur chaîne stéréo). Les navigateurs bloquent le micro sur HTTP local.",
+            "Calme & immobilité" to "Coupez ventilateurs et sources de bruit, restez immobile pendant le balayage et tenez le téléphone à hauteur d'oreille micro dégagé.",
+            "Volume de l'ampli" to "Réglez un volume d'écoute modéré et utilisez le test de niveau préalable (« Optimal ✓ »).",
+            "Limites réalistes" to "Les micros de smartphone ne sont pas calibrés (surtout sous 40 Hz). Les dB absolus sont relatifs, mais les pics, creux et comparaisons restent très fiables."
+        ),
+        guideGotIt = "Compris, c'est parti",
+        micPermissionTitle = "Autorisation microphone requise",
+        micPermissionDesc = "Pour mesurer l'acoustique à votre place, SurroundLab doit accéder au micro du téléphone (actif uniquement pendant les tests et mesures).",
+        micPermissionBtn = "Autoriser le micro",
+        micErrorMsg = "Impossible d'ouvrir le microphone. Vérifiez l'autorisation.",
+        levelCheckTitle = "Test de niveau préalable",
+        levelCheckDesc = "Vérifiez que le volume est bien supérieur au bruit ambiant :",
+        levelCheckStartBtn = "Tester le niveau",
+        levelCheckStopBtn = "Arrêter le test",
+        levelAmbientLabel = { db -> "Bruit ambiant : $db dBFS" },
+        levelLiveLabel = { db, snr -> "Signal : $db dBFS (+$snr dB SNR)" },
+        verdictIdle = "Prêt — touchez « Tester le niveau » ou lancez directement le balayage.",
+        verdictCalibrating = "Mesure du bruit ambiant… restez silencieux.",
+        verdictTooQuiet = "Signal trop faible ! Montez légèrement le volume.",
+        verdictOptimal = "Niveau optimal ✓ — bien au-dessus du bruit de fond.",
+        verdictClipping = "Micro saturé ! Baissez légèrement le volume.",
+        speakersSectionTitle = "Enceintes mesurées",
+        speakerPresetHint = { preset ->
+            when (preset) {
+                GeneratorPreset.P2_0 -> "Idéal avec l'ampli réglé sur enceintes « Small » (bass-management actif) : test le plus réaliste pour la musique et le raccord sans doublon de graves. En « Large » (caisson muet), passez en 0.1 ou 2.1."
+                GeneratorPreset.P0_1_SUB -> "Mesure uniquement le caisson (.1 LFE) — idéal pour repérer les résonances graves et comparer ses emplacements."
+                GeneratorPreset.P2_1 -> "Envoie aux enceintes avant + LFE ensemble (utile sans bass-management AVR ou en Large ; renforce les graves sous la coupure en Small)."
+                GeneratorPreset.ALL_WITHOUT_SUB -> "Teste les satellites sans canal LFE séparé (le caisson joue tout de même si le bass-management de l'ampli est actif)."
+                GeneratorPreset.ALL_ACTIVE -> "Active toutes les enceintes simultanément (niveau global élevé, mais des annulations de phase peuvent apparaître)."
+                GeneratorPreset.CUSTOM -> "Choix libre des canaux (par ex. pour isoler la centrale ou une enceinte précise)."
+            }
+        },
+        presetSectionTitle = "Plage & pas de fréquence",
+        presetRoomModes = "Modes de pièce (20–200 Hz)",
+        presetSubwoofer = "Caisson (20–120 Hz)",
+        presetFullRange = "Spectre complet (20–20k)",
+        presetCustom = "Personnalisé",
+        startHzLabel = "Début (Hz)",
+        endHzLabel = "Fin (Hz)",
+        stepModeLinear = "Linéaire (Hz)",
+        stepModeOctave = "Logarithmique (Octave)",
+        stepHzLabel = "Pas (Hz)",
+        stepOctaveLabel = { d -> "1/$d octave" },
+        speedLabel = "Vitesse",
+        speedFast = "Rapide",
+        speedStandard = "Standard",
+        speedPrecise = "Précise",
+        estimatedTimeLabel = { pts, sec -> "$pts points • ~${sec}s par position" },
+        positionNameLabel = "Nom de cette position",
+        defaultPositionName = { idx -> "Position $idx" },
+        startSweepBtn = "Lancer la mesure",
+        addPositionSweepBtn = "Mesurer la position",
+        countdownLabel = { sec -> "Restez calme et immobile… début dans $sec" },
+        silenceCalibLabel = "Mesure du bruit de fond…",
+        sweepingLabel = { cur, tot, hz -> "Étape $cur / $tot • $hz Hz" },
+        cancelSweepBtn = "Annuler la mesure",
+        activeSessionTitle = "Session en cours",
+        defaultSessionName = { d -> "Mesure $d" },
+        scaleLinearLabel = "Linéaire (Plate)",
+        scaleDbaLabel = "dBA (Audition)",
+        meanCurveLabel = "Moyenne",
+        smoothLabel = "Lisser",
+        addAnotherPositionBtn = "+ Autre position d'écoute",
+        saveSessionBtn = "Enregistrer",
+        savedToast = "Mesure enregistrée",
+        renameSessionTitle = "Nommer & annoter",
+        sessionNameHint = "ex. Caisson angle gauche",
+        sessionNoteHint = "Note (ex. Coupure 80 Hz, Phase 0°)",
+        renamePositionTitle = "Renommer la position",
+        newPositionHint = "ex. Canapé centre",
+        archiveEmptyTitle = "Aucune mesure enregistrée",
+        archiveEmptyBody = "Lancez votre premier balayage dans « Mesurer » puis enregistrez-le pour comparer ou exporter en PDF A4.",
+        positionsCountLabel = { c -> "$c position(s)" },
+        loadInEditorBtn = "Ouvrir / Compléter",
+        exportPdfSingleBtn = "PDF",
+        exportPdfSelectedBtn = { c -> "Exporter PDF ($c)" },
+        selectForExportHint = "Cochez plusieurs mesures pour les regrouper dans un PDF A4.",
+        compareHint = "Sélectionnez au moins 2 mesures enregistrées pour superposer leurs courbes :",
+        compareMinTwoHint = "Enregistrez au moins 2 mesures pour comparer.",
+        pdfReportTitle = "SurroundLab — Rapport acoustique",
+        pdfGeneratedPrefix = "Généré le",
+        pdfPageLabel = { p, t -> "Page $p / $t" },
+        pdfChannelsPrefix = "Canaux",
+        pdfShareTitle = "Partager le rapport PDF",
+        pdfErrorToast = "Échec de l'export PDF.",
+        pdfLayoutDialogTitle = "Format de page PDF",
+        pdfLayoutDialogBody = "Le mode paysage offre plus de lisibilité sur les balayages larges (ex. 20 Hz – 20 kHz).",
+        pdfPortraitDefaultBtn = "Portrait (Défaut)",
+        pdfLandscapeWideBtn = "Paysage (Large)"
     )
 )

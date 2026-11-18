@@ -19,6 +19,7 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.automirrored.rounded.VolumeUp
 import androidx.compose.material.icons.rounded.GraphicEq
 import androidx.compose.material.icons.rounded.LibraryMusic
+import androidx.compose.material.icons.rounded.Mic
 import androidx.compose.material.icons.rounded.PlayCircle
 import androidx.compose.material.icons.rounded.QrCode2
 import androidx.compose.material.icons.rounded.Radar
@@ -202,7 +203,7 @@ fun TvHomeHubScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(340.dp),
-                horizontalArrangement = Arrangement.spacedBy(24.dp)
+                horizontalArrangement = Arrangement.spacedBy(18.dp)
             ) {
                 TvModeCard(
                     modifier = Modifier
@@ -251,6 +252,22 @@ fun TvHomeHubScreen(
                     iconTint = SurroundColors.OnTertiaryContainer,
                     accentColor = SurroundColors.Tertiary,
                     onClick = { onSelectMode(TestMode.PUCK_2D) }
+                )
+
+                TvModeCard(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
+                    badgeText = s.mode4Badge,
+                    title = s.mode4Title,
+                    description = s.mode4TvDesc,
+                    footerIcon = Icons.Rounded.Mic,
+                    footerText = s.mode4Footer,
+                    icon = Icons.Rounded.GraphicEq,
+                    iconContainer = SurroundColors.PrimaryContainer,
+                    iconTint = SurroundColors.OnPrimaryContainer,
+                    accentColor = SurroundColors.Primary,
+                    onClick = { onSelectMode(TestMode.ROOM_MEASUREMENT) }
                 )
             }
         }
@@ -358,7 +375,7 @@ private fun TvModeCard(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(26.dp),
+                .padding(20.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
@@ -371,14 +388,14 @@ private fun TvModeCard(
                         icon = icon,
                         containerColor = iconContainer,
                         iconTint = iconTint,
-                        size = 64.dp,
-                        cornerRadius = 20.dp
+                        size = 56.dp,
+                        cornerRadius = 18.dp
                     )
                     Box(
                         modifier = Modifier
                             .clip(CircleShape)
                             .background(SurroundColors.SurfaceContainerHighest)
-                            .padding(horizontal = 12.dp, vertical = 5.dp)
+                            .padding(horizontal = 10.dp, vertical = 4.dp)
                     ) {
                         Text(
                             text = badgeText,
@@ -390,21 +407,21 @@ private fun TvModeCard(
                     }
                 }
 
-                Spacer(Modifier.height(22.dp))
+                Spacer(Modifier.height(16.dp))
 
                 Text(
                     text = title,
-                    fontSize = 24.sp,
+                    fontSize = 21.sp,
                     fontWeight = FontWeight.Bold,
                     color = SurroundColors.OnSurface
                 )
 
-                Spacer(Modifier.height(10.dp))
+                Spacer(Modifier.height(8.dp))
 
                 Text(
                     text = description,
-                    fontSize = 15.sp,
-                    lineHeight = 22.sp,
+                    fontSize = 14.sp,
+                    lineHeight = 20.sp,
                     color = SurroundColors.OnSurfaceVariant
                 )
             }

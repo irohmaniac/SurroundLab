@@ -22,7 +22,9 @@ data class PersistedSettings(
     val setup: SpeakerSetup = SpeakerSetup.S5_1,
     val setupCompleted: Boolean = false,
     val onboardingCompleted: Boolean = false,
+    val roomGuideSeen: Boolean = false,
     val masterGainDb: Float = -12.0f,
+    val lfeLowPassHz: Int = 120,
     val swap71SurroundBack: Boolean? = null,
     val speakerLayoutPreset: SpeakerLayoutPreset = SpeakerLayoutPreset.STANDARD,
     val tvUiScale: Float = 0.75f,
@@ -38,7 +40,9 @@ class PreferencesRepository(private val context: Context) {
         val SETUP_CODE = stringPreferencesKey("setup_code")
         val SETUP_COMPLETED = booleanPreferencesKey("setup_completed")
         val ONBOARDING_COMPLETED = booleanPreferencesKey("onboarding_completed")
+        val ROOM_GUIDE_SEEN = booleanPreferencesKey("room_guide_seen")
         val MASTER_GAIN_DB = floatPreferencesKey("master_gain_db")
+        val LFE_LOW_PASS_HZ = intPreferencesKey("lfe_low_pass_hz")
         val SWAP_71_SURROUND_BACK = booleanPreferencesKey("swap_71_surround_back")
         val SPEAKER_LAYOUT_PRESET = stringPreferencesKey("speaker_layout_preset")
         val TV_UI_SCALE = floatPreferencesKey("tv_ui_scale")
@@ -53,7 +57,9 @@ class PreferencesRepository(private val context: Context) {
             setup = SpeakerSetup.fromCode(prefs[Keys.SETUP_CODE] ?: SpeakerSetup.S5_1.code),
             setupCompleted = prefs[Keys.SETUP_COMPLETED] ?: false,
             onboardingCompleted = prefs[Keys.ONBOARDING_COMPLETED] ?: false,
+            roomGuideSeen = prefs[Keys.ROOM_GUIDE_SEEN] ?: false,
             masterGainDb = (prefs[Keys.MASTER_GAIN_DB] ?: -12.0f).coerceIn(-30.0f, 0.0f),
+            lfeLowPassHz = (prefs[Keys.LFE_LOW_PASS_HZ] ?: 120).let { if (it <= 0) 0 else it.coerceIn(60, 250) },
             swap71SurroundBack = prefs[Keys.SWAP_71_SURROUND_BACK],
             speakerLayoutPreset = prefs[Keys.SPEAKER_LAYOUT_PRESET]?.let { raw ->
                 runCatching { SpeakerLayoutPreset.valueOf(raw) }.getOrNull()
@@ -78,6 +84,19 @@ class PreferencesRepository(private val context: Context) {
     suspend fun saveMasterGainDb(gainDb: Float) {
         context.surroundDataStore.edit { prefs ->
             prefs[Keys.MASTER_GAIN_DB] = gainDb.coerceIn(-30.0f, 0.0f)
+        }
+    }
+
+    suspend fun saveLfeLowPassHz(cutoffHz: Int) {
+        val sanitized = if (cutoffHz <= 0) 0 else cutoffHz.coerceIn(60, 250)
+        context.surroundDataStore.edit { prefs ->
+            prefs[Keys.LFE_LOW_PASS_HZ] = sanitized
+        }
+    }
+
+    suspend fun saveRoomGuideSeen(seen: Boolean) {
+        context.surroundDataStore.edit { prefs ->
+            prefs[Keys.ROOM_GUIDE_SEEN] = seen
         }
     }
 

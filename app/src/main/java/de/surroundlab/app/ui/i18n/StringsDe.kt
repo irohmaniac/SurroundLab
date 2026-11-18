@@ -62,6 +62,7 @@ val StringsDe = AppStrings(
     generatorPresetLabel = { preset ->
         when (preset) {
             GeneratorPreset.ALL_ACTIVE -> "Alle aktiven Kanäle"
+            GeneratorPreset.ALL_WITHOUT_SUB -> "Alle außer Subwoofer"
             GeneratorPreset.P2_1 -> "2.1 Stereo + Sub"
             GeneratorPreset.P2_0 -> "2.0 Front"
             GeneratorPreset.P0_1_SUB -> "0.1 Nur Subwoofer"
@@ -169,6 +170,11 @@ val StringsDe = AppStrings(
     mode3TvDesc = "Echtzeit-Bühnenpanner. Bewege den Sound-Puck mit D-Pad oder Auto-Orbit frei zwischen den Lautsprechern.",
     mode3MobileDesc = "Live-Raumpanner. Schiebe ein virtuelles Objekt oder fokussiere einzelne Lautsprecher direkt per Touch & Auto-Orbit.",
     mode3Footer = "Virtuelles Objekt & Lautsprecher-Fokus",
+    mode4Badge = "MODUS 04",
+    mode4Title = "Raummoden & Einmessung",
+    mode4TvDesc = "Automatische Frequenzgang-Messung gegen Raummoden mit deinem Android-Smartphone als Messmikrofon.",
+    mode4MobileDesc = "Automatischer Frequenz-Sweep über Handy-Mikrofon: Finde Raummoden, vergleiche Hörpositionen & exportiere DIN-A4-PDFs.",
+    mode4Footer = "Mikrofon-Sweep & PDF-Bericht",
     mobileConnConnected = { host -> "Verbunden: $host" },
     mobileConnConnecting = "Verbinde mit TV...",
     mobileConnLocal = "Lokal-Modus (2.0)",
@@ -178,6 +184,8 @@ val StringsDe = AppStrings(
     mobileCard2FooterLeft = "Frequenzspektrum",
     mobileCard3FooterLeft = "Surround-Panning",
     mobileCard3FooterRight = "360° Echtzeit",
+    mobileCard4FooterLeft = "Mikrofon-Analyse",
+    mobileCard4FooterRight = "Graph & PDF",
     mobileFooterTv = { ip -> "TV: $ip" },
     mobileFooterLocal = "Lokaler Downmix aktiv",
     mobileFooterHeadroom = { db -> "Headroom $db dBFS" },
@@ -272,6 +280,9 @@ val StringsDe = AppStrings(
     tvSettingsTitle = "TV Host Einstellungen",
     tvSettingsSubtitle = "Digitaler Gehör- & Hochtönerschutz + HDMI-Diagnose",
     masterLevelTitleTv = { def -> "Master-Ausgangspegel (Standard: $def dBFS)" },
+    lfeLowPassTitle = "LFE-Tiefpass (Rauschen & Musik)",
+    lfeLowPassDesc = "Begrenzt Rosa Rauschen und eigene Tracks auf dem Subwoofer (.1). Reine Sinustöne und Raum-Messungen laufen immer direkt bis zum AVR-Crossover.",
+    lfeDirectLabel = "Direkt (Aus)",
     swap71Title = "7.1 Surround & Back tauschen (HDMI-HAL)",
     swap71DescTv = "Aktivieren, wenn bei 7.1 SL/SR und SBL/SBR vertauscht sind (z. B. Chromecast / Amlogic).",
     swap71DescMobile = "HDMI-HAL-Workaround (z. B. Chromecast / Amlogic), falls SL/SR und SBL/SBR vertauscht sind.",
@@ -401,5 +412,117 @@ val StringsDe = AppStrings(
         installNowBtn = "Jetzt installieren",
         permissionHint = "Bitte erlaube einmalig die Installation aus dieser Quelle und tippe danach erneut auf „Jetzt installieren“.",
         errorText = { err -> "Update-Prüfung fehlgeschlagen ($err)" }
+    ),
+
+    room = RoomMeasurementStrings(
+        screenTitle = "Raummoden & Einmessung",
+        screenSubtitle = "AUTOMATISCHER FREQUENZ-SWEEP",
+        guideBtn = "Anleitung",
+        tabMeasure = "Messen",
+        tabArchive = "Gespeichert",
+        tabCompare = "Vergleich",
+        tvInfoBadge = "SMARTPHONE-MIKROFON ERFORDERLICH",
+        tvInfoTitle = "Einmessung über Android-Smartphone starten",
+        tvInfoBody = "Für die automatische Raummoden-Messung wird das Mikrofon deines Android-Smartphones direkt am Hörplatz benötigt. Der Fernseher gibt währenddessen die exakten Testtöne über deine Anlage aus.",
+        tvInfoSteps = listOf(
+            "1. SurroundLab auf deinem Android-Handy installieren & öffnen (im selben WLAN verbindet es sich automatisch).",
+            "2. Im Handy auf „Raummoden & Einmessung“ tippen und Mikrofonzugriff erlauben.",
+            "3. Handy ruhig auf Ohrhöhe an den Hörplatz halten und Sweep starten – die Auswertung samt PDF-Export erfolgt direkt am Handy."
+        ),
+        tvActiveSweepStatus = { hz -> "Messung aktiv vom Smartphone • Aktueller Testton: $hz Hz" },
+        tvShowQrBtn = "Verbindungs-Infos / QR zeigen",
+        guideTitle = "So funktioniert die Raum-Einmessung",
+        guideSubtitle = "Alles Wichtige für aussagekräftige Messergebnisse:",
+        guideItems = listOf(
+            "Wofür ist das Tool?" to "Die App spielt automatisch Sinustöne nacheinander ab und misst die Lautstärke an deinem Hörplatz. So erkennst du dröhnende Raummoden (Peaks) und Auslöschungen (Löcher) und kannst verschiedene Subwoofer-/Boxen-Aufstellungen vergleichen.",
+            "Steuergerät nötig (Android-App)" to "Du kannst die Messung direkt mit deinem verbundenen TV-Host (5.1/7.1) oder im Standalone-Modus (Kabel/Bluetooth an Stereoanlage) über die Android-App durchführen. Mobile Browser blockieren leider das Mikrofon über lokales WLAN.",
+            "Vorbereitung & Ruhe" to "Schalte Lüfter/Störquellen aus, bleib während des Durchlaufs ruhig sitzen, vermeide Rascheln und halte das Handy ruhig auf Ohrhöhe (Mikrofon frei).",
+            "Lautstärke der Anlage" to "Stelle normale bis gehobene Zimmerlautstärke ein und nutze vorab den Pegel-Check („Optimal ✓“), bevor du den Sweep startest.",
+            "Ehrliche Einordnung" to "Smartphone-Mikrofone sind nicht wie teure Messmikrofone kalibriert (besonders unter 40 Hz fallen viele Handys leicht ab). Die absoluten dB-Werte sind daher relativ – aber Peaks, Löcher und der direkte Vergleich verschiedener Positionen sind sehr aussagekräftig."
+        ),
+        guideGotIt = "Verstanden, los geht's",
+        micPermissionTitle = "Mikrofon-Berechtigung benötigt",
+        micPermissionDesc = "Für die automatische Lautstärkemessung am Hörplatz braucht die App einmalig Zugriff auf das Smartphone-Mikrofon (nur während der Messung aktiv).",
+        micPermissionBtn = "Mikrofon freigeben",
+        micErrorMsg = "Mikrofon konnte nicht initialisiert werden. Bitte Berechtigung prüfen.",
+        levelCheckTitle = "Vorab-Pegelcheck",
+        levelCheckDesc = "Prüfe kurz, ob deine Anlagen-Lautstärke für das Mikrofon sauber lesbar ist:",
+        levelCheckStartBtn = "Testton prüfen",
+        levelCheckStopBtn = "Prüfung stoppen",
+        levelAmbientLabel = { db -> "Raumrauschen: $db dBFS" },
+        levelLiveLabel = { db, snr -> "Messpegel: $db dBFS (Abstand +$snr dB)" },
+        verdictIdle = "Bereit – tippe auf „Testton prüfen“ oder starte direkt den Sweep.",
+        verdictCalibrating = "Messe Umgebungsrauschen… bitte kurz still sein.",
+        verdictTooQuiet = "Signal zu leise! Dreh die Anlage etwas lauter auf.",
+        verdictOptimal = "Pegel optimal ✓ – sauber über dem Grundrauschen.",
+        verdictClipping = "Mikrofon übersteuert! Dreh die Anlage etwas leiser.",
+        speakersSectionTitle = "Lautsprecher-Auswahl",
+        speakerPresetHint = { preset ->
+            when (preset) {
+                GeneratorPreset.P2_0 -> "Optimal bei AVR-Einstellung ‚Small / Klein‘ (aktives Bass-Management): Realistischster Musik- & Übergangstest ohne Bass-Dopplung. Stehen die Fronts auf ‚Large‘ und der Sub bleibt stumm, wähle 0.1 oder 2.1."
+                GeneratorPreset.P0_1_SUB -> "Misst ausschließlich den Subwoofer – ideal zum Finden von Bass-Raummoden und zum Vergleichen neuer Sub-Standorte."
+                GeneratorPreset.P2_1 -> "Sendet gleichzeitig an Fronts + LFE (gut für ‚Large‘-Fronts oder Anlagen ohne AVR-Bassmanagement; bei ‚Small‘-Boxen unter dem Crossover etwas lauter)."
+                GeneratorPreset.ALL_WITHOUT_SUB -> "Prüft alle Satellitenkanäle ohne separaten LFE-Kanal (bei aktivem AVR-Bassmanagement spielt der Sub unter dem Crossover trotzdem mit)."
+                GeneratorPreset.ALL_ACTIVE -> "Steuert alle aktiven Lautsprecher gleichzeitig an (nützlich für maximalen Gesamtpegel; zwischen mehreren Boxen können Phasen-Auslöschungen entstehen)."
+                GeneratorPreset.CUSTOM -> "Freie Kanalwahl – z. B. gezielt nur einen einzelnen Lautsprecher oder Front L/R + Center getrennt prüfen."
+            }
+        },
+        presetSectionTitle = "Frequenzbereich & Schrittgröße",
+        presetRoomModes = "Raummoden (20–200 Hz)",
+        presetSubwoofer = "Subwoofer (20–120 Hz)",
+        presetFullRange = "Vollspektrum (20–20k)",
+        presetCustom = "Benutzerdefiniert",
+        startHzLabel = "Start (Hz)",
+        endHzLabel = "Ende (Hz)",
+        stepModeLinear = "Linear (Hz)",
+        stepModeOctave = "Logarithmisch (Oktave)",
+        stepHzLabel = "Schrittweite (Hz)",
+        stepOctaveLabel = { d -> "1/$d Oktave" },
+        speedLabel = "Mess-Tempo",
+        speedFast = "Schnell",
+        speedStandard = "Standard",
+        speedPrecise = "Präzise",
+        estimatedTimeLabel = { pts, sec -> "$pts Messpunkte • ca. ${sec}s pro Hörposition" },
+        positionNameLabel = "Name dieser Hörposition",
+        defaultPositionName = { idx -> "Hörposition $idx" },
+        startSweepBtn = "Messung starten",
+        addPositionSweepBtn = "Hörposition einmessen",
+        countdownLabel = { sec -> "Bitte still halten… Start in $sec" },
+        silenceCalibLabel = "Messe Grundrauschen im Raum…",
+        sweepingLabel = { cur, tot, hz -> "Schritt $cur / $tot • $hz Hz" },
+        cancelSweepBtn = "Messung abbrechen",
+        activeSessionTitle = "Aktuelle Messsitzung",
+        defaultSessionName = { d -> "Messung $d" },
+        scaleLinearLabel = "Linear (Flat)",
+        scaleDbaLabel = "dBA (Gehör)",
+        meanCurveLabel = "Mittelwert",
+        smoothLabel = "Glätten",
+        addAnotherPositionBtn = "+ Weitere Hörposition",
+        saveSessionBtn = "Durchlauf speichern",
+        savedToast = "Messung gespeichert",
+        renameSessionTitle = "Durchlauf benennen & Notiz",
+        sessionNameHint = "z. B. Subwoofer Ecke links",
+        sessionNoteHint = "Notiz (z. B. Crossover 80 Hz, Phase 0°)",
+        renamePositionTitle = "Hörposition umbenennen",
+        newPositionHint = "z. B. Sofa Mitte",
+        archiveEmptyTitle = "Noch keine gespeicherten Messungen",
+        archiveEmptyBody = "Starte im Tab „Messen“ deinen ersten Durchlauf und speichere ihn, um später Aufstellungen zu vergleichen oder PDFs zu exportieren.",
+        positionsCountLabel = { c -> "$c Hörposition(en)" },
+        loadInEditorBtn = "Öffnen / Ergänzen",
+        exportPdfSingleBtn = "PDF",
+        exportPdfSelectedBtn = { c -> "PDF exportieren ($c)" },
+        selectForExportHint = "Tippe Checkboxen an, um mehrere Messungen auf eine DIN-A4-PDF zu packen.",
+        compareHint = "Wähle 2 oder mehr gespeicherte Durchläufe, um deren Kurven direkt zu vergleichen:",
+        compareMinTwoHint = "Mindestens 2 gespeicherte Messungen nötig.",
+        pdfReportTitle = "SurroundLab — Raumakustik-Bericht",
+        pdfGeneratedPrefix = "Erstellt",
+        pdfPageLabel = { p, t -> "Seite $p / $t" },
+        pdfChannelsPrefix = "Kanäle",
+        pdfShareTitle = "Raummessung als PDF teilen",
+        pdfErrorToast = "PDF-Export fehlgeschlagen.",
+        pdfLayoutDialogTitle = "PDF-Seitenformat wählen",
+        pdfLayoutDialogBody = "Für breite Messungen (z. B. 20 Hz – 20 kHz) ist das Querformat besonders übersichtlich.",
+        pdfPortraitDefaultBtn = "Hochformat (Standard)",
+        pdfLandscapeWideBtn = "Querformat (Breitbild)"
     )
 )

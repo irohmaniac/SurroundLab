@@ -34,10 +34,11 @@ Statt komprimierter Videos erzeugt die App auf dem TV in Echtzeit einen diskrete
 
 <table>
   <tr>
-    <td align="center"><img src="docs/images/de-DE/phone_02_puck_2d_1080x1920.png" width="220" alt="2D-Raum-Puck" /></td>
-    <td align="center"><img src="docs/images/de-DE/phone_01_single_speaker_1080x1920.png" width="220" alt="Einzellautsprecher-Test" /></td>
-    <td align="center"><img src="docs/images/de-DE/phone_03_generator_1080x1920.png" width="220" alt="1-Hz-Frequenz-Stepper" /></td>
-    <td align="center"><img src="docs/images/de-DE/phone_04_multi_device_sync_1080x1920.png" width="220" alt="Kabellose Multi-Device-Steuerung" /></td>
+    <td align="center"><img src="docs/images/de-DE/phone_02_puck_2d_1080x1920.png" width="175" alt="2D-Raum-Puck" /></td>
+    <td align="center"><img src="docs/images/de-DE/phone_01_single_speaker_1080x1920.png" width="175" alt="Einzellautsprecher-Test" /></td>
+    <td align="center"><img src="docs/images/de-DE/phone_03_generator_1080x1920.png" width="175" alt="1-Hz-Frequenz-Stepper" /></td>
+    <td align="center"><img src="docs/images/de-DE/phone_05_room_sweep_1080x1920.png" width="175" alt="Raummoden &amp; Einmessung" /></td>
+    <td align="center"><img src="docs/images/de-DE/phone_04_multi_device_sync_1080x1920.png" width="175" alt="Kabellose Multi-Device-Steuerung" /></td>
   </tr>
 </table>
 
@@ -50,11 +51,12 @@ Statt komprimierter Videos erzeugt die App auf dem TV in Echtzeit einen diskrete
 
 ---
 
-## Die 3 Kern-Modi
+## Die 4 Kern-Modi
 
 - **01 — Einzellautsprecher-Test:** Schalte jeden Lautsprecher deines `2.0`-, `2.1`-, `3.1`-, `5.0`-, `5.1`- oder `7.1`-Systems einzeln frei. Wähle pro Kanal zwischen **Rosa Rauschen**, reinem **Sinuston** oder einer **eigenen Audiodatei**, um Verkabelung, Pegel und Klangfarbe zu prüfen.
-- **02 — Frequenz- & Preset-Generator:** Durchfahre das Spektrum von **20 Hz bis 20 kHz** in feinen **1-Hz-Schritten**. Finde dröhnende Raummoden, klappernde Möbel oder prüfe mit den Direkt-Presets (`40 Hz`, `60 Hz`, `80 Hz THX-Crossover`, `400 Hz`, `1 kHz Referenz`, `10 kHz`) den Übergang zwischen Subwoofer und Satelliten.
+- **02 — Frequenz- & Preset-Generator:** Durchfahre das Spektrum von **20 Hz bis 20 kHz** in feinen **1-Hz-Schritten**. Finde dröhnende Raummoden, klappernde Möbel oder prüfe mit den Direkt-Presets (`40 Hz`, `60 Hz`, `80 Hz THX-Crossover`, `400 Hz`, `1 kHz Referenz`, `10 kHz`) sowie Kanalgruppen (inkl. *Alle außer Subwoofer*) den Übergang zwischen Subwoofer und Satelliten.
 - **03 — 2D-Raum-Puck (Live-Raumpanner):** Hier trifft Einmessung auf Hörspaß. Verschiebe eine Klangquelle in Echtzeit frei durch dein Wohnzimmer oder lass sie im **Auto-Orbit** (Langsam, Mittel, Schnell) kreisen. Schalte um zwischen *Virtuellem Objekt* (mit realistischer Distanz- und Luftdämpfung) und *Lautsprecher-Fokus*.
+- **04 — Raummoden & Einmessung (Android-App):** Nutze dein Android-Smartphone am Hörplatz als Messmikrofon – sowohl verbunden mit dem TV-Host als auch Standalone per Kabel/Bluetooth an einer Stereoanlage. Mit Vorab-**Pegelcheck**, störungsarmer **Goertzel-Frequenzanalyse**, frei wählbarem Bereich & Schrittgröße (linear in Hz oder logarithmisch in Oktaven), beliebig vielen farbig getrennten **Hörpositionen** (per Haken ein-/ausblendbar) + **Mittelwertkurve**, nachträglicher Umschaltung **Linear (Flat) / dBA**, Durchlauf-Vergleich und **DIN-A4-PDF-Export** (3 Durchläufe pro Hochkant-Seite oder Breitbild-Querformat für Einzelmessungen). *(Hinweis: In der Browser-/iOS-Websteuerung ist dieser Modus deaktiviert, da Browser über unverschlüsseltes lokales WLAN keinen Mikrofonzugriff erlauben.)*
 
 ---
 
@@ -70,9 +72,9 @@ Statt komprimierter Videos erzeugt die App auf dem TV in Echtzeit einen diskrete
 
 - **7.1-Kanaltausch-Fix:** Viele TV-Sticks (z. B. Chromecast / Amlogic) vertauschen bei 7.1 seitliche Surrounds (`SL/SR`) und Back-Surrounds (`SBL/SBR`). Ein Schalter in den Einstellungen behebt das sofort.
 - **Anpassbare Raumgeometrie:** Wähle zwischen **Eng (±22°)**, **Standard (±30° Dolby/ITU)** und **Breit (±40°)**, passend zu deinem Wohnzimmer.
-- **Gehör- & Hochtönerschutz:** Startet sicher bei **-12 dBFS** Headroom mit integriertem Soft-Clip-Limiter (`±0.98f`) und sanften 15-ms-Ein-/Ausblendrampen – kein Knacksen, kein Clipping.
+- **Konfigurierbarer LFE-Tiefpass & Gehörschutz:** Startet sicher bei **-12 dBFS** Headroom mit integriertem Soft-Clip-Limiter (`±0.98f`) und sanften 15-ms-Ein-/Ausblendrampen. Der LFE-Tiefpass für Rosa Rauschen & Musik ist einstellbar (`80–200 Hz` oder `Direkt`, Standard `120 Hz`); reine Sinustöne und Raum-Messungen umgehen ihn immer direkt bis zum AVR-Crossover.
 - **Eigene Audio-Tracks:** Lade eigene `.wav`-, `.mp3`-, `.flac`- oder `.ogg`-Dateien (bis 30 MB) hoch und schicke sie auf eine 360°-Reise durch den Raum.
-- **Datenschutz ohne Ballast:** Keine Werbung, kein Abo, kein Konto-Zwang und keinerlei Standort- oder Speicher-Vollzugriffsberechtigungen.
+- **Datenschutz ohne Ballast:** Keine Werbung, kein Abo, kein Konto-Zwang und keinerlei Standort- oder Speicher-Vollzugriffsberechtigungen. Mikrofonzugriff (`RECORD_AUDIO`) wird erst beim Start der Raum-Einmessung am Handy angefragt.
 
 ---
 

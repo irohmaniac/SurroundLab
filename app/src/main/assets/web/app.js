@@ -24,7 +24,11 @@
       mode2Desc: '20 Hz – 20 kHz Sinuston oder Rosa Rauschen auf gewählten Kanälen & Subwoofer-Presets.',
       mode3Title: '2D-Raum-Puck',
       mode3Desc: 'Live-Raumpanner per Touch/Maus mit Virtuellem Objekt, Lautsprecher-Fokus und Auto-Orbit.',
+      mode4Title: 'Raummoden & Einmessung',
+      mode4DisabledDesc: 'Nur in der Android-App verfügbar – Browser blockieren Mikrofonzugriff über lokales HTTP im WLAN.',
       masterLevelTitle: 'Master-Pegel (Gehörschutz)',
+      lfeLowPassLabel: 'LFE-Tiefpass (Rauschen/Musik)',
+      lfeDirect: 'Direkt (Aus)',
       swap71Label: '7.1 Surround & Back tauschen (HDMI-HAL)',
       layoutAnglesLabel: 'Aufstellungs-Winkel',
       presetCompact: 'Eng (±22°)',
@@ -51,6 +55,7 @@
       genShortTitle: 'Frequenz-Generator',
       genPresets: {
         ALL_ACTIVE: 'Alle aktiven Kanäle',
+        ALL_WITHOUT_SUB: 'Alle außer Subwoofer',
         P2_1: '2.1 Stereo + Sub',
         P2_0: '2.0 Front',
         P0_1_SUB: '0.1 Nur Sub',
@@ -89,7 +94,11 @@
       mode2Desc: '20 Hz – 20 kHz sine wave or pink noise on selected channels & subwoofer presets.',
       mode3Title: '2D Spatial Sound Puck',
       mode3Desc: 'Real-time spatial panner via touch/mouse with Virtual Object, Speaker Focus, and Auto-Orbit.',
+      mode4Title: 'Room Modes & Sweep',
+      mode4DisabledDesc: 'Android app only — browsers block microphone access over local Wi-Fi HTTP.',
       masterLevelTitle: 'Master Level (Hearing Protection)',
+      lfeLowPassLabel: 'LFE Low-Pass (Noise/Audio)',
+      lfeDirect: 'Direct (Off)',
       swap71Label: 'Swap 7.1 Surround & Back (HDMI-HAL)',
       layoutAnglesLabel: 'Placement Angles',
       presetCompact: 'Narrow (±22°)',
@@ -116,6 +125,7 @@
       genShortTitle: 'Frequency Generator',
       genPresets: {
         ALL_ACTIVE: 'All Active Channels',
+        ALL_WITHOUT_SUB: 'All Except Subwoofer',
         P2_1: '2.1 Stereo + Sub',
         P2_0: '2.0 Front',
         P0_1_SUB: '0.1 Subwoofer Only',
@@ -154,7 +164,11 @@
       mode2Desc: 'Onda senoidal 20 Hz – 20 kHz o ruido rosa en canales elegidos y corte de subwoofer.',
       mode3Title: 'Puck espacial 2D',
       mode3Desc: 'Panner espacial en tiempo real táctil/ratón con Objeto virtual, Foco en altavoz y Auto-Órbita.',
+      mode4Title: 'Modos de sala y Barrido',
+      mode4DisabledDesc: 'Solo disponible en la app Android: los navegadores bloquean el micrófono por HTTP en red local.',
       masterLevelTitle: 'Nivel maestro (Protección auditiva)',
+      lfeLowPassLabel: 'Paso bajo LFE (Ruido/Audio)',
+      lfeDirect: 'Directo (No)',
       swap71Label: 'Invertir 7.1 Surround y Traseros (HDMI-HAL)',
       layoutAnglesLabel: 'Ángulos de ubicación',
       presetCompact: 'Estrecho (±22°)',
@@ -181,6 +195,7 @@
       genShortTitle: 'Generador de frecuencias',
       genPresets: {
         ALL_ACTIVE: 'Todos los canales activos',
+        ALL_WITHOUT_SUB: 'Todos menos Subwoofer',
         P2_1: '2.1 Estéreo + Sub',
         P2_0: '2.0 Frontal',
         P0_1_SUB: '0.1 Solo Subwoofer',
@@ -219,7 +234,11 @@
       mode2Desc: 'Sinusoïde 20 Hz – 20 kHz ou bruit rose sur les canaux choisis & préréglages caisson.',
       mode3Title: 'Spatialisation 2D (Puck)',
       mode3Desc: 'Panner spatial temps réel tactile/souris avec Objet virtuel, Focus enceinte et Auto-Orbite.',
+      mode4Title: 'Modes de pièce & Mesure',
+      mode4DisabledDesc: 'Uniquement dans l’app Android : les navigateurs bloquent le micro sur HTTP en Wi-Fi local.',
       masterLevelTitle: 'Niveau général (Protection auditive)',
+      lfeLowPassLabel: 'Passe-bas LFE (Bruit/Audio)',
+      lfeDirect: 'Direct (Off)',
       swap71Label: 'Inverser 7.1 Surround & Arrière (HDMI-HAL)',
       layoutAnglesLabel: 'Angles de placement',
       presetCompact: 'Resserré (±22°)',
@@ -246,6 +265,7 @@
       genShortTitle: 'Générateur de fréquences',
       genPresets: {
         ALL_ACTIVE: 'Tous les canaux actifs',
+        ALL_WITHOUT_SUB: 'Tous sauf caisson',
         P2_1: '2.1 Stéréo + Caisson',
         P2_0: '2.0 Avant',
         P0_1_SUB: '0.1 Caisson seul',
@@ -284,7 +304,11 @@
       mode2Desc: 'Senoide 20 Hz – 20 kHz ou ruído rosa nos canais selecionados e cortes de subwoofer.',
       mode3Title: 'Puck Espacial 2D',
       mode3Desc: 'Panner espacial em tempo real por toque/mouse com Objeto virtual, Foco na caixa e Auto-Órbita.',
+      mode4Title: 'Modos de Sala & Varredura',
+      mode4DisabledDesc: 'Apenas no app Android — navegadores bloqueiam o microfone via HTTP na rede local.',
       masterLevelTitle: 'Nível Geral (Proteção Auditiva)',
+      lfeLowPassLabel: 'Filtro LFE (Ruído/Áudio)',
+      lfeDirect: 'Direto (Off)',
       swap71Label: 'Inverter 7.1 Surround & Traseira (HDMI-HAL)',
       layoutAnglesLabel: 'Ângulos de posicionamento',
       presetCompact: 'Estreito (±22°)',
@@ -311,6 +335,7 @@
       genShortTitle: 'Gerador de Frequências',
       genPresets: {
         ALL_ACTIVE: 'Todos os canais ativos',
+        ALL_WITHOUT_SUB: 'Todos exceto Subwoofer',
         P2_1: '2.1 Estéreo + Sub',
         P2_0: '2.0 Frontal',
         P0_1_SUB: '0.1 Apenas Subwoofer',
@@ -349,7 +374,11 @@
       mode2Desc: '20 Hz 〜 20 kHz のサイン波・ピンクノイズおよびサブウーファープリセット。',
       mode3Title: '2D 空間サウンドパック',
       mode3Desc: 'タッチ・マウス操作対応のリアルタイム空間パンナー＆自動オービット。',
+      mode4Title: 'ルーム音響・自動測定',
+      mode4DisabledDesc: 'Android アプリ専用機能です（ブラウザはローカル HTTP 環境でマイク利用をブロックします）。',
       masterLevelTitle: 'マスター出力レベル（聴覚保護）',
+      lfeLowPassLabel: 'LFE ローパス（ノイズ/音楽）',
+      lfeDirect: 'スルー (無効)',
       swap71Label: '7.1 サラウンドとバックを入替 (HDMI-HAL)',
       layoutAnglesLabel: 'スピーカー配置角度',
       presetCompact: '狭角 (±22°)',
@@ -376,6 +405,7 @@
       genShortTitle: '周波数発信器',
       genPresets: {
         ALL_ACTIVE: '有効な全チャンネル',
+        ALL_WITHOUT_SUB: 'サブウーファー以外の全て',
         P2_1: '2.1 ステレオ + サブ',
         P2_0: '2.0 フロント',
         P0_1_SUB: '0.1 サブ単体',
@@ -486,6 +516,7 @@
 
   const PRESET_DEFS = [
     { id: 'ALL_ACTIVE' },
+    { id: 'ALL_WITHOUT_SUB', needSub: true },
     { id: 'P2_1', needSub: true },
     { id: 'P2_0' },
     { id: 'P0_1_SUB', needSub: true },
@@ -571,17 +602,22 @@
     const setupCode = SETUP_FROM_ENUM[appState.setup] || '5.1';
     el('setupSelect').value = setupCode;
 
-    // Switch Hub-and-Spoke View
-    const mode = appState.activeMode || 'HUB';
+    // Switch Hub-and-Spoke View (ROOM_MEASUREMENT stays on Hub in browser)
+    const rawMode = appState.activeMode || 'HUB';
+    const mode = rawMode === 'ROOM_MEASUREMENT' ? 'HUB' : rawMode;
     el('viewHub').classList.toggle('hidden', mode !== 'HUB');
     el('viewSingle').classList.toggle('hidden', mode !== 'SINGLE_SPEAKER');
     el('viewGenerator').classList.toggle('hidden', mode !== 'GENERATOR');
     el('viewPuck').classList.toggle('hidden', mode !== 'PUCK_2D');
 
-    // Master Gain, 7.1 Swap & Layout Angle Preset
+    // Master Gain, LFE Low-Pass, 7.1 Swap & Layout Angle Preset
     const gainDb = Math.round(appState.masterGainDb ?? -12);
     el('masterGainSlider').value = gainDb;
     el('masterGainLabel').textContent = `${gainDb} dBFS`;
+    const lfeSel = el('lfeLowPassSelect');
+    if (lfeSel) {
+      lfeSel.value = String(appState.lfeLowPassHz ?? 120);
+    }
     el('swap71Toggle').checked = !!appState.swap71SurroundBack;
     const presetKey = appState.speakerLayoutPreset || 'STANDARD';
     el('layoutPresetSelect').value = presetKey;
@@ -920,7 +956,7 @@
     sendWs({ type: 'SET_LANGUAGE', appLanguage: lang });
   };
 
-  document.querySelectorAll('.mode-card').forEach((btn) => {
+  document.querySelectorAll('.mode-card[data-mode]').forEach((btn) => {
     btn.onclick = () => sendWs({ type: 'SET_MODE', mode: btn.dataset.mode });
   });
 
@@ -933,6 +969,13 @@
     el('masterGainLabel').textContent = `${db} dBFS`;
     sendWs({ type: 'SET_MASTER_GAIN', masterGainDb: db });
   };
+
+  const lfeSelEl = el('lfeLowPassSelect');
+  if (lfeSelEl) {
+    lfeSelEl.onchange = (e) => {
+      sendWs({ type: 'SET_LFE_LOW_PASS', lfeLowPassHz: Number(e.target.value) });
+    };
+  }
 
   el('swap71Toggle').onchange = (e) => {
     sendWs({ type: 'SET_SWAP_71_SURROUND_BACK', swap71SurroundBack: e.target.checked });

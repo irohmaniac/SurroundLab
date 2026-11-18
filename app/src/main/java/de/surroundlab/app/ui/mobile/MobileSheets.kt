@@ -537,6 +537,7 @@ fun MobileConnectionSettingsScreen(
     onConnectHost: (String, Int, String) -> Unit,
     onDisconnectHost: () -> Unit,
     onMasterGainChange: (Float) -> Unit,
+    onLfeLowPassChange: (Int) -> Unit,
     onSwap71Change: (Boolean) -> Unit,
     onSpeakerLayoutPresetChange: (SpeakerLayoutPreset) -> Unit,
     onLanguageChange: (AppLanguage) -> Unit,
@@ -810,6 +811,67 @@ fun MobileConnectionSettingsScreen(
                         activeTrackColor = SurroundColors.Primary
                     )
                 )
+            }
+
+            // Configurable LFE Low-Pass Filter (Pink Noise & Music; Sine & Room Sweeps always bypass)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(24.dp))
+                    .background(SurroundColors.SurfaceContainer)
+                    .padding(18.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = s.lfeLowPassTitle,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = SurroundColors.OnSurface,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Text(
+                        text = if (state.lfeLowPassHz <= 0) s.lfeDirectLabel else "${state.lfeLowPassHz} Hz",
+                        fontFamily = MonoFontFamily,
+                        fontWeight = FontWeight.Bold,
+                        color = SurroundColors.Primary
+                    )
+                }
+                Text(
+                    text = s.lfeLowPassDesc,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = SurroundColors.OnSurfaceVariant
+                )
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    listOf(80, 100, 120, 150, 200, 0).forEach { cutoff ->
+                        val selected = state.lfeLowPassHz == cutoff
+                        val label = if (cutoff == 0) s.lfeDirectLabel else "$cutoff Hz"
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(14.dp))
+                                .background(
+                                    if (selected) SurroundColors.PrimaryContainer
+                                    else SurroundColors.SurfaceContainerHigh
+                                )
+                                .clickable { onLfeLowPassChange(cutoff) }
+                                .padding(horizontal = 12.dp, vertical = 8.dp)
+                        ) {
+                            Text(
+                                text = label,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = if (selected) SurroundColors.OnPrimaryContainer else SurroundColors.OnSurfaceVariant
+                            )
+                        }
+                    }
+                }
             }
 
             // 7.1 Surround / Back HDMI-HAL Compatibility Switch

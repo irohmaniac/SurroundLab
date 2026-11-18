@@ -13,14 +13,21 @@ import de.surroundlab.app.domain.model.AudioSyncStatus
 import de.surroundlab.app.domain.model.ConnectionStatus
 import de.surroundlab.app.domain.model.CustomAudioTrack
 import de.surroundlab.app.domain.model.DiscoveredHost
+import de.surroundlab.app.domain.model.FrequencyMeasurementPoint
 import de.surroundlab.app.domain.model.GeneratorPreset
+import de.surroundlab.app.domain.model.ListeningPositionTrace
+import de.surroundlab.app.domain.model.MeasurementRunProgress
+import de.surroundlab.app.domain.model.MeasurementSpeed
 import de.surroundlab.app.domain.model.OrbitSpeed
 import de.surroundlab.app.domain.model.PanningMode
+import de.surroundlab.app.domain.model.RoomLevelCheckState
+import de.surroundlab.app.domain.model.RoomMeasurementSession
 import de.surroundlab.app.domain.model.SignalSourceType
 import de.surroundlab.app.domain.model.SpeakerChannel
 import de.surroundlab.app.domain.model.SpeakerLayoutPreset
 import de.surroundlab.app.domain.model.SpeakerSetup
 import de.surroundlab.app.domain.model.SurroundAppState
+import de.surroundlab.app.domain.model.SweepStepMode
 import de.surroundlab.app.domain.model.TestMode
 import kotlinx.coroutines.flow.StateFlow
 
@@ -45,6 +52,10 @@ class SurroundViewModel(application: Application) : AndroidViewModel(application
     val localAudioLibrary: StateFlow<List<CustomAudioTrack>> = repo.localAudioLibrary
     val audioSyncStatus: StateFlow<AudioSyncStatus> = repo.audioSyncStatus
     val onboardingCompleted: StateFlow<Boolean?> = repo.onboardingCompleted
+    val roomGuideSeen: StateFlow<Boolean> = repo.roomGuideSeen
+    val roomSessions: StateFlow<List<RoomMeasurementSession>> = repo.roomSessions
+    val roomLevelCheckState: StateFlow<RoomLevelCheckState> = repo.roomLevelCheckState
+    val roomMeasurementProgress: StateFlow<MeasurementRunProgress> = repo.roomMeasurementProgress
 
     fun selectSetup(setup: SpeakerSetup, markCompleted: Boolean = true) =
         repo.selectSetup(setup, markCompleted)
@@ -52,6 +63,8 @@ class SurroundViewModel(application: Application) : AndroidViewModel(application
     fun setMode(mode: TestMode) = repo.setMode(mode)
 
     fun setMasterGainDb(gainDb: Float) = repo.setMasterGainDb(gainDb)
+
+    fun setLfeLowPassHz(cutoffHz: Int) = repo.setLfeLowPassHz(cutoffHz)
 
     fun setSwap71SurroundBack(enabled: Boolean) = repo.setSwap71SurroundBack(enabled)
 
@@ -119,6 +132,51 @@ class SurroundViewModel(application: Application) : AndroidViewModel(application
     fun completeOnboarding() = repo.completeOnboarding()
 
     fun reopenOnboarding() = repo.reopenOnboarding()
+
+    fun markRoomGuideSeen() = repo.markRoomGuideSeen()
+
+    fun startRoomLevelCheck(
+        preset: GeneratorPreset,
+        customChannels: Set<SpeakerChannel>,
+        testHz: Int,
+        withTone: Boolean
+    ) = repo.startRoomLevelCheck(preset, customChannels, testHz, withTone)
+
+    fun stopRoomLevelCheck() = repo.stopRoomLevelCheck()
+
+    fun startRoomSweep(
+        preset: GeneratorPreset,
+        customChannels: Set<SpeakerChannel>,
+        startHz: Int,
+        endHz: Int,
+        stepMode: SweepStepMode,
+        stepValue: Int,
+        speed: MeasurementSpeed,
+        micErrorLabel: String,
+        onCompleted: (List<FrequencyMeasurementPoint>) -> Unit
+    ) = repo.startRoomSweep(
+        preset, customChannels, startHz, endHz, stepMode, stepValue, speed, micErrorLabel, onCompleted
+    )
+
+    fun cancelRoomSweep() = repo.cancelRoomSweep()
+
+    fun resetRoomSweepProgress() = repo.resetRoomSweepProgress()
+
+    fun saveRoomSession(session: RoomMeasurementSession) = repo.saveRoomSession(session)
+
+    fun addPositionToRoomSession(sessionId: String, position: ListeningPositionTrace) =
+        repo.addPositionToRoomSession(sessionId, position)
+
+    fun updateRoomSessionMeta(sessionId: String, name: String, note: String) =
+        repo.updateRoomSessionMeta(sessionId, name, note)
+
+    fun renameRoomPosition(sessionId: String, positionId: String, newName: String) =
+        repo.renameRoomPosition(sessionId, positionId, newName)
+
+    fun deleteRoomPosition(sessionId: String, positionId: String) =
+        repo.deleteRoomPosition(sessionId, positionId)
+
+    fun deleteRoomSession(sessionId: String) = repo.deleteRoomSession(sessionId)
 
     fun checkForUpdates() {
         viewModelScope.launch {

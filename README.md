@@ -34,10 +34,11 @@ Instead of playing compressed video files, SurroundLab opens a real-time, discre
 
 <table>
   <tr>
-    <td align="center"><img src="docs/images/en-US/phone_02_puck_2d_1080x1920.png" width="220" alt="2D Spatial Sound Puck" /></td>
-    <td align="center"><img src="docs/images/en-US/phone_01_single_speaker_1080x1920.png" width="220" alt="Single Speaker Isolation" /></td>
-    <td align="center"><img src="docs/images/en-US/phone_03_generator_1080x1920.png" width="220" alt="1-Hz Frequency Stepper" /></td>
-    <td align="center"><img src="docs/images/en-US/phone_04_multi_device_sync_1080x1920.png" width="220" alt="Wireless Multi-Device Control" /></td>
+    <td align="center"><img src="docs/images/en-US/phone_02_puck_2d_1080x1920.png" width="175" alt="2D Spatial Sound Puck" /></td>
+    <td align="center"><img src="docs/images/en-US/phone_01_single_speaker_1080x1920.png" width="175" alt="Single Speaker Isolation" /></td>
+    <td align="center"><img src="docs/images/en-US/phone_03_generator_1080x1920.png" width="175" alt="1-Hz Frequency Stepper" /></td>
+    <td align="center"><img src="docs/images/en-US/phone_05_room_sweep_1080x1920.png" width="175" alt="Room Modes &amp; Automated Sweep" /></td>
+    <td align="center"><img src="docs/images/en-US/phone_04_multi_device_sync_1080x1920.png" width="175" alt="Wireless Multi-Device Control" /></td>
   </tr>
 </table>
 
@@ -50,11 +51,12 @@ Instead of playing compressed video files, SurroundLab opens a real-time, discre
 
 ---
 
-## Three Core Modes
+## Four Core Modes
 
 - **01 — Single Speaker Test:** Isolate every channel of your `2.0`, `2.1`, `3.1`, `5.0`, `5.1`, or `7.1` system individually. Choose between **Pink Noise**, a pure **Sine Wave**, or your **own uploaded audio track** per channel to verify wiring, trim levels, and speaker timbre.
-- **02 — Frequency & Preset Generator:** Sweep continuously from **20 Hz to 20 kHz** with **1 Hz precision**. Track down room modes, cabinet rattles, or test your subwoofer integration using quick presets (`40 Hz`, `60 Hz`, `80 Hz THX Crossover`, `400 Hz`, `1 kHz Reference`, `10 kHz`).
+- **02 — Frequency & Preset Generator:** Sweep continuously from **20 Hz to 20 kHz** with **1 Hz precision**. Track down room modes, cabinet rattles, or test your subwoofer integration using quick presets (`40 Hz`, `60 Hz`, `80 Hz THX Crossover`, `400 Hz`, `1 kHz Reference`, `10 kHz`) and speaker groups including *All Except Subwoofer*.
 - **03 — 2D Spatial Sound Puck:** Where serious calibration meets pure listening fun. Drag a sound source smoothly around your room in real time or let it circle automatically with **Auto-Orbit** (Slow, Medium, Fast). Switch between *Virtual Object* (simulating natural distance & air attenuation) and *Speaker Focus* to hear how seamlessly your speakers blend across the room.
+- **04 — Room Modes & Automated Sweep (Android App):** Turn your Android smartphone into an acoustic measurement mic at your listening seat (works both connected to your TV host and standalone via cable/Bluetooth). Includes a pre-sweep **Level Check**, narrowband **Goertzel** analysis resistant to background noise, custom linear (Hz) or logarithmic (octave) sweeps, multiple color-coded listening positions with per-seat visibility toggles and an optional **Spatial Average** curve, non-destructive **Linear (Flat) / dBA** switching, run comparisons, and **DIN A4 PDF export** (3 compact runs per portrait page or wide landscape for single runs). *(Note: Browser/iOS web control disables this mode because mobile browsers block microphone access over plain local Wi-Fi HTTP.)*
 
 ---
 
@@ -70,9 +72,9 @@ Instead of playing compressed video files, SurroundLab opens a real-time, discre
 
 - **7.1 HDMI Channel-Swap Fix:** Many Android TV sticks (such as Chromecast / Amlogic devices) swap Side Surrounds (`SL/SR`) and Rear Surrounds (`SBL/SBR`) in 7.1 hardware output. A single toggle in Settings fixes the mapping instantly.
 - **Adjustable Room Geometry:** Match your actual speaker placement with **Narrow (±22°)**, **Standard (±30° Dolby/ITU)**, or **Wide (±40°)** angle presets.
-- **Hearing & Tweeter Protection:** Starts safely at **-12 dBFS** digital headroom with an always-on soft-clip limiter (`±0.98f`) and smooth 15 ms raised-cosine fades—no pops, clicks, or harsh clipping.
+- **Configurable LFE Low-Pass & Hearing Protection:** Starts safely at **-12 dBFS** digital headroom with an always-on soft-clip limiter (`±0.98f`) and smooth 15 ms raised-cosine fades. The subwoofer (`.1`) low-pass for Pink Noise & Music is configurable (`80–200 Hz` or `Direct`, default `120 Hz`), while pure sine waves and room sweeps always bypass directly to your AVR crossover.
 - **Custom Reference Audio:** Upload your own `.wav`, `.mp3`, `.flac`, or `.ogg` tracks (up to 30 MB) and send them on a 360° orbit around your sofa.
-- **Zero Bloat & Zero Intrusive Permissions:** No ads, no subscriptions, no account required, and no location or broad storage permissions.
+- **Zero Bloat & Minimal Permissions:** No ads, no subscriptions, no account required, and no location or broad storage permissions. Microphone access (`RECORD_AUDIO`) is requested only when you run the Room Mode measurement on your phone.
 
 ---
 

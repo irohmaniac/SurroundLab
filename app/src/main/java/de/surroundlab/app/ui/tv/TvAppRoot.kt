@@ -76,6 +76,13 @@ fun TvAppRoot(
                     }
                 )
             }
+            state.activeMode == TestMode.ROOM_MEASUREMENT -> {
+                TvRoomMeasurementScreen(
+                    state = state,
+                    onOpenQrDialog = { showQrDialog = true },
+                    onBack = { vm.setMode(TestMode.HUB) }
+                )
+            }
         }
 
         if (showQrDialog) {
@@ -89,6 +96,7 @@ fun TvAppRoot(
             TvSettingsDialog(
                 state = state,
                 onMasterGainChange = { db -> vm.setMasterGainDb(db) },
+                onLfeLowPassChange = { hz -> vm.setLfeLowPassHz(hz) },
                 onSwap71Change = { enabled -> vm.setSwap71SurroundBack(enabled) },
                 onSpeakerLayoutPresetChange = { preset -> vm.setSpeakerLayoutPreset(preset) },
                 onTvUiScaleChange = { scale -> vm.setTvUiScale(scale) },

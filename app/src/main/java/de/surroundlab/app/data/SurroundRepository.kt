@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import de.surroundlab.app.audio.AudioDeviceInspector
 import de.surroundlab.app.audio.DecodedAudioCache
+import de.surroundlab.app.audio.RoomMeasurementCoordinator
 import de.surroundlab.app.audio.SpatialPanner
 import de.surroundlab.app.audio.SurroundAudioEngine
 import de.surroundlab.app.domain.model.AppLanguage
@@ -14,15 +15,23 @@ import de.surroundlab.app.domain.model.AudioSyncStatus
 import de.surroundlab.app.domain.model.ConnectionStatus
 import de.surroundlab.app.domain.model.CustomAudioTrack
 import de.surroundlab.app.domain.model.DiscoveredHost
+import de.surroundlab.app.domain.model.FrequencyMeasurementPoint
 import de.surroundlab.app.domain.model.GeneratorPreset
+import de.surroundlab.app.domain.model.ListeningPositionTrace
+import de.surroundlab.app.domain.model.MeasurementRunProgress
+import de.surroundlab.app.domain.model.MeasurementSpeed
 import de.surroundlab.app.domain.model.OrbitSpeed
 import de.surroundlab.app.domain.model.PanningMode
+import de.surroundlab.app.domain.model.RoomGraphUtils
+import de.surroundlab.app.domain.model.RoomLevelCheckState
+import de.surroundlab.app.domain.model.RoomMeasurementSession
 import de.surroundlab.app.domain.model.SignalSourceType
 import de.surroundlab.app.domain.model.SingleSpeakerChannelConfig
 import de.surroundlab.app.domain.model.SpeakerChannel
 import de.surroundlab.app.domain.model.SpeakerLayoutPreset
 import de.surroundlab.app.domain.model.SpeakerSetup
 import de.surroundlab.app.domain.model.SurroundAppState
+import de.surroundlab.app.domain.model.SweepStepMode
 import de.surroundlab.app.domain.model.TestMode
 import de.surroundlab.app.domain.model.WsMessage
 import de.surroundlab.app.domain.model.WsMessageTypes
@@ -66,6 +75,7 @@ class SurroundRepository(context: Context) {
 
     private val prefsRepo = PreferencesRepository(appContext)
     val audioLibrary = AudioLibraryRepository(appContext)
+    private val roomMeasurementRepo = RoomMeasurementRepository(appContext)
     private val decodedCache = DecodedAudioCache()
     private val audioEngine = SurroundAudioEngine(
         context = appContext,
@@ -73,6 +83,25 @@ class SurroundRepository(context: Context) {
     )
     private val nsdManager = NsdDiscoveryManager(appContext)
     private val ktorClient = SurroundKtorClient(audioLibrary)
+    private val roomCoordinator = RoomMeasurementCoordinator(
+        context = appContext,
+        stateProvider = { _uiState.value },
+        isConnectedToTv = { isConnectedToRemote() },
+        sendMeasurementTone = { preset, customChannels, frequencyHz, playing ->
+            val msg = WsMessage(
+                type = WsMessageTypes.UPDATE_MEASUREMENT_TONE,
+                preset = preset.name,
+                customChannels = customChannels.map { it.name },
+                frequencyHz = frequencyHz.coerceIn(20, 20000),
+                playing = playing
+            )
+            if (!isTvDevice && isConnectedToRemote()) {
+                ktorClient.sendCommand(msg)
+            } else {
+                applyCommand(msg)
+            }
+        }
+    )
 
     private val ktorServer = SurroundKtorServer(
         context = appContext,
@@ -132,6 +161,13 @@ class SurroundRepository(context: Context) {
     private val _onboardingCompleted = MutableStateFlow<Boolean?>(null)
     val onboardingCompleted: StateFlow<Boolean?> = _onboardingCompleted.asStateFlow()
 
+    private val _roomGuideSeen = MutableStateFlow(false)
+    val roomGuideSeen: StateFlow<Boolean> = _roomGuideSeen.asStateFlow()
+
+    val roomSessions: StateFlow<List<RoomMeasurementSession>> = roomMeasurementRepo.sessions
+    val roomLevelCheckState: StateFlow<RoomLevelCheckState> = roomCoordinator.levelCheckState
+    val roomMeasurementProgress: StateFlow<MeasurementRunProgress> = roomCoordinator.runProgress
+
     private var hostStarted = false
     private var orbitJob: Job? = null
     private var orbitAngle = 0f
@@ -142,8 +178,10 @@ class SurroundRepository(context: Context) {
         audioEngine.start()
         scope.launch {
             audioLibrary.initialize()
+            roomMeasurementRepo.initialize()
             val settings = prefsRepo.getSnapshot()
             _onboardingCompleted.value = settings.onboardingCompleted
+            _roomGuideSeen.value = settings.roomGuideSeen
             val hdmi = AudioDeviceInspector.inspectOutputs(appContext)
             val defaultSwap71 = settings.swap71SurroundBack ?: AudioDeviceInspector.isAmlogicPlatform()
             val initialGains = computePuckGainsMap(
@@ -159,6 +197,7 @@ class SurroundRepository(context: Context) {
                     setup = settings.setup,
                     setupCompleted = settings.setupCompleted,
                     masterGainDb = settings.masterGainDb,
+                    lfeLowPassHz = settings.lfeLowPassHz,
                     swap71SurroundBack = defaultSwap71,
                     speakerLayoutPreset = settings.speakerLayoutPreset,
                     tvUiScale = settings.tvUiScale,
@@ -290,6 +329,106 @@ class SurroundRepository(context: Context) {
         _onboardingCompleted.value = false
     }
 
+    fun markRoomGuideSeen() {
+        _roomGuideSeen.value = true
+        scope.launch {
+            prefsRepo.saveRoomGuideSeen(true)
+        }
+    }
+
+    fun setLfeLowPassHz(cutoffHz: Int) {
+        val sanitized = if (cutoffHz <= 0) 0 else cutoffHz.coerceIn(60, 250)
+        scope.launch {
+            if (isTvDevice || !isConnectedToRemote()) {
+                prefsRepo.saveLfeLowPassHz(sanitized)
+            }
+        }
+        dispatchCommand(WsMessage(type = WsMessageTypes.SET_LFE_LOW_PASS, lfeLowPassHz = sanitized))
+    }
+
+    fun startRoomLevelCheck(
+        preset: GeneratorPreset,
+        customChannels: Set<SpeakerChannel>,
+        testHz: Int,
+        withTone: Boolean
+    ) {
+        roomCoordinator.startLevelCheck(preset, customChannels, testHz, withTone)
+    }
+
+    fun stopRoomLevelCheck() {
+        roomCoordinator.stopLevelCheck()
+    }
+
+    fun startRoomSweep(
+        preset: GeneratorPreset,
+        customChannels: Set<SpeakerChannel>,
+        startHz: Int,
+        endHz: Int,
+        stepMode: SweepStepMode,
+        stepValue: Int,
+        speed: MeasurementSpeed,
+        micErrorLabel: String,
+        onCompleted: (List<FrequencyMeasurementPoint>) -> Unit
+    ) {
+        roomCoordinator.startSweep(
+            preset = preset,
+            customChannels = customChannels,
+            startHz = startHz,
+            endHz = endHz,
+            stepMode = stepMode,
+            stepValue = stepValue,
+            speed = speed,
+            micErrorLabel = micErrorLabel,
+            onCompleted = { points ->
+                onCompleted(points)
+            }
+        )
+    }
+
+    fun cancelRoomSweep() {
+        roomCoordinator.cancelSweep()
+    }
+
+    fun resetRoomSweepProgress() {
+        roomCoordinator.resetProgress()
+    }
+
+    fun saveRoomSession(session: RoomMeasurementSession) {
+        scope.launch {
+            roomMeasurementRepo.saveSession(session)
+        }
+    }
+
+    fun addPositionToRoomSession(sessionId: String, position: ListeningPositionTrace) {
+        scope.launch {
+            roomMeasurementRepo.addPositionToSession(sessionId, position)
+        }
+    }
+
+    fun updateRoomSessionMeta(sessionId: String, name: String, note: String) {
+        scope.launch {
+            roomMeasurementRepo.updateSessionMeta(sessionId, name, note)
+        }
+    }
+
+    fun renameRoomPosition(sessionId: String, positionId: String, newName: String) {
+        scope.launch {
+            roomMeasurementRepo.renamePosition(sessionId, positionId, newName)
+        }
+    }
+
+    fun deleteRoomPosition(sessionId: String, positionId: String) {
+        scope.launch {
+            roomMeasurementRepo.deletePosition(sessionId, positionId)
+        }
+    }
+
+    fun deleteRoomSession(sessionId: String) {
+        scope.launch {
+            roomMeasurementRepo.deleteSession(sessionId)
+        }
+    }
+
     // ---- User Actions (routed either to TV host via WS or applied locally) ----
 
     fun selectSetup(setup: SpeakerSetup, markCompleted: Boolean = true) {
@@ -306,6 +445,9 @@ class SurroundRepository(context: Context) {
     }
 
     fun setMode(mode: TestMode) {
+        if (mode != TestMode.ROOM_MEASUREMENT) {
+            roomCoordinator.stopAllMeasurementJobs()
+        }
         dispatchCommand(WsMessage(type = WsMessageTypes.SET_MODE, mode = mode.name))
     }
 
@@ -454,6 +596,7 @@ class SurroundRepository(context: Context) {
     }
 
     fun stopAll() {
+        roomCoordinator.stopAllMeasurementJobs()
         dispatchCommand(WsMessage(type = WsMessageTypes.STOP_ALL))
     }
 
@@ -610,7 +753,8 @@ class SurroundRepository(context: Context) {
                             activeMode = mode,
                             singleSpeaker = cur.singleSpeaker.copy(playing = false),
                             generator = cur.generator.copy(playing = false),
-                            puck = cur.puck.copy(playing = false, autoOrbit = false)
+                            puck = cur.puck.copy(playing = false, autoOrbit = false),
+                            measurementTone = cur.measurementTone.copy(playing = false)
                         )
                     } else {
                         cur
@@ -623,6 +767,15 @@ class SurroundRepository(context: Context) {
                         scope.launch { prefsRepo.saveMasterGainDb(gain) }
                     }
                     cur.copy(masterGainDb = gain)
+                }
+
+                WsMessageTypes.SET_LFE_LOW_PASS -> {
+                    val raw = msg.lfeLowPassHz ?: cur.lfeLowPassHz
+                    val cutoff = if (raw <= 0) 0 else raw.coerceIn(60, 250)
+                    if (isTvDevice) {
+                        scope.launch { prefsRepo.saveLfeLowPassHz(cutoff) }
+                    }
+                    cur.copy(lfeLowPassHz = cutoff)
                 }
 
                 WsMessageTypes.SET_SWAP_71_SURROUND_BACK -> {
@@ -799,11 +952,32 @@ class SurroundRepository(context: Context) {
                     )
                 }
 
+                WsMessageTypes.UPDATE_MEASUREMENT_TONE -> {
+                    val oldTone = cur.measurementTone
+                    val newPreset = msg.preset?.let { runCatching { GeneratorPreset.valueOf(it) }.getOrNull() }
+                        ?: oldTone.preset
+                    val newCustom = msg.customChannels?.mapNotNull {
+                        runCatching { SpeakerChannel.valueOf(it) }.getOrNull()
+                    }?.toSet() ?: oldTone.customChannels
+                    val newFreq = (msg.frequencyHz ?: oldTone.frequencyHz).coerceIn(20, 20000)
+                    val newPlaying = msg.playing ?: oldTone.playing
+                    cur.copy(
+                        activeMode = TestMode.ROOM_MEASUREMENT,
+                        measurementTone = oldTone.copy(
+                            preset = newPreset,
+                            customChannels = newCustom,
+                            frequencyHz = newFreq,
+                            playing = newPlaying
+                        )
+                    )
+                }
+
                 WsMessageTypes.STOP_ALL -> {
                     cur.copy(
                         singleSpeaker = cur.singleSpeaker.copy(playing = false),
                         generator = cur.generator.copy(playing = false),
-                        puck = cur.puck.copy(playing = false, autoOrbit = false)
+                        puck = cur.puck.copy(playing = false, autoOrbit = false),
+                        measurementTone = cur.measurementTone.copy(playing = false)
                     )
                 }
 
@@ -973,6 +1147,7 @@ class SurroundRepository(context: Context) {
     }
 
     fun shutdown() {
+        roomCoordinator.stopAllMeasurementJobs()
         stopAutoOrbitLoop()
         decodeJob?.cancel()
         audioEngine.stop()

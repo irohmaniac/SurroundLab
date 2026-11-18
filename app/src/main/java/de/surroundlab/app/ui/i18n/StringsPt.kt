@@ -61,6 +61,7 @@ val StringsPt = AppStrings(
     generatorPresetLabel = { preset ->
         when (preset) {
             GeneratorPreset.ALL_ACTIVE -> "Todos os canais ativos"
+            GeneratorPreset.ALL_WITHOUT_SUB -> "Todos exceto Subwoofer"
             GeneratorPreset.P2_1 -> "2.1 Estéreo + Sub"
             GeneratorPreset.P2_0 -> "2.0 Frontal"
             GeneratorPreset.P0_1_SUB -> "0.1 Apenas Subwoofer"
@@ -168,6 +169,11 @@ val StringsPt = AppStrings(
     mode3TvDesc = "Panner espacial em tempo real. Mova a fonte virtual pelo ambiente com D-Pad ou Auto-Órbita.",
     mode3MobileDesc = "Panner em tempo real. Arraste a fonte virtual ou foque caixas pelo toque e Auto-Órbita.",
     mode3Footer = "Objeto virtual & Foco na caixa",
+    mode4Badge = "MODO 04",
+    mode4Title = "Modos de Sala & Varredura",
+    mode4TvDesc = "Medição automática da resposta em frequência usando seu celular Android como microfone de medição.",
+    mode4MobileDesc = "Varredura automática via microfone: encontre ressonâncias da sala, compare assentos e exporte PDF A4.",
+    mode4Footer = "Varredura por Mic & PDF",
     mobileConnConnected = { host -> "Conectado: $host" },
     mobileConnConnecting = "Conectando à TV...",
     mobileConnLocal = "Modo local (2.0)",
@@ -177,6 +183,8 @@ val StringsPt = AppStrings(
     mobileCard2FooterLeft = "Espectro de frequências",
     mobileCard3FooterLeft = "Panning surround",
     mobileCard3FooterRight = "360° tempo real",
+    mobileCard4FooterLeft = "Análise por microfone",
+    mobileCard4FooterRight = "Gráfico & PDF",
     mobileFooterTv = { ip -> "TV: $ip" },
     mobileFooterLocal = "Downmix local ativo",
     mobileFooterHeadroom = { db -> "Headroom $db dBFS" },
@@ -271,6 +279,9 @@ val StringsPt = AppStrings(
     tvSettingsTitle = "Configurações do Host TV",
     tvSettingsSubtitle = "Headroom digital, proteção de tweeters & diagnóstico HDMI",
     masterLevelTitleTv = { def -> "Nível de saída geral (Padrão: $def dBFS)" },
+    lfeLowPassTitle = "Filtro passa-baixas LFE (Ruído & Música)",
+    lfeLowPassDesc = "Limita ruído rosa e áudios próprios no subwoofer (.1). Senoides puras e varreduras acústicas vão direto ao crossover do receiver.",
+    lfeDirectLabel = "Direto (Desligado)",
     swap71Title = "Inverter 7.1 Surround & Traseira (HDMI-HAL)",
     swap71DescTv = "Ative se os canais 7.1 SL/SR e SBL/SBR estiverem trocados (ex. Chromecast / Amlogic).",
     swap71DescMobile = "Ajuste HDMI-HAL (ex. Chromecast / Amlogic) se SL/SR e SBL/SBR estiverem invertidos.",
@@ -400,5 +411,117 @@ val StringsPt = AppStrings(
         installNowBtn = "Instalar agora",
         permissionHint = "Permita a instalação desta fonte uma vez e toque novamente em “Instalar agora”.",
         errorText = { err -> "Falha ao verificar ($err)" }
+    ),
+
+    room = RoomMeasurementStrings(
+        screenTitle = "Modos de Sala & Varredura",
+        screenSubtitle = "RESPOSTA EM FREQUÊNCIA AUTOMÁTICA",
+        guideBtn = "Guia",
+        tabMeasure = "Medir",
+        tabArchive = "Salvos",
+        tabCompare = "Comparar",
+        tvInfoBadge = "MICROFONE DO CELULAR NECESSÁRIO",
+        tvInfoTitle = "Inicie a medição pelo celular Android",
+        tvInfoBody = "A medição automática usa o microfone do seu smartphone Android na posição de escuta enquanto a TV reproduz os tons exatos pelo seu sistema de som.",
+        tvInfoSteps = listOf(
+            "1. Instale e abra o SurroundLab no celular Android (conecta-se sozinho no mesmo Wi-Fi).",
+            "2. Toque em “Modos de Sala & Varredura” no celular e permita o uso do microfone.",
+            "3. Segure o celular parado na altura do ouvido e inicie a varredura; gráficos e PDF ficam no celular."
+        ),
+        tvActiveSweepStatus = { hz -> "Medição ativa pelo celular • Tom atual: $hz Hz" },
+        tvShowQrBtn = "Ver conexão / QR",
+        guideTitle = "Como funciona a medição acústica",
+        guideSubtitle = "Dicas essenciais para gráficos confiáveis:",
+        guideItems = listOf(
+            "Para que serve?" to "O app toca tons senoidais em sequência e mede o volume no seu assento para revelar ressonâncias (picos) e cancelamentos (vales) e comparar posições.",
+            "App Android necessário" to "Funciona conectado à TV (5.1/7.1) ou no modo local (cabo/Bluetooth em som estéreo). Navegadores bloqueiam o microfone em HTTP local.",
+            "Silêncio e firmeza" to "Desligue ventiladores e ruídos, fique parado durante o teste e segure o celular firme na altura do ouvido sem tampar o microfone.",
+            "Volume do sistema" to "Ajuste um volume moderado e use antes a checagem de nível (“Ideal ✓”).",
+            "Expectativas reais" to "Microfones de celular não são calibrados (especialmente abaixo de 40 Hz). Valores absolutos de dB são relativos, mas picos e comparações entre posições são muito úteis."
+        ),
+        guideGotIt = "Entendi, começar",
+        micPermissionTitle = "Permissão de microfone necessária",
+        micPermissionDesc = "Para medir a resposta acústica no seu assento, o SurroundLab precisa acessar o microfone do celular (ativo só durante testes e varreduras).",
+        micPermissionBtn = "Permitir microfone",
+        micErrorMsg = "Não foi possível abrir o microfone. Verifique a permissão.",
+        levelCheckTitle = "Checagem prévia de nível",
+        levelCheckDesc = "Confira se o volume do som está bem acima do ruído ambiente:",
+        levelCheckStartBtn = "Testar nível",
+        levelCheckStopBtn = "Parar teste",
+        levelAmbientLabel = { db -> "Ruído ambiente: $db dBFS" },
+        levelLiveLabel = { db, snr -> "Sinal: $db dBFS (+$snr dB SNR)" },
+        verdictIdle = "Pronto — toque em “Testar nível” ou inicie a varredura diretamente.",
+        verdictCalibrating = "Medindo ruído ambiente… faça silêncio por um instante.",
+        verdictTooQuiet = "Sinal muito baixo! Aumente um pouco o volume do receiver.",
+        verdictOptimal = "Nível ideal ✓ — bem acima do ruído da sala.",
+        verdictClipping = "Microfone saturando! Abaixe um pouco o volume.",
+        speakersSectionTitle = "Seleção de caixas",
+        speakerPresetHint = { preset ->
+            when (preset) {
+                GeneratorPreset.P2_0 -> "Ideal com caixas em “Small” no AVR (gerenciamento de graves ativo): teste mais realista para música e crossover sem somar graves duplicados. Se estiverem em “Large” e o sub ficar mudo, use 0.1 ou 2.1."
+                GeneratorPreset.P0_1_SUB -> "Mede apenas o subwoofer (.1 LFE) — ideal para achar ressonâncias de graves e comparar posições do sub."
+                GeneratorPreset.P2_1 -> "Envia para Frontais + LFE ao mesmo tempo (útil sem bass-management ou com frontais Large; em caixas Small soma graves abaixo do corte)."
+                GeneratorPreset.ALL_WITHOUT_SUB -> "Testa os satélites sem canal LFE separado (o sub ainda toca se o gerenciamento de graves do AVR estiver ativo)."
+                GeneratorPreset.ALL_ACTIVE -> "Ativa todos os canais juntos (nível máximo, mas podem ocorrer cancelamentos de fase entre caixas)."
+                GeneratorPreset.CUSTOM -> "Escolha livre de canais (ex.: testar apenas o canal central ou uma caixa específica)."
+            }
+        },
+        presetSectionTitle = "Faixa de frequência e passo",
+        presetRoomModes = "Modos de sala (20–200 Hz)",
+        presetSubwoofer = "Subwoofer (20–120 Hz)",
+        presetFullRange = "Espectro total (20–20k)",
+        presetCustom = "Personalizado",
+        startHzLabel = "Início (Hz)",
+        endHzLabel = "Fim (Hz)",
+        stepModeLinear = "Linear (Hz)",
+        stepModeOctave = "Logarítmico (Oitava)",
+        stepHzLabel = "Passo (Hz)",
+        stepOctaveLabel = { d -> "1/$d oitava" },
+        speedLabel = "Velocidade",
+        speedFast = "Rápida",
+        speedStandard = "Padrão",
+        speedPrecise = "Precisa",
+        estimatedTimeLabel = { pts, sec -> "$pts pontos • ~${sec}s por assento" },
+        positionNameLabel = "Nome desta posição",
+        defaultPositionName = { idx -> "Posição $idx" },
+        startSweepBtn = "Iniciar medição",
+        addPositionSweepBtn = "Medir posição",
+        countdownLabel = { sec -> "Fique imóvel e em silêncio… iniciando em $sec" },
+        silenceCalibLabel = "Medindo ruído de fundo…",
+        sweepingLabel = { cur, tot, hz -> "Passo $cur / $tot • $hz Hz" },
+        cancelSweepBtn = "Cancelar varredura",
+        activeSessionTitle = "Sessão atual",
+        defaultSessionName = { d -> "Medição $d" },
+        scaleLinearLabel = "Linear (Plana)",
+        scaleDbaLabel = "dBA (Audição)",
+        meanCurveLabel = "Média",
+        smoothLabel = "Suavizar",
+        addAnotherPositionBtn = "+ Outra posição",
+        saveSessionBtn = "Salvar medição",
+        savedToast = "Medição salva",
+        renameSessionTitle = "Nome e notas",
+        sessionNameHint = "ex. Subwoofer canto esquerdo",
+        sessionNoteHint = "Nota (ex. Crossover 80 Hz, Fase 0°)",
+        renamePositionTitle = "Renomear posição",
+        newPositionHint = "ex. Centro do sofá",
+        archiveEmptyTitle = "Nenhuma medição salva ainda",
+        archiveEmptyBody = "Faça sua primeira varredura na aba “Medir” e salve para comparar posições ou exportar relatórios PDF A4.",
+        positionsCountLabel = { c -> "$c posição(ões)" },
+        loadInEditorBtn = "Abrir / Adicionar",
+        exportPdfSingleBtn = "PDF",
+        exportPdfSelectedBtn = { c -> "Exportar PDF ($c)" },
+        selectForExportHint = "Marque as caixas para reunir várias medições em um único PDF A4.",
+        compareHint = "Selecione 2 ou mais medições salvas para sobrepor as curvas:",
+        compareMinTwoHint = "Salve ao menos 2 medições para comparar.",
+        pdfReportTitle = "SurroundLab — Relatório acústico de sala",
+        pdfGeneratedPrefix = "Gerado em",
+        pdfPageLabel = { p, t -> "Página $p / $t" },
+        pdfChannelsPrefix = "Canais",
+        pdfShareTitle = "Compartilhar PDF da medição",
+        pdfErrorToast = "Falha ao exportar PDF.",
+        pdfLayoutDialogTitle = "Escolher formato do PDF",
+        pdfLayoutDialogBody = "O modo paisagem dá mais detalhe horizontal para varreduras amplas (ex. 20 Hz – 20 kHz).",
+        pdfPortraitDefaultBtn = "Retrato (Padrão)",
+        pdfLandscapeWideBtn = "Paisagem (Largo)"
     )
 )

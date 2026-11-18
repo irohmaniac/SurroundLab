@@ -188,6 +188,7 @@ fun TvQrPairingDialog(
 fun TvSettingsDialog(
     state: SurroundAppState,
     onMasterGainChange: (Float) -> Unit,
+    onLfeLowPassChange: (Int) -> Unit,
     onSwap71Change: (Boolean) -> Unit,
     onSpeakerLayoutPresetChange: (SpeakerLayoutPreset) -> Unit,
     onTvUiScaleChange: (Float) -> Unit,
@@ -304,6 +305,62 @@ fun TvSettingsDialog(
                     ) {
                         Icon(Icons.AutoMirrored.Rounded.VolumeUp, contentDescription = null)
                         Text("+3 dB", fontFamily = MonoFontFamily, fontWeight = FontWeight.Bold)
+                    }
+                }
+            }
+
+            // Configurable LFE Low-Pass Filter (Pink Noise & Music; Sine & Room Sweeps always bypass)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(SurroundColors.SurfaceContainer)
+                    .padding(18.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = s.lfeLowPassTitle,
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = SurroundColors.OnSurface
+                    )
+                    Text(
+                        text = if (state.lfeLowPassHz <= 0) s.lfeDirectLabel else "${state.lfeLowPassHz} Hz",
+                        fontFamily = MonoFontFamily,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = SurroundColors.Primary
+                    )
+                }
+                Text(
+                    text = s.lfeLowPassDesc,
+                    fontSize = 12.sp,
+                    color = SurroundColors.OnSurfaceVariant
+                )
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    listOf(80, 100, 120, 150, 200, 0).forEach { cutoff ->
+                        val selected = state.lfeLowPassHz == cutoff
+                        val label = if (cutoff == 0) s.lfeDirectLabel else "$cutoff Hz"
+                        TvPillSurface(
+                            onClick = { onLfeLowPassChange(cutoff) },
+                            containerColor = if (selected) SurroundColors.PrimaryContainer else SurroundColors.SurfaceContainerHighest,
+                            contentColor = if (selected) SurroundColors.OnPrimaryContainer else SurroundColors.OnSurfaceVariant,
+                            contentPadding = PaddingValues(horizontal = 14.dp, vertical = 8.dp)
+                        ) {
+                            Text(
+                                text = label,
+                                fontSize = 13.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
                 }
             }

@@ -61,6 +61,7 @@ val StringsEn = AppStrings(
     generatorPresetLabel = { preset ->
         when (preset) {
             GeneratorPreset.ALL_ACTIVE -> "All Active Channels"
+            GeneratorPreset.ALL_WITHOUT_SUB -> "All Except Subwoofer"
             GeneratorPreset.P2_1 -> "2.1 Stereo + Sub"
             GeneratorPreset.P2_0 -> "2.0 Front"
             GeneratorPreset.P0_1_SUB -> "0.1 Subwoofer Only"
@@ -168,6 +169,11 @@ val StringsEn = AppStrings(
     mode3TvDesc = "Real-time spatial panner. Move the sound puck smoothly around speakers with D-Pad or Auto-Orbit.",
     mode3MobileDesc = "Live room panner. Drag a virtual sound object or focus individual speakers via touch & Auto-Orbit.",
     mode3Footer = "Virtual Object & Speaker Focus",
+    mode4Badge = "MODE 04",
+    mode4Title = "Room Modes & Sweep",
+    mode4TvDesc = "Automated frequency response sweep to detect room modes using your Android phone as a measurement mic.",
+    mode4MobileDesc = "Automated microphone frequency sweep: spot room resonances, compare listening seats & export A4 PDFs.",
+    mode4Footer = "Mic Sweep & PDF Report",
     mobileConnConnected = { host -> "Connected: $host" },
     mobileConnConnecting = "Connecting to TV...",
     mobileConnLocal = "Local Mode (2.0)",
@@ -177,6 +183,8 @@ val StringsEn = AppStrings(
     mobileCard2FooterLeft = "Frequency Spectrum",
     mobileCard3FooterLeft = "Surround Panning",
     mobileCard3FooterRight = "360° Real-time",
+    mobileCard4FooterLeft = "Mic Analysis",
+    mobileCard4FooterRight = "Graph & PDF",
     mobileFooterTv = { ip -> "TV: $ip" },
     mobileFooterLocal = "Local downmix active",
     mobileFooterHeadroom = { db -> "Headroom $db dBFS" },
@@ -271,6 +279,9 @@ val StringsEn = AppStrings(
     tvSettingsTitle = "TV Host Settings",
     tvSettingsSubtitle = "Digital Headroom & Tweeter Protection + HDMI Diagnostics",
     masterLevelTitleTv = { def -> "Master Output Level (Default: $def dBFS)" },
+    lfeLowPassTitle = "LFE Low-Pass (Noise & Music)",
+    lfeLowPassDesc = "Limits Pink Noise and custom audio tracks on the subwoofer (.1). Pure sine tones and room sweeps always bypass directly to your AVR crossover.",
+    lfeDirectLabel = "Direct (Off)",
     swap71Title = "Swap 7.1 Surround & Back (HDMI-HAL)",
     swap71DescTv = "Enable if 7.1 SL/SR and SBL/SBR channels are swapped (e.g. Chromecast / Amlogic).",
     swap71DescMobile = "HDMI-HAL workaround (e.g. Chromecast / Amlogic) if SL/SR and SBL/SBR are swapped.",
@@ -400,5 +411,117 @@ val StringsEn = AppStrings(
         installNowBtn = "Install Now",
         permissionHint = "Please allow app installs from this source once, then tap “Install Now” again.",
         errorText = { err -> "Update check failed ($err)" }
+    ),
+
+    room = RoomMeasurementStrings(
+        screenTitle = "Room Modes & Sweep",
+        screenSubtitle = "AUTOMATED FREQUENCY RESPONSE",
+        guideBtn = "Guide",
+        tabMeasure = "Measure",
+        tabArchive = "Saved",
+        tabCompare = "Compare",
+        tvInfoBadge = "PHONE MICROPHONE REQUIRED",
+        tvInfoTitle = "Start Measurement on Your Android Phone",
+        tvInfoBody = "Automated room-mode measurement uses your Android smartphone's microphone directly at your listening position while the TV outputs the calibrated sine tones through your sound system.",
+        tvInfoSteps = listOf(
+            "1. Install & open SurroundLab on your Android phone (it connects automatically on the same Wi-Fi).",
+            "2. Tap “Room Modes & Sweep” on your phone and grant microphone permission.",
+            "3. Hold the phone steady at ear level in your seat and start the sweep — charts and PDF export live on your phone."
+        ),
+        tvActiveSweepStatus = { hz -> "Measurement running from phone • Playing: $hz Hz" },
+        tvShowQrBtn = "Show Connection / QR",
+        guideTitle = "How Room Measurement Works",
+        guideSubtitle = "Key tips for reliable frequency response plots:",
+        guideItems = listOf(
+            "What is this tool for?" to "The app automatically steps through sine frequencies and records relative volume at your seat. You can spot booming room modes (peaks) and cancellations (nulls), and compare speaker or subwoofer placements.",
+            "Controller required (Android App)" to "Run measurements connected to your TV host (5.1/7.1) or in Standalone mode (cable/Bluetooth to a stereo). Mobile browsers block microphone access over plain local Wi-Fi HTTP.",
+            "Keep the room quiet" to "Turn off fans or noisy appliances, sit still during the sweep, avoid rustling, and hold the phone steady at ear height with the mic uncovered.",
+            "System volume" to "Set normal-to-moderate listening volume and run the quick Level Check (“Optimal ✓”) before starting the sweep.",
+            "Honest expectations" to "Phone mics are uncalibrated (especially below 40 Hz where many phones roll off). Absolute dB SPL numbers aren't reference-grade, but peaks, dips, and comparing two placements are very informative."
+        ),
+        guideGotIt = "Got it, let's start",
+        micPermissionTitle = "Microphone Permission Required",
+        micPermissionDesc = "To measure room response at your seat, SurroundLab needs access to your phone's microphone (active only during checks and sweeps).",
+        micPermissionBtn = "Allow Microphone",
+        micErrorMsg = "Could not open microphone. Please check permission.",
+        levelCheckTitle = "Pre-Sweep Level Check",
+        levelCheckDesc = "Verify that your playback volume is clearly audible above room noise:",
+        levelCheckStartBtn = "Test Tone Level",
+        levelCheckStopBtn = "Stop Check",
+        levelAmbientLabel = { db -> "Noise floor: $db dBFS" },
+        levelLiveLabel = { db, snr -> "Signal: $db dBFS (+$snr dB SNR)" },
+        verdictIdle = "Ready — tap “Test Tone Level” or start the sweep directly.",
+        verdictCalibrating = "Measuring ambient noise… stay quiet for a moment.",
+        verdictTooQuiet = "Signal too quiet! Turn your receiver volume up slightly.",
+        verdictOptimal = "Level optimal ✓ — clearly above room noise.",
+        verdictClipping = "Microphone clipping! Lower your receiver volume slightly.",
+        speakersSectionTitle = "Speaker Selection",
+        speakerPresetHint = { preset ->
+            when (preset) {
+                GeneratorPreset.P2_0 -> "Best for AVR ‘Small’ speaker settings (active bass management): most realistic music & crossover test without bass doubling. If fronts are ‘Large’ and the sub stays silent, use 0.1 or 2.1."
+                GeneratorPreset.P0_1_SUB -> "Measures only the subwoofer (.1 LFE) — ideal for finding bass room modes and comparing sub placements."
+                GeneratorPreset.P2_1 -> "Drives Fronts + LFE simultaneously (great for Large fronts or systems without AVR bass management; adds extra bass below crossover on Small speakers)."
+                GeneratorPreset.ALL_WITHOUT_SUB -> "Tests all satellite speakers without a separate LFE signal (sub still receives redirected bass if AVR bass management is active)."
+                GeneratorPreset.ALL_ACTIVE -> "Drives all active channels simultaneously (high total output, though multi-speaker phase cancellations can occur above ~100 Hz)."
+                GeneratorPreset.CUSTOM -> "Pick specific speakers manually — e.g., isolate Center or individual surrounds."
+            }
+        },
+        presetSectionTitle = "Frequency Range & Step Size",
+        presetRoomModes = "Room Modes (20–200 Hz)",
+        presetSubwoofer = "Subwoofer (20–120 Hz)",
+        presetFullRange = "Full Range (20–20k)",
+        presetCustom = "Custom",
+        startHzLabel = "Start (Hz)",
+        endHzLabel = "End (Hz)",
+        stepModeLinear = "Linear (Hz)",
+        stepModeOctave = "Logarithmic (Octave)",
+        stepHzLabel = "Step Size (Hz)",
+        stepOctaveLabel = { d -> "1/$d Octave" },
+        speedLabel = "Sweep Speed",
+        speedFast = "Fast",
+        speedStandard = "Standard",
+        speedPrecise = "Precise",
+        estimatedTimeLabel = { pts, sec -> "$pts points • ~${sec}s per seat" },
+        positionNameLabel = "Listening Position Name",
+        defaultPositionName = { idx -> "Position $idx" },
+        startSweepBtn = "Start Measurement",
+        addPositionSweepBtn = "Measure Position",
+        countdownLabel = { sec -> "Hold steady & quiet… starting in $sec" },
+        silenceCalibLabel = "Measuring room noise floor…",
+        sweepingLabel = { cur, tot, hz -> "Step $cur / $tot • $hz Hz" },
+        cancelSweepBtn = "Cancel Sweep",
+        activeSessionTitle = "Active Session",
+        defaultSessionName = { d -> "Measurement $d" },
+        scaleLinearLabel = "Linear (Flat)",
+        scaleDbaLabel = "dBA (Hearing)",
+        meanCurveLabel = "Average",
+        smoothLabel = "Smooth",
+        addAnotherPositionBtn = "+ Add Listening Position",
+        saveSessionBtn = "Save Run",
+        savedToast = "Measurement saved",
+        renameSessionTitle = "Name Run & Notes",
+        sessionNameHint = "e.g. Sub in front-left corner",
+        sessionNoteHint = "Note (e.g. Crossover 80 Hz, Phase 0°)",
+        renamePositionTitle = "Rename Position",
+        newPositionHint = "e.g. Center Sofa",
+        archiveEmptyTitle = "No saved measurements yet",
+        archiveEmptyBody = "Run your first sweep in the “Measure” tab and save it here to compare placements or export A4 PDF reports.",
+        positionsCountLabel = { c -> "$c seat(s)" },
+        loadInEditorBtn = "Open / Add Seats",
+        exportPdfSingleBtn = "PDF",
+        exportPdfSelectedBtn = { c -> "Export PDF ($c)" },
+        selectForExportHint = "Use checkboxes to combine multiple runs onto one A4 PDF.",
+        compareHint = "Select 2 or more saved runs to overlay and compare their curves:",
+        compareMinTwoHint = "Save at least 2 runs to compare.",
+        pdfReportTitle = "SurroundLab — Room Acoustic Report",
+        pdfGeneratedPrefix = "Generated",
+        pdfPageLabel = { p, t -> "Page $p / $t" },
+        pdfChannelsPrefix = "Channels",
+        pdfShareTitle = "Share Room Measurement PDF",
+        pdfErrorToast = "PDF export failed.",
+        pdfLayoutDialogTitle = "Choose PDF Page Layout",
+        pdfLayoutDialogBody = "Landscape gives extra horizontal detail for wide-band sweeps (such as 20 Hz – 20 kHz).",
+        pdfPortraitDefaultBtn = "Portrait (Default)",
+        pdfLandscapeWideBtn = "Landscape (Wide)"
     )
 )
