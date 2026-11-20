@@ -398,7 +398,6 @@ val StringsJa = AppStrings(
         urlCopiedToast = "ダウンロード URL をコピーしました",
         closeBtn = "閉じる"
     ),
-    donatePaypalBtn = "開発を支援する (PayPal)",
 
     update = UpdateStrings(
         sectionTitle = "アップデート確認 (GitHub)",

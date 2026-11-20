@@ -398,7 +398,6 @@ val StringsEn = AppStrings(
         urlCopiedToast = "Download link copied to clipboard",
         closeBtn = "Close"
     ),
-    donatePaypalBtn = "Support Project (PayPal)",
 
     update = UpdateStrings(
         sectionTitle = "App Updates (GitHub)",

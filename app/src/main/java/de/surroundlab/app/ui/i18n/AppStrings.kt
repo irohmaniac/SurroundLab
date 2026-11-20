@@ -295,9 +295,6 @@ data class AppStrings(
     // TV Installation Guide (Downloader by AFTVnews + GitHub Release)
     val tvInstall: TvInstallStrings,
 
-    // Donation
-    val donatePaypalBtn: String,
-
     // In-App GitHub Updater
     val update: UpdateStrings,
 
@@ -437,7 +434,6 @@ data class UpdateStrings(
 
 const val AFTVNEWS_DOWNLOADER_CODE = "7281113"
 const val GITHUB_LATEST_APK_URL = "https://github.com/irohmaniac/SurroundLab/releases/latest/download/SurroundLab.apk"
-const val PAYPAL_DONATE_URL = "https://www.paypal.me/ceddiemcleod"
 
 val LocalAppStrings = staticCompositionLocalOf { StringsDe }
 

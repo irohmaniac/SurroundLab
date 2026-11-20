@@ -398,7 +398,6 @@ val StringsPt = AppStrings(
         urlCopiedToast = "Link copiado para a área de transferência",
         closeBtn = "Fechar"
     ),
-    donatePaypalBtn = "Apoiar o projeto (PayPal)",
 
     update = UpdateStrings(
         sectionTitle = "Atualizações (GitHub)",

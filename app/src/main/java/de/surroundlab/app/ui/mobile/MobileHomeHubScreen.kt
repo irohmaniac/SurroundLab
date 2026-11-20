@@ -21,7 +21,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.automirrored.rounded.VolumeUp
-import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.GraphicEq
 import androidx.compose.material.icons.rounded.LibraryMusic
 import androidx.compose.material.icons.rounded.Radar
@@ -35,7 +34,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -244,35 +242,6 @@ fun MobileHomeHubScreen(
                 accent = SurroundColors.Primary,
                 onClick = { onSelectMode(TestMode.ROOM_MEASUREMENT) }
             )
-
-            val context = LocalContext.current
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                Row(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .background(SurroundColors.SurfaceContainer)
-                        .clickable { openPayPalDonate(context) }
-                        .padding(horizontal = 16.dp, vertical = 10.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Favorite,
-                        contentDescription = null,
-                        tint = SurroundColors.Tertiary,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Text(
-                        text = s.donatePaypalBtn,
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = SurroundColors.OnSurfaceVariant
-                    )
-                }
-            }
 
             Spacer(Modifier.height(8.dp))
         }
