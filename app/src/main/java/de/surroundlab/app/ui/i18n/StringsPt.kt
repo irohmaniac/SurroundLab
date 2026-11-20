@@ -165,7 +165,7 @@ val StringsPt = AppStrings(
     mode2MobileDesc = "Roda tátil háptica com ondas senoidais, ruído rosa e cortes de subwoofer.",
     mode2Footer = "Espectro 20 Hz – 20 kHz",
     mode3Badge = "MODO 03",
-    mode3Title = "Puck Espacial 2D",
+    mode3Title = "Palco sonoro 2D",
     mode3TvDesc = "Panner espacial em tempo real. Mova a fonte virtual pelo ambiente com D-Pad ou Auto-Órbita.",
     mode3MobileDesc = "Panner em tempo real. Arraste a fonte virtual ou foque caixas pelo toque e Auto-Órbita.",
     mode3Footer = "Objeto virtual & Foco na caixa",
@@ -176,7 +176,7 @@ val StringsPt = AppStrings(
     mode4Footer = "Varredura por Mic & PDF",
     mobileConnConnected = { host -> "Conectado: $host" },
     mobileConnConnecting = "Conectando à TV...",
-    mobileConnLocal = "Modo local (2.0)",
+    mobileConnLocal = "Modo local (2.0) · Desconectado",
     mobileRoleRemote = "Controle Remoto TV",
     mobileRoleLocal = "Calibrador de Áudio (Estéreo)",
     mobileCard1FooterLeft = { count -> "$count canais" },
@@ -250,16 +250,16 @@ val StringsPt = AppStrings(
     freqDialogTitle = "Inserir frequência exata",
     freqDialogRangeLabel = "Frequência (20 – 20.000 Hz)",
 
-    puckTitle = "Puck Espacial 2D",
+    puckTitle = "Palco sonoro 2D",
     puckMobileSubtitle = "PANNER ESPACIAL EM TEMPO REAL",
     puckTvSubtitle = { mode, az, hint -> "$mode • Azimute ${az}° • $hint" },
-    legendMovePuck = "Mover Puck",
+    legendMovePuck = "Mover fonte",
     legendSideMenuActive = "Menu lateral ativo",
     legendBackForHub = "Voltar ao Hub",
     puckSourcePrefix = { lbl -> "Fonte: $lbl" },
     virtualDistance = { m -> "Distância virtual: $m m" },
     roomControlUpper = "CONTROLE ESPACIAL",
-    puckBtnLabel = "Puck",
+    puckBtnLabel = "Fonte",
     orbitStateLabel = { on -> "Órbita: ${if (on) "Ligada" else "Desligada"}" },
     stateOn = "On",
     stateOff = "Off",
@@ -352,7 +352,7 @@ val StringsPt = AppStrings(
             bullets = listOf(
                 "Teste por Caixa" to "Isole cada canal para conferir fiação e equilíbrio com ruído rosa, senoide ou áudios próprios.",
                 "Gerador de Frequências" to "Varra de 20 Hz a 20 kHz, encontre ressonâncias da sala e ajuste o corte do subwoofer.",
-                "Puck Espacial 2D" to "Mova uma fonte virtual ou foque caixas individuais em tempo real ao redor da sala.",
+                "Palco sonoro 2D" to "Mova uma fonte virtual ou foque caixas individuais em tempo real ao redor da sala.",
                 "Modos de Sala & Varredura" to "Use o microfone do seu celular Android para medir a resposta em frequência em vários assentos, comparar posições e exportar PDF A4."
             )
         ),
@@ -446,7 +446,7 @@ val StringsPt = AppStrings(
         micPermissionBtn = "Permitir microfone",
         micErrorMsg = "Não foi possível abrir o microfone. Verifique a permissão.",
         levelCheckTitle = "Checagem prévia de nível",
-        levelCheckDesc = "Confira se o volume do som está bem acima do ruído ambiente:",
+        levelCheckDesc = "Confira se o volume do som está bem acima do ruído ambiente. Dica: um teste rápido também desperta subwoofers com standby automático para não perder pontos na medição.",
         levelCheckStartBtn = "Testar nível",
         levelCheckStopBtn = "Parar teste",
         levelAmbientLabel = { db -> "Ruído ambiente: $db dBFS" },
@@ -459,12 +459,12 @@ val StringsPt = AppStrings(
         speakersSectionTitle = "Seleção de caixas",
         speakerPresetHint = { preset ->
             when (preset) {
-                GeneratorPreset.P2_0 -> "Ideal com caixas em “Small” no AVR (gerenciamento de graves ativo): teste mais realista para música e crossover sem somar graves duplicados. Se estiverem em “Large” e o sub ficar mudo, use 0.1 ou 2.1."
-                GeneratorPreset.P0_1_SUB -> "Mede apenas o subwoofer (.1 LFE) — ideal para achar ressonâncias de graves e comparar posições do sub."
+                GeneratorPreset.P2_0 -> "Útil nos graves (20–200 Hz) para checar soma L+R ou cancelamento de fase. Acima de ~300 Hz, duas caixas com o mesmo sinal geram filtro pente no microfone — para espectro total, meça apenas uma caixa (FL ou FR)."
+                GeneratorPreset.P0_1_SUB -> "Mede apenas o subwoofer (.1 LFE) — ideal para achar ressonâncias de graves (20–120 Hz) e comparar posições do sub."
                 GeneratorPreset.P2_1 -> "Envia para Frontais + LFE ao mesmo tempo (útil sem bass-management ou com frontais Large; em caixas Small soma graves abaixo do corte)."
-                GeneratorPreset.ALL_WITHOUT_SUB -> "Testa os satélites sem canal LFE separado (o sub ainda toca se o gerenciamento de graves do AVR estiver ativo)."
-                GeneratorPreset.ALL_ACTIVE -> "Ativa todos os canais juntos (nível máximo, mas podem ocorrer cancelamentos de fase entre caixas)."
-                GeneratorPreset.CUSTOM -> "Escolha livre de canais (ex.: testar apenas o canal central ou uma caixa específica)."
+                GeneratorPreset.ALL_WITHOUT_SUB -> "Testa os satélites sem LFE separado (o sub toca se o gerenciamento de graves do AVR estiver ativo; várias caixas juntas causam filtro pente nos médios/agudos)."
+                GeneratorPreset.ALL_ACTIVE -> "Ativa todos os canais juntos (nível máximo, mas ocorrem cancelamentos de fase e filtro pente acima de ~200 Hz)."
+                GeneratorPreset.CUSTOM -> "Padrão acústico recomendado (uma caixa só, ex.: apenas FL ou FR): evita filtro pente nos médios/agudos. Mostra a transição real para o sub em “Small” ou a curva pura de graves e modos em “Large”."
             }
         },
         presetSectionTitle = "Faixa de frequência e passo",
@@ -486,6 +486,9 @@ val StringsPt = AppStrings(
         positionNameLabel = "Nome desta posição",
         defaultPositionName = { idx -> "Posição $idx" },
         startSweepBtn = "Iniciar medição",
+        localPlaybackHint = "O áudio é reproduzido por este celular (sem TV conectada)",
+        micSelectorLabel = "Microfone",
+        micPhoneDefault = "Microfone do celular",
         addPositionSweepBtn = "Medir posição",
         countdownLabel = { sec -> "Fique imóvel e em silêncio… iniciando em $sec" },
         silenceCalibLabel = "Medindo ruído de fundo…",
@@ -523,6 +526,8 @@ val StringsPt = AppStrings(
         pdfLayoutDialogTitle = "Escolher formato do PDF",
         pdfLayoutDialogBody = "O modo paisagem dá mais detalhe horizontal para varreduras amplas (ex. 20 Hz – 20 kHz).",
         pdfPortraitDefaultBtn = "Retrato (Padrão)",
-        pdfLandscapeWideBtn = "Paisagem (Largo)"
+        pdfLandscapeWideBtn = "Paisagem (Largo)",
+        pdfExportConfigTitle = "Configurar exportação PDF",
+        pdfExportActionBtn = "Exportar PDF"
     )
 )

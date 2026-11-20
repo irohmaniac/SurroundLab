@@ -23,8 +23,8 @@ object OnboardingContent {
             icon = Icons.Rounded.SurroundSound,
             bullets = listOf(
                 "Einzellautsprecher-Test" to "Prüfe jeden Kanal isoliert auf korrekte Verkabelung mit Pink Noise, Sinuston oder eigenen Tracks.",
-                "Frequenz- & Preset-Generator" to "Durchfahre 20 Hz – 20 kHz, finde dröhnende Raummoden und kontrolliere deinen Subwoofer.",
-                "2D-Raum-Puck" to "Schiebe ein virtuelles Sound-Objekt oder Fokuspunkt in Echtzeit durch den Raum.",
+                "Frequenzgenerator" to "Durchfahre 20 Hz – 20 kHz, finde dröhnende Raummoden und kontrolliere deinen Subwoofer.",
+                "2D-Klangbühne" to "Schiebe ein virtuelles Sound-Objekt oder Fokuspunkt in Echtzeit durch den Raum.",
                 "Raummoden & Einmessung" to "Miss per Handy-Mikrofon automatisch den Frequenzgang an mehreren Hörpositionen, vergleiche Aufstellungen und exportiere DIN-A4-PDFs."
             )
         ),

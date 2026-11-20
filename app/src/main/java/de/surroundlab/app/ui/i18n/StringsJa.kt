@@ -111,7 +111,7 @@ val StringsJa = AppStrings(
 
     roomTvFront = "TV 前面",
     roomSweetSpotDesc = "視聴位置",
-    roomSoundPuckDesc = "2D パック",
+    roomSoundPuckDesc = "2D 音場",
 
     tvTopologyBadge = "TV スピーカー構成",
     setupTvSubtitle = "スピーカー構成を選択 & スマホ / ブラウザと連携",
@@ -160,12 +160,12 @@ val StringsJa = AppStrings(
     mode1MobileDesc = { chs -> "対話型 2D ルーム図。各チャンネル（$chs）を個別に鳴らして配線と音量を確認します。" },
     mode1Footer = "ピンクノイズ • サイン波 • 音声",
     mode2Badge = "モード 02",
-    mode2Title = "周波数・プリセット発信器",
+    mode2Title = "周波数ジェネレーター",
     mode2TvDesc = "リモコンで調整できる連続サイン波・ピンクノイズ発信器とサブウーファー帯域プリセット。",
     mode2MobileDesc = "ハプティックダイヤル対応のサイン波・ピンクノイズ・クロスオーバー確認ツール。",
     mode2Footer = "20 Hz – 20 kHz 帯域",
     mode3Badge = "モード 03",
-    mode3Title = "2D 空間サウンドパック",
+    mode3Title = "2D 空間サウンドステージ",
     mode3TvDesc = "リアルタイム空間パンナー。方向キーや自動オービットで音像を部屋中で滑らかに移動できます。",
     mode3MobileDesc = "リアルタイム空間パンナー。タッチ操作や自動オービットで音像を自在に定位できます。",
     mode3Footer = "バーチャル音源 & スピーカーフォーカス",
@@ -176,7 +176,7 @@ val StringsJa = AppStrings(
     mode4Footer = "マイク測定 & PDF レポート",
     mobileConnConnected = { host -> "接続中: $host" },
     mobileConnConnecting = "TV に接続中...",
-    mobileConnLocal = "ローカルモード (2.0)",
+    mobileConnLocal = "ローカルモード (2.0) · 未接続",
     mobileRoleRemote = "TV リモートコントローラー",
     mobileRoleLocal = "ステレオキャリブレーター",
     mobileCard1FooterLeft = { count -> "$count チャンネル" },
@@ -216,7 +216,7 @@ val StringsJa = AppStrings(
     applyToAllChannels = "全スピーカーに適用",
     applySignalBtn = "信号を適用",
 
-    generatorTitle = "周波数・プリセット発信器",
+    generatorTitle = "周波数ジェネレーター",
     generatorMobileSubtitle = "DSP シンセサイザー",
     activeChannelsPrefix = { chs -> "出力チャンネル: $chs" },
     noneText = "なし",
@@ -250,16 +250,16 @@ val StringsJa = AppStrings(
     freqDialogTitle = "周波数を直接入力",
     freqDialogRangeLabel = "周波数 (20 – 20,000 Hz)",
 
-    puckTitle = "2D 空間サウンドパック",
+    puckTitle = "2D 空間サウンドステージ",
     puckMobileSubtitle = "リアルタイム空間パンナー",
     puckTvSubtitle = { mode, az, hint -> "$mode • 方位角 ${az}° • $hint" },
-    legendMovePuck = "パック移動",
+    legendMovePuck = "音源移動",
     legendSideMenuActive = "右メニュー操作中",
     legendBackForHub = "戻るでハブへ",
     puckSourcePrefix = { lbl -> "音源: $lbl" },
     virtualDistance = { m -> "仮想距離: $m m" },
     roomControlUpper = "空間コントロール",
-    puckBtnLabel = "パック",
+    puckBtnLabel = "音源",
     orbitStateLabel = { on -> "自動回転: ${if (on) "オン" else "オフ"}" },
     stateOn = "オン",
     stateOff = "オフ",
@@ -352,7 +352,7 @@ val StringsJa = AppStrings(
             bullets = listOf(
                 "単体スピーカーテスト" to "ピンクノイズ・サイン波・任意音源で各チャンネルを個別に鳴らし、配線や音量を検証します。",
                 "周波数・プリセット発信器" to "20 Hz 〜 20 kHz をスイープし、定在波やサブウーファーのクロスオーバーを確認できます。",
-                "2D 空間サウンドパック" to "仮想音源やスピーカーフォーカスを部屋の周囲で滑らかに回転・移動させて定位をチェックします。",
+                "2D 空間サウンドステージ" to "仮想音源やスピーカーフォーカスを部屋の周囲で滑らかに回転・移動させて定位をチェックします。",
                 "ルーム音響・自動測定" to "Android スマホのマイクで複数の試聴位置を自動スイープ測定し、設置比較や A4 PDF レポート出力まで行えます。"
             )
         ),
@@ -446,7 +446,7 @@ val StringsJa = AppStrings(
         micPermissionBtn = "マイクを許可",
         micErrorMsg = "マイクを初期化できませんでした。権限を確認してください。",
         levelCheckTitle = "事前レベルチェック",
-        levelCheckDesc = "アンプの音量が部屋の雑音より十分大きいか確認します:",
+        levelCheckDesc = "アンプの音量が部屋の雑音より十分大きいか確認します。ヒント：オートスタンバイ機能付きサブウーファーも事前に起動でき、測定開始直後の取りこぼしを防げます。",
         levelCheckStartBtn = "テスト音で確認",
         levelCheckStopBtn = "確認を停止",
         levelAmbientLabel = { db -> "暗騒音: $db dBFS" },
@@ -459,12 +459,12 @@ val StringsJa = AppStrings(
         speakersSectionTitle = "測定スピーカー",
         speakerPresetHint = { preset ->
             when (preset) {
-                GeneratorPreset.P2_0 -> "AV アンプでスピーカー設定が「Small」の場合に最適（低域管理が有効）：低音の二重加算がなく、音楽再生やクロスオーバー確認に最も現実的です。「Large」設定でサブウーファーが鳴らない場合は 0.1 または 2.1 を選択してください。"
-                GeneratorPreset.P0_1_SUB -> "サブウーファー (.1 LFE) のみを測定します。低域の定在波や設置場所の比較に最適です。"
+                GeneratorPreset.P2_0 -> "低域（20–200 Hz）の左右合成や位相打ち消しの確認に有効です。約300 Hz以上では2本のスピーカー間でコムフィルタ干渉が起きるため、全帯域測定は単体スピーカー（FLまたはFR）を推奨します。"
+                GeneratorPreset.P0_1_SUB -> "サブウーファー (.1 LFE) のみを測定します。低域の定在波（20–120 Hz）や設置場所の比較に最適です。"
                 GeneratorPreset.P2_1 -> "フロント + LFE を同時に出力します（AV アンプの低域管理なしや Large 設定向け。Small 設定ではクロスオーバー以下が加算されます）。"
-                GeneratorPreset.ALL_WITHOUT_SUB -> "LFE を除いた全スピーカーを鳴らします（AV アンプ側で低域管理が有効な場合はサブウーファーも動作します）。"
-                GeneratorPreset.ALL_ACTIVE -> "有効な全チャンネルを同時に鳴らします（複数スピーカー間の位相干渉・打ち消し合いが起きる場合があります）。"
-                GeneratorPreset.CUSTOM -> "センターのみなど、特定のチャンネルを自由に選んで測定できます。"
+                GeneratorPreset.ALL_WITHOUT_SUB -> "LFE を除いた全スピーカーを鳴らします（AV アンプの低域管理が有効な場合はサブウーファーも動作します）。"
+                GeneratorPreset.ALL_ACTIVE -> "有効な全チャンネルを同時に鳴らします（約200 Hz以上では複数スピーカー間の位相干渉・打ち消し合いが起きやすくなります）。"
+                GeneratorPreset.CUSTOM -> "推奨の測定標準（FL または FR のみなど単体測定）：中高域のコムフィルタ干渉を防ぎ、「Small」時はサブとの自然なつながり、「Large」時は純粋な低域特性と定在波を正確に確認できます。"
             }
         },
         presetSectionTitle = "周波数範囲 & ステップ幅",
@@ -486,6 +486,9 @@ val StringsJa = AppStrings(
         positionNameLabel = "この試聴位置の名前",
         defaultPositionName = { idx -> "試聴位置 $idx" },
         startSweepBtn = "測定を開始",
+        localPlaybackHint = "音声はこのスマホから再生されます（TV未接続）",
+        micSelectorLabel = "マイク",
+        micPhoneDefault = "スマホ内蔵マイク（標準）",
         addPositionSweepBtn = "この位置を測定",
         countdownLabel = { sec -> "動かず静かに… $sec 秒後に開始" },
         silenceCalibLabel = "部屋の環境ノイズを測定中…",
@@ -523,6 +526,8 @@ val StringsJa = AppStrings(
         pdfLayoutDialogTitle = "PDF の向きを選択",
         pdfLayoutDialogBody = "全帯域スイープ（20 Hz – 20 kHz など）では横向きにするとグラフがより見やすくなります。",
         pdfPortraitDefaultBtn = "縦向き（標準）",
-        pdfLandscapeWideBtn = "横向き（ワイド）"
+        pdfLandscapeWideBtn = "横向き（ワイド）",
+        pdfExportConfigTitle = "PDFエクスポート設定",
+        pdfExportActionBtn = "PDFを書き出す"
     )
 )

@@ -50,6 +50,8 @@ fun MobileAppRoot(
     val roomSessions by vm.roomSessions.collectAsStateWithLifecycle()
     val roomLevelCheckState by vm.roomLevelCheckState.collectAsStateWithLifecycle()
     val roomMeasurementProgress by vm.roomMeasurementProgress.collectAsStateWithLifecycle()
+    val roomExternalMics by vm.roomExternalMics.collectAsStateWithLifecycle()
+    val roomSelectedMicId by vm.roomSelectedMicId.collectAsStateWithLifecycle()
 
     LaunchedEffect(statusToast) {
         if (statusToast != null) {
@@ -151,10 +153,14 @@ fun MobileAppRoot(
             state.activeMode == TestMode.ROOM_MEASUREMENT -> {
                 MobileRoomMeasurementScreen(
                     state = state,
+                    connectionStatus = connectionStatus,
                     roomGuideSeen = roomGuideSeen,
                     savedSessions = roomSessions,
                     levelCheckState = roomLevelCheckState,
                     runProgress = roomMeasurementProgress,
+                    externalMics = roomExternalMics,
+                    selectedMicId = roomSelectedMicId,
+                    onSelectMic = { vm.selectRoomMicrophone(it) },
                     onMarkGuideSeen = { vm.markRoomGuideSeen() },
                     onStartLevelCheck = { preset, custom, hz, withTone ->
                         vm.startRoomLevelCheck(preset, custom, hz, withTone)

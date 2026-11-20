@@ -81,16 +81,20 @@ fun MobileHomeHubScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // Connection Status Pill (Clickable to open TV pairing / connection sheet)
+                val isLocalDisconnected = connectionStatus == ConnectionStatus.LOCAL_STANDALONE
                 val (dotColor, statusText) = when (connectionStatus) {
                     ConnectionStatus.CONNECTED_TO_TV -> SurroundColors.Success to s.mobileConnConnected(state.hostName)
                     ConnectionStatus.CONNECTING -> SurroundColors.Secondary to s.mobileConnConnecting
-                    ConnectionStatus.LOCAL_STANDALONE -> SurroundColors.Primary to s.mobileConnLocal
+                    ConnectionStatus.LOCAL_STANDALONE -> androidx.compose.ui.graphics.Color(0xFFFF5252) to s.mobileConnLocal
                     ConnectionStatus.TV_HOST_ACTIVE -> SurroundColors.Primary to s.tvHostActiveLabel(state.hostIp ?: "LAN")
                 }
                 Row(
                     modifier = Modifier
                         .clip(CircleShape)
-                        .background(SurroundColors.SurfaceContainerHigh)
+                        .background(
+                            if (isLocalDisconnected) androidx.compose.ui.graphics.Color(0xFF690005)
+                            else SurroundColors.SurfaceContainerHigh
+                        )
                         .clickable { onOpenConnectionSettings() }
                         .padding(horizontal = 14.dp, vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -105,7 +109,7 @@ fun MobileHomeHubScreen(
                     Text(
                         text = statusText,
                         style = MaterialTheme.typography.labelLarge,
-                        color = SurroundColors.OnSurface
+                        color = if (isLocalDisconnected) SurroundColors.Error else SurroundColors.OnSurface
                     )
                 }
 

@@ -1,6 +1,12 @@
 package de.surroundlab.app.audio
 
 import android.content.Context
+import android.media.AudioDeviceCallback
+import android.media.AudioDeviceInfo
+import android.media.AudioManager
+import android.os.Handler
+import android.os.Looper
+import de.surroundlab.app.domain.model.ExternalMicOption
 import de.surroundlab.app.domain.model.FrequencyMeasurementPoint
 import de.surroundlab.app.domain.model.GeneratorPreset
 import de.surroundlab.app.domain.model.LevelCheckVerdict
@@ -39,7 +45,36 @@ class RoomMeasurementCoordinator(
     ) -> Unit
 ) {
     private val analyzer = RoomAcousticAnalyzer(context.applicationContext)
+    private val audioManager = context.applicationContext.getSystemService(Context.AUDIO_SERVICE) as? AudioManager
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+    private val _externalMics = MutableStateFlow(analyzer.listExternalMicrophones())
+    val externalMics: StateFlow<List<ExternalMicOption>> = _externalMics.asStateFlow()
+
+    private val _selectedMicId = MutableStateFlow<Int?>(null)
+    val selectedMicId: StateFlow<Int?> = _selectedMicId.asStateFlow()
+
+    private val deviceCallback = object : AudioDeviceCallback() {
+        override fun onAudioDevicesAdded(addedDevices: Array<out AudioDeviceInfo>?) = refreshMics()
+        override fun onAudioDevicesRemoved(removedDevices: Array<out AudioDeviceInfo>?) = refreshMics()
+    }
+
+    init {
+        audioManager?.registerAudioDeviceCallback(deviceCallback, Handler(Looper.getMainLooper()))
+    }
+
+    private fun refreshMics() {
+        val list = analyzer.listExternalMicrophones()
+        _externalMics.value = list
+        val currentId = _selectedMicId.value
+        if (currentId != null && list.none { it.id == currentId }) {
+            _selectedMicId.value = null
+        }
+    }
+
+    fun selectMicrophone(deviceId: Int?) {
+        _selectedMicId.value = deviceId
+    }
 
     private val _levelCheckState = MutableStateFlow(RoomLevelCheckState())
     val levelCheckState: StateFlow<RoomLevelCheckState> = _levelCheckState.asStateFlow()
@@ -66,7 +101,7 @@ class RoomMeasurementCoordinator(
         )
 
         levelJob = scope.launch {
-            val record = analyzer.openAudioRecord()
+            val record = analyzer.openAudioRecord(_selectedMicId.value)
             if (record == null) {
                 _levelCheckState.value = RoomLevelCheckState(
                     running = false,
@@ -164,7 +199,7 @@ class RoomMeasurementCoordinator(
                     delay(1000L)
                 }
 
-                record = analyzer.openAudioRecord()
+                record = analyzer.openAudioRecord(_selectedMicId.value)
                 if (record == null) {
                     _runProgress.value = MeasurementRunProgress(
                         phase = SweepPhase.ERROR,

@@ -111,7 +111,7 @@ val StringsEn = AppStrings(
 
     roomTvFront = "TV FRONT",
     roomSweetSpotDesc = "Sweet Spot",
-    roomSoundPuckDesc = "Sound Puck",
+    roomSoundPuckDesc = "Sound Stage",
 
     tvTopologyBadge = "TV TOPOLOGY",
     setupTvSubtitle = "Choose speaker setup & pair smartphone / browser",
@@ -160,13 +160,13 @@ val StringsEn = AppStrings(
     mode1MobileDesc = { chs -> "Interactive 2D floorplan. Isolate channels ($chs) to verify wiring and levels." },
     mode1Footer = "Pink Noise • Sine • Audio",
     mode2Badge = "MODE 02",
-    mode2Title = "Frequency & Preset Generator",
+    mode2Title = "Frequency Generator",
     mode2TvDesc = "Continuous sine wave generator with D-Pad stepper, pink noise, and subwoofer room-mode presets.",
     mode2MobileDesc = "Tactile haptic jog wheel with sine waves, pink noise, and subwoofer crossover presets.",
     mode2Footer = "20 Hz – 20 kHz Spectrum",
     mode3Badge = "MODE 03",
-    mode3Title = "2D Spatial Sound Puck",
-    mode3TvDesc = "Real-time spatial panner. Move the sound puck smoothly around speakers with D-Pad or Auto-Orbit.",
+    mode3Title = "2D Spatial Sound Stage",
+    mode3TvDesc = "Real-time spatial panner. Move the sound source smoothly around speakers with D-Pad or Auto-Orbit.",
     mode3MobileDesc = "Live room panner. Drag a virtual sound object or focus individual speakers via touch & Auto-Orbit.",
     mode3Footer = "Virtual Object & Speaker Focus",
     mode4Badge = "MODE 04",
@@ -176,7 +176,7 @@ val StringsEn = AppStrings(
     mode4Footer = "Mic Sweep & PDF Report",
     mobileConnConnected = { host -> "Connected: $host" },
     mobileConnConnecting = "Connecting to TV...",
-    mobileConnLocal = "Local Mode (2.0)",
+    mobileConnLocal = "Local Mode (2.0) · Not connected",
     mobileRoleRemote = "TV Remote Controller",
     mobileRoleLocal = "Soundstage Calibrator (Stereo)",
     mobileCard1FooterLeft = { count -> "$count Channels" },
@@ -216,7 +216,7 @@ val StringsEn = AppStrings(
     applyToAllChannels = "Apply to all speakers",
     applySignalBtn = "Apply Signal",
 
-    generatorTitle = "Frequency & Preset Generator",
+    generatorTitle = "Frequency Generator",
     generatorMobileSubtitle = "DSP SYNTHESIZER",
     activeChannelsPrefix = { chs -> "Active channels: $chs" },
     noneText = "None",
@@ -250,16 +250,16 @@ val StringsEn = AppStrings(
     freqDialogTitle = "Enter frequency directly",
     freqDialogRangeLabel = "Frequency (20 – 20,000 Hz)",
 
-    puckTitle = "2D Sound Puck",
+    puckTitle = "2D Spatial Sound Stage",
     puckMobileSubtitle = "LIVE SPATIAL PANNER",
     puckTvSubtitle = { mode, az, hint -> "$mode • Azimuth ${az}° • $hint" },
-    legendMovePuck = "Move Puck",
+    legendMovePuck = "Move Source",
     legendSideMenuActive = "Side menu active",
     legendBackForHub = "Back for Hub",
     puckSourcePrefix = { lbl -> "Source: $lbl" },
     virtualDistance = { m -> "Virtual distance: $m m" },
     roomControlUpper = "SPATIAL CONTROLS",
-    puckBtnLabel = "Puck",
+    puckBtnLabel = "Source",
     orbitStateLabel = { on -> "Orbit: ${if (on) "On" else "Off"}" },
     stateOn = "On",
     stateOff = "Off",
@@ -351,8 +351,8 @@ val StringsEn = AppStrings(
             icon = Icons.Rounded.SurroundSound,
             bullets = listOf(
                 "Single Speaker Test" to "Isolate every channel to verify real speaker wiring using Pink Noise, Sine Wave, or custom tracks.",
-                "Frequency & Preset Generator" to "Sweep 20 Hz – 20 kHz, locate room resonances, and verify your subwoofer crossover.",
-                "2D Spatial Sound Puck" to "Move a virtual sound object or speaker focus smoothly around your room in real time.",
+                "Frequency Generator" to "Sweep 20 Hz – 20 kHz, locate room resonances, and verify your subwoofer crossover.",
+                "2D Spatial Sound Stage" to "Move a virtual sound object or speaker focus smoothly around your room in real time.",
                 "Room Modes & Sweep" to "Use your Android phone's mic to sweep frequencies across multiple seats, compare placements, and export A4 PDF reports."
             )
         ),
@@ -446,7 +446,7 @@ val StringsEn = AppStrings(
         micPermissionBtn = "Allow Microphone",
         micErrorMsg = "Could not open microphone. Please check permission.",
         levelCheckTitle = "Pre-Sweep Level Check",
-        levelCheckDesc = "Verify that your playback volume is clearly audible above room noise:",
+        levelCheckDesc = "Verify that your playback volume is clearly audible above room noise. Tip: A quick check also wakes up subwoofers with auto-standby so no sweep points are missed.",
         levelCheckStartBtn = "Test Tone Level",
         levelCheckStopBtn = "Stop Check",
         levelAmbientLabel = { db -> "Noise floor: $db dBFS" },
@@ -459,12 +459,12 @@ val StringsEn = AppStrings(
         speakersSectionTitle = "Speaker Selection",
         speakerPresetHint = { preset ->
             when (preset) {
-                GeneratorPreset.P2_0 -> "Best for AVR ‘Small’ speaker settings (active bass management): most realistic music & crossover test without bass doubling. If fronts are ‘Large’ and the sub stays silent, use 0.1 or 2.1."
-                GeneratorPreset.P0_1_SUB -> "Measures only the subwoofer (.1 LFE) — ideal for finding bass room modes and comparing sub placements."
-                GeneratorPreset.P2_1 -> "Drives Fronts + LFE simultaneously (great for Large fronts or systems without AVR bass management; adds extra bass below crossover on Small speakers)."
-                GeneratorPreset.ALL_WITHOUT_SUB -> "Tests all satellite speakers without a separate LFE signal (sub still receives redirected bass if AVR bass management is active)."
-                GeneratorPreset.ALL_ACTIVE -> "Drives all active channels simultaneously (high total output, though multi-speaker phase cancellations can occur above ~100 Hz)."
-                GeneratorPreset.CUSTOM -> "Pick specific speakers manually — e.g., isolate Center or individual surrounds."
+                GeneratorPreset.P2_0 -> "Useful in the bass range (20–200 Hz) to check L+R summation or phase cancellation. Above ~300 Hz, two speakers playing the same tone create comb-filtering at the mic — for full-range sweeps, measure a single speaker (FL or FR) instead."
+                GeneratorPreset.P0_1_SUB -> "Measures only the subwoofer (.1 LFE) — ideal for finding pure bass room modes (20–120 Hz) and comparing sub placements."
+                GeneratorPreset.P2_1 -> "Drives Fronts + LFE simultaneously (useful for Large fronts or systems without AVR bass management; adds bass below crossover on Small speakers and can cause comb-filtering in highs)."
+                GeneratorPreset.ALL_WITHOUT_SUB -> "Tests all satellite speakers without a separate LFE signal (sub still receives redirected bass if AVR bass management is active; multi-speaker comb-filtering occurs in mids/highs)."
+                GeneratorPreset.ALL_ACTIVE -> "Drives all active channels simultaneously (high total output, though comb-filtering and phase cancellations occur above ~200 Hz)."
+                GeneratorPreset.CUSTOM -> "Recommended acoustic standard (single speaker, e.g., FL or FR only): avoids mid/high comb-filtering. Reveals the true crossover transition to the sub on ‘Small’ speakers, or the pure bass/room-mode curve on ‘Large’ speakers."
             }
         },
         presetSectionTitle = "Frequency Range & Step Size",
@@ -486,6 +486,9 @@ val StringsEn = AppStrings(
         positionNameLabel = "Listening Position Name",
         defaultPositionName = { idx -> "Position $idx" },
         startSweepBtn = "Start Measurement",
+        localPlaybackHint = "Audio plays through this phone (no TV connected)",
+        micSelectorLabel = "Microphone",
+        micPhoneDefault = "Phone Mic (Default)",
         addPositionSweepBtn = "Measure Position",
         countdownLabel = { sec -> "Hold steady & quiet… starting in $sec" },
         silenceCalibLabel = "Measuring room noise floor…",
@@ -523,6 +526,8 @@ val StringsEn = AppStrings(
         pdfLayoutDialogTitle = "Choose PDF Page Layout",
         pdfLayoutDialogBody = "Landscape gives extra horizontal detail for wide-band sweeps (such as 20 Hz – 20 kHz).",
         pdfPortraitDefaultBtn = "Portrait (Default)",
-        pdfLandscapeWideBtn = "Landscape (Wide)"
+        pdfLandscapeWideBtn = "Landscape (Wide)",
+        pdfExportConfigTitle = "Configure PDF Export",
+        pdfExportActionBtn = "Export PDF"
     )
 )

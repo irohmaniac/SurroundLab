@@ -290,84 +290,86 @@ fun MobileGeneratorScreen(
                 }
             }
 
-            // Tactile Rotary Jog-Wheel Card
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(28.dp))
-                    .background(SurroundColors.SurfaceContainer)
-                    .padding(20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                FrequencyRotaryJogWheel(
-                    frequencyHz = gen.frequencyHz,
-                    isPinkNoise = gen.signalType == SignalSourceType.PINK_NOISE,
-                    onFrequencyChange = { newHz ->
-                        onUpdateGenerator(null, null, SignalSourceType.SINE, newHz, null)
-                    },
-                    onCenterClick = { showHzInputDialog = true }
-                )
-
-                // Fine Tuning Stepper Buttons
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    verticalAlignment = Alignment.CenterVertically
+            if (gen.signalType == SignalSourceType.SINE) {
+                // Tactile Rotary Jog-Wheel Card
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(28.dp))
+                        .background(SurroundColors.SurfaceContainer)
+                        .padding(20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    listOf(-10, -1, 1, 10).forEach { delta ->
-                        val label = if (delta > 0) "+$delta" else "$delta"
-                        Box(
-                            modifier = Modifier
-                                .clip(CircleShape)
-                                .background(SurroundColors.SurfaceContainerHighest)
-                                .clickable {
-                                    onUpdateGenerator(
-                                        null, null, SignalSourceType.SINE,
-                                        (gen.frequencyHz + delta).coerceIn(20, 20000),
-                                        null
-                                    )
-                                }
-                                .padding(horizontal = 16.dp, vertical = 10.dp)
-                        ) {
-                            Text(
-                                text = if (delta == -10 || delta == 10) "$label Hz" else label,
-                                fontFamily = MonoFontFamily,
-                                fontSize = 13.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = SurroundColors.OnSurface
-                            )
+                    FrequencyRotaryJogWheel(
+                        frequencyHz = gen.frequencyHz,
+                        isPinkNoise = false,
+                        onFrequencyChange = { newHz ->
+                            onUpdateGenerator(null, null, SignalSourceType.SINE, newHz, null)
+                        },
+                        onCenterClick = { showHzInputDialog = true }
+                    )
+
+                    // Fine Tuning Stepper Buttons
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        listOf(-10, -1, 1, 10).forEach { delta ->
+                            val label = if (delta > 0) "+$delta" else "$delta"
+                            Box(
+                                modifier = Modifier
+                                    .clip(CircleShape)
+                                    .background(SurroundColors.SurfaceContainerHighest)
+                                    .clickable {
+                                        onUpdateGenerator(
+                                            null, null, SignalSourceType.SINE,
+                                            (gen.frequencyHz + delta).coerceIn(20, 20000),
+                                            null
+                                        )
+                                    }
+                                    .padding(horizontal = 16.dp, vertical = 10.dp)
+                            ) {
+                                Text(
+                                    text = if (delta == -10 || delta == 10) "$label Hz" else label,
+                                    fontFamily = MonoFontFamily,
+                                    fontSize = 13.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = SurroundColors.OnSurface
+                                )
+                            }
                         }
                     }
                 }
-            }
 
-            // Quick Frequency Presets
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                listOf(80 to "80 Hz", 400 to "400 Hz", 1000 to "1 kHz", 10000 to "10 kHz").forEach { (hz, label) ->
-                    val isSel = gen.frequencyHz == hz
-                    Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .clip(RoundedCornerShape(14.dp))
-                            .background(if (isSel) SurroundColors.PrimaryContainer else SurroundColors.SurfaceContainer)
-                            .clickable { onUpdateGenerator(null, null, SignalSourceType.SINE, hz, null) }
-                            .padding(vertical = 10.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = label,
-                            fontFamily = MonoFontFamily,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = when {
-                                isSel -> SurroundColors.OnPrimaryContainer
-                                hz <= 80 -> SurroundColors.Secondary
-                                else -> SurroundColors.OnSurface
-                            }
-                        )
+                // Quick Frequency Presets
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    listOf(80 to "80 Hz", 400 to "400 Hz", 1000 to "1 kHz", 10000 to "10 kHz").forEach { (hz, label) ->
+                        val isSel = gen.frequencyHz == hz
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .clip(RoundedCornerShape(14.dp))
+                                .background(if (isSel) SurroundColors.PrimaryContainer else SurroundColors.SurfaceContainer)
+                                .clickable { onUpdateGenerator(null, null, SignalSourceType.SINE, hz, null) }
+                                .padding(vertical = 10.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = label,
+                                fontFamily = MonoFontFamily,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = when {
+                                    isSel -> SurroundColors.OnPrimaryContainer
+                                    hz <= 80 -> SurroundColors.Secondary
+                                    else -> SurroundColors.OnSurface
+                                }
+                            )
+                        }
                     }
                 }
             }

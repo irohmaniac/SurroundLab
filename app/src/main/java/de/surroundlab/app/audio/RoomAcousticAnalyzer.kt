@@ -2,10 +2,13 @@ package de.surroundlab.app.audio
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.media.AudioDeviceInfo
 import android.media.AudioFormat
 import android.media.AudioManager
 import android.media.AudioRecord
 import android.media.MediaRecorder
+import android.os.Build
+import de.surroundlab.app.domain.model.ExternalMicOption
 import de.surroundlab.app.domain.model.FrequencyMeasurementPoint
 import kotlin.math.PI
 import kotlin.math.abs
@@ -44,14 +47,41 @@ class RoomAcousticAnalyzer(private val context: Context) {
         }
     }
 
+    fun listExternalMicrophones(): List<ExternalMicOption> {
+        val am = context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager ?: return emptyList()
+        val inputs = am.getDevices(AudioManager.GET_DEVICES_INPUTS)
+        return inputs.mapNotNull { dev ->
+            val tag = when (dev.type) {
+                AudioDeviceInfo.TYPE_USB_DEVICE,
+                AudioDeviceInfo.TYPE_USB_HEADSET,
+                AudioDeviceInfo.TYPE_USB_ACCESSORY -> "USB"
+                AudioDeviceInfo.TYPE_BLUETOOTH_SCO -> "BT"
+                AudioDeviceInfo.TYPE_WIRED_HEADSET,
+                AudioDeviceInfo.TYPE_LINE_ANALOG,
+                AudioDeviceInfo.TYPE_AUX_LINE -> "AUX"
+                else -> if (Build.VERSION.SDK_INT >= 31 && dev.type == AudioDeviceInfo.TYPE_BLE_HEADSET) "BT" else null
+            } ?: return@mapNotNull null
+
+            val label = dev.productName?.toString()?.trim()?.takeIf { it.isNotBlank() } ?: "External Mic"
+            ExternalMicOption(id = dev.id, name = label, transportTag = tag)
+        }.distinctBy { it.id }
+    }
+
     @SuppressLint("MissingPermission")
-    fun openAudioRecord(): AudioRecord? {
+    fun openAudioRecord(preferredDeviceId: Int? = null): AudioRecord? {
         val minBytes = AudioRecord.getMinBufferSize(
             SAMPLE_RATE,
             AudioFormat.CHANNEL_IN_MONO,
             AudioFormat.ENCODING_PCM_16BIT
         ).coerceAtLeast(4096)
         val bufferBytes = max(minBytes * 3, SAMPLE_RATE * 2) // >= 1s ring buffer
+
+        val preferredDevice = if (preferredDeviceId != null) {
+            val am = context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager
+            am?.getDevices(AudioManager.GET_DEVICES_INPUTS)?.firstOrNull { it.id == preferredDeviceId }
+        } else {
+            null
+        }
 
         val candidates = listOf(
             selectAudioSource(),
@@ -70,6 +100,9 @@ class RoomAcousticAnalyzer(private val context: Context) {
                 )
             }.getOrNull()
             if (rec != null && rec.state == AudioRecord.STATE_INITIALIZED) {
+                if (preferredDevice != null) {
+                    rec.setPreferredDevice(preferredDevice)
+                }
                 return rec
             }
             runCatching { rec?.release() }

@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -81,7 +82,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import de.surroundlab.app.data.RoomPdfExporter
+import de.surroundlab.app.domain.model.ConnectionStatus
 import de.surroundlab.app.domain.model.DbScaleMode
+import de.surroundlab.app.domain.model.ExternalMicOption
 import de.surroundlab.app.domain.model.FrequencyMeasurementPoint
 import de.surroundlab.app.domain.model.GeneratorPreset
 import de.surroundlab.app.domain.model.LevelCheckVerdict
@@ -120,10 +123,14 @@ private enum class RoomTab {
 @Composable
 fun MobileRoomMeasurementScreen(
     state: SurroundAppState,
+    connectionStatus: ConnectionStatus,
     roomGuideSeen: Boolean,
     savedSessions: List<RoomMeasurementSession>,
     levelCheckState: RoomLevelCheckState,
     runProgress: MeasurementRunProgress,
+    externalMics: List<ExternalMicOption>,
+    selectedMicId: Int?,
+    onSelectMic: (Int?) -> Unit,
     onMarkGuideSeen: () -> Unit,
     onStartLevelCheck: (GeneratorPreset, Set<SpeakerChannel>, Int, Boolean) -> Unit,
     onStopLevelCheck: () -> Unit,
@@ -180,15 +187,17 @@ fun MobileRoomMeasurementScreen(
     var showGuideDialog by remember { mutableStateOf(!roomGuideSeen) }
     var activeTab by remember { mutableStateOf(RoomTab.MEASURE) }
 
-    // Sweep configuration state (Default: 2.0 Front for realistic AVR bass-management without LFE doubling)
-    var selectedPreset by remember { mutableStateOf(GeneratorPreset.P2_0) }
+    // Sweep configuration state (Default: single front speaker FL to avoid comb-filtering at the mic)
+    var selectedPreset by remember { mutableStateOf(GeneratorPreset.CUSTOM) }
     LaunchedEffect(state.setup) {
         if (!selectedPreset.isAvailableFor(state.setup)) {
-            selectedPreset = GeneratorPreset.P2_0
+            selectedPreset = GeneratorPreset.CUSTOM
         }
     }
     var customChannels by remember(state.setup) {
-        mutableStateOf(state.setup.channels.toSet())
+        val defaultChannel = state.setup.channels.firstOrNull { it == SpeakerChannel.FL }
+            ?: state.setup.channels.first()
+        mutableStateOf(setOf(defaultChannel))
     }
     var rangePreset by remember { mutableStateOf(RoomPresetType.ROOM_MODES) }
     var startHzText by remember { mutableStateOf("20") }
@@ -230,18 +239,16 @@ fun MobileRoomMeasurementScreen(
         runProgress.phase == SweepPhase.SWEEPING
 
     fun launchPdfShare(
-        sessionsToExport: List<RoomMeasurementSession>,
+        configsToExport: List<RoomPdfExporter.SessionExportConfig>,
         landscapeSinglePerPage: Boolean = false
     ) {
-        if (sessionsToExport.isEmpty()) return
+        if (configsToExport.isEmpty()) return
         coroutineScope.launch {
             val result = withContext(Dispatchers.IO) {
                 RoomPdfExporter.exportToPdfUri(
                     context = context,
-                    sessions = sessionsToExport,
+                    configs = configsToExport,
                     scaleMode = scaleMode,
-                    showMeanCurve = showMeanCurve,
-                    smoothCurves = smoothCurves,
                     landscapeSinglePerPage = landscapeSinglePerPage,
                     labels = RoomPdfExporter.ExportLabels(
                         reportTitle = r.pdfReportTitle,
@@ -268,11 +275,7 @@ fun MobileRoomMeasurementScreen(
 
     fun requestPdfExport(sessionsToExport: List<RoomMeasurementSession>) {
         if (sessionsToExport.isEmpty()) return
-        if (sessionsToExport.size == 1) {
-            pendingSinglePdfSessions = sessionsToExport
-        } else {
-            launchPdfShare(sessionsToExport, landscapeSinglePerPage = false)
-        }
+        pendingSinglePdfSessions = sessionsToExport
     }
 
     LaunchedEffect(savedSessions) {
@@ -741,7 +744,58 @@ fun MobileRoomMeasurementScreen(
                                 }
                             )
 
+                            if (externalMics.isNotEmpty()) {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clip(RoundedCornerShape(18.dp))
+                                        .background(SurroundColors.SurfaceContainer)
+                                        .padding(14.dp),
+                                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    Text(
+                                        text = r.micSelectorLabel,
+                                        style = MaterialTheme.typography.titleSmall,
+                                        color = SurroundColors.OnSurface
+                                    )
+                                    FlowRow(
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                                    ) {
+                                        RoomChip(
+                                            text = r.micPhoneDefault,
+                                            selected = selectedMicId == null,
+                                            onClick = { onSelectMic(null) }
+                                        )
+                                        externalMics.forEach { mic ->
+                                            RoomChip(
+                                                text = "${mic.name} (${mic.transportTag})",
+                                                selected = selectedMicId == mic.id,
+                                                onClick = { onSelectMic(mic.id) }
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+
                             // Start Sweep CTA
+                            if (connectionStatus != ConnectionStatus.CONNECTED_TO_TV) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(bottom = 8.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    Text(
+                                        text = r.localPlaybackHint,
+                                        fontSize = 12.sp,
+                                        fontWeight = FontWeight.Medium,
+                                        color = SurroundColors.Secondary
+                                    )
+                                }
+                            }
+
                             Button(
                                 onClick = {
                                     if (!hasMicPermission) {
@@ -938,14 +992,18 @@ fun MobileRoomMeasurementScreen(
     }
 
     pendingSinglePdfSessions?.let { sessionsToExport ->
-        PdfLayoutChoiceDialog(
-            onSelectPortrait = {
-                pendingSinglePdfSessions = null
-                launchPdfShare(sessionsToExport, landscapeSinglePerPage = false)
+        PdfExportConfigDialog(
+            sessions = sessionsToExport,
+            initialHiddenPositionIds = if (sessionsToExport.size == 1 && sessionsToExport.first().id == workingSession?.id) {
+                hiddenPositionIds
+            } else {
+                emptySet()
             },
-            onSelectLandscape = {
+            defaultShowMean = showMeanCurve,
+            defaultSmooth = smoothCurves,
+            onExport = { configs, landscape ->
                 pendingSinglePdfSessions = null
-                launchPdfShare(sessionsToExport, landscapeSinglePerPage = true)
+                launchPdfShare(configs, landscapeSinglePerPage = landscape)
             },
             onDismiss = { pendingSinglePdfSessions = null }
         )
@@ -1703,9 +1761,10 @@ private fun CompareTabContent(
 private fun RoomChip(
     text: String,
     selected: Boolean,
+    dotColor: Color? = null,
     onClick: () -> Unit
 ) {
-    Box(
+    Row(
         modifier = Modifier
             .clip(RoundedCornerShape(14.dp))
             .background(if (selected) SurroundColors.PrimaryContainer else SurroundColors.SurfaceContainerHigh)
@@ -1715,8 +1774,18 @@ private fun RoomChip(
                 shape = RoundedCornerShape(14.dp)
             )
             .clickable { onClick() }
-            .padding(horizontal = 12.dp, vertical = 8.dp)
+            .padding(horizontal = 12.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(6.dp)
     ) {
+        if (dotColor != null) {
+            Box(
+                modifier = Modifier
+                    .size(8.dp)
+                    .clip(CircleShape)
+                    .background(dotColor)
+            )
+        }
         Text(
             text = text,
             fontSize = 12.sp,
@@ -1856,52 +1925,146 @@ private fun RenamePositionDialog(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun PdfLayoutChoiceDialog(
-    onSelectPortrait: () -> Unit,
-    onSelectLandscape: () -> Unit,
+private fun PdfExportConfigDialog(
+    sessions: List<RoomMeasurementSession>,
+    initialHiddenPositionIds: Set<String>,
+    defaultShowMean: Boolean,
+    defaultSmooth: Boolean,
+    onExport: (configs: List<RoomPdfExporter.SessionExportConfig>, landscape: Boolean) -> Unit,
     onDismiss: () -> Unit
 ) {
     val s = LocalAppStrings.current
     val r = s.room
+    var landscape by remember { mutableStateOf(false) }
+    var configs by remember(sessions) {
+        mutableStateOf(
+            sessions.map { session ->
+                val allIds = session.positions.map { it.id }.toSet()
+                val visible = (allIds - initialHiddenPositionIds).ifEmpty { allIds }
+                RoomPdfExporter.SessionExportConfig(
+                    session = session,
+                    includedPositionIds = visible,
+                    showMeanCurve = defaultShowMean,
+                    smoothCurves = defaultSmooth
+                )
+            }
+        )
+    }
+    val canExport = configs.all { it.includedPositionIds.isNotEmpty() }
+
     AlertDialog(
         onDismissRequest = onDismiss,
         containerColor = SurroundColors.SurfaceContainerHigh,
         title = {
-            Text(r.pdfLayoutDialogTitle, fontWeight = FontWeight.Bold, color = SurroundColors.OnSurface)
+            Text(r.pdfExportConfigTitle, fontWeight = FontWeight.Bold, color = SurroundColors.OnSurface)
         },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                Text(
-                    text = r.pdfLayoutDialogBody,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = SurroundColors.OnSurfaceVariant
-                )
-                Button(
-                    onClick = onSelectPortrait,
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = CircleShape,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = SurroundColors.Primary,
-                        contentColor = SurroundColors.OnPrimary
-                    )
-                ) {
-                    Icon(Icons.Rounded.PictureAsPdf, contentDescription = null, modifier = Modifier.size(16.dp))
-                    Spacer(Modifier.width(6.dp))
-                    Text(r.pdfPortraitDefaultBtn, fontWeight = FontWeight.Bold)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 420.dp)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                if (sessions.size == 1) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        RoomChip(
+                            text = r.pdfPortraitDefaultBtn,
+                            selected = !landscape,
+                            onClick = { landscape = false }
+                        )
+                        RoomChip(
+                            text = r.pdfLandscapeWideBtn,
+                            selected = landscape,
+                            onClick = { landscape = true }
+                        )
+                    }
                 }
-                OutlinedButton(
-                    onClick = onSelectLandscape,
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = CircleShape
-                ) {
-                    Icon(Icons.Rounded.PictureAsPdf, contentDescription = null, modifier = Modifier.size(16.dp))
-                    Spacer(Modifier.width(6.dp))
-                    Text(r.pdfLandscapeWideBtn, fontWeight = FontWeight.Bold)
+
+                configs.forEachIndexed { idx, cfg ->
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(14.dp))
+                            .background(SurroundColors.SurfaceContainer)
+                            .padding(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(
+                            text = cfg.session.name,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 13.sp,
+                            color = SurroundColors.OnSurface
+                        )
+                        FlowRow(
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            verticalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            cfg.session.positions.forEachIndexed { pIdx, pos ->
+                                val selected = pos.id in cfg.includedPositionIds
+                                RoomChip(
+                                    text = pos.name,
+                                    selected = selected,
+                                    dotColor = Color(RoomGraphUtils.colorForIndex(pIdx)),
+                                    onClick = {
+                                        val nextIds = if (selected) {
+                                            cfg.includedPositionIds - pos.id
+                                        } else {
+                                            cfg.includedPositionIds + pos.id
+                                        }
+                                        configs = configs.toMutableList().also {
+                                            it[idx] = cfg.copy(includedPositionIds = nextIds)
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            if (cfg.session.positions.size >= 2) {
+                                RoomChip(
+                                    text = r.meanCurveLabel,
+                                    selected = cfg.showMeanCurve,
+                                    onClick = {
+                                        configs = configs.toMutableList().also {
+                                            it[idx] = cfg.copy(showMeanCurve = !cfg.showMeanCurve)
+                                        }
+                                    }
+                                )
+                            }
+                            RoomChip(
+                                text = r.smoothLabel,
+                                selected = cfg.smoothCurves,
+                                onClick = {
+                                    configs = configs.toMutableList().also {
+                                        it[idx] = cfg.copy(smoothCurves = !cfg.smoothCurves)
+                                    }
+                                }
+                            )
+                        }
+                    }
                 }
             }
         },
-        confirmButton = {},
+        confirmButton = {
+            Button(
+                onClick = { onExport(configs, if (sessions.size == 1) landscape else false) },
+                enabled = canExport,
+                shape = CircleShape,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = SurroundColors.Primary,
+                    contentColor = SurroundColors.OnPrimary
+                )
+            ) {
+                Icon(Icons.Rounded.PictureAsPdf, contentDescription = null, modifier = Modifier.size(16.dp))
+                Spacer(Modifier.width(6.dp))
+                Text(r.pdfExportActionBtn, fontWeight = FontWeight.Bold)
+            }
+        },
         dismissButton = {
             TextButton(onClick = onDismiss) {
                 Text(s.cancel)

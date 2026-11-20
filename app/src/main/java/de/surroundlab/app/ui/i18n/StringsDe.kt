@@ -112,7 +112,7 @@ val StringsDe = AppStrings(
 
     roomTvFront = "TV FRONT",
     roomSweetSpotDesc = "Hörplatz",
-    roomSoundPuckDesc = "Sound Puck",
+    roomSoundPuckDesc = "Klangbühne",
 
     tvTopologyBadge = "TV TOPOLOGIE",
     setupTvSubtitle = "Lautsprecher-Setup wählen & Smartphone / Browser koppeln",
@@ -161,13 +161,13 @@ val StringsDe = AppStrings(
     mode1MobileDesc = { chs -> "Interaktiver 2D-Raumplan. Isoliere einzelne Kanäle ($chs) für Pegel- & Kanalprüfung." },
     mode1Footer = "Pink Noise • Sinus • Audio",
     mode2Badge = "MODUS 02",
-    mode2Title = "Frequenz- & Preset-Generator",
+    mode2Title = "Frequenzgenerator",
     mode2TvDesc = "Kontinuierlicher Sinuston-Generator mit D-Pad Stepper, Pink Noise und Subwoofer-Raummoden-Presets.",
     mode2MobileDesc = "Taktiles Dreh-Jog-Wheel mit Haptik, Sinustönen, Rosa Rauschen und Subwoofer-Crossover-Presets.",
     mode2Footer = "20 Hz – 20 kHz Frequenzband",
     mode3Badge = "MODUS 03",
-    mode3Title = "2D-Raum-Puck",
-    mode3TvDesc = "Echtzeit-Bühnenpanner. Bewege den Sound-Puck mit D-Pad oder Auto-Orbit frei zwischen den Lautsprechern.",
+    mode3Title = "2D-Klangbühne",
+    mode3TvDesc = "Echtzeit-Raumpanner. Bewege die Klangquelle mit D-Pad oder Auto-Orbit frei zwischen den Lautsprechern.",
     mode3MobileDesc = "Live-Raumpanner. Schiebe ein virtuelles Objekt oder fokussiere einzelne Lautsprecher direkt per Touch & Auto-Orbit.",
     mode3Footer = "Virtuelles Objekt & Lautsprecher-Fokus",
     mode4Badge = "MODUS 04",
@@ -177,7 +177,7 @@ val StringsDe = AppStrings(
     mode4Footer = "Mikrofon-Sweep & PDF-Bericht",
     mobileConnConnected = { host -> "Verbunden: $host" },
     mobileConnConnecting = "Verbinde mit TV...",
-    mobileConnLocal = "Lokal-Modus (2.0)",
+    mobileConnLocal = "Lokal-Modus (2.0) · Nicht verbunden",
     mobileRoleRemote = "TV-Fernsteuerung",
     mobileRoleLocal = "Raum-Kalibrator (Stereo)",
     mobileCard1FooterLeft = { count -> "$count Kanäle" },
@@ -217,7 +217,7 @@ val StringsDe = AppStrings(
     applyToAllChannels = "Für alle Lautsprecher übernehmen",
     applySignalBtn = "Signal übernehmen",
 
-    generatorTitle = "Frequenz- & Preset-Generator",
+    generatorTitle = "Frequenzgenerator",
     generatorMobileSubtitle = "DSP SYNTHESIZER",
     activeChannelsPrefix = { chs -> "Aktive Kanäle: $chs" },
     noneText = "Keine",
@@ -251,16 +251,16 @@ val StringsDe = AppStrings(
     freqDialogTitle = "Frequenz direkt eingeben",
     freqDialogRangeLabel = "Frequenz (20 – 20.000 Hz)",
 
-    puckTitle = "2D-Raum-Puck",
+    puckTitle = "2D-Klangbühne",
     puckMobileSubtitle = "LIVE-RAUMPANNER",
     puckTvSubtitle = { mode, az, hint -> "$mode • Azimut ${az}° • $hint" },
-    legendMovePuck = "Puck bewegen",
+    legendMovePuck = "Quelle bewegen",
     legendSideMenuActive = "Seitenmenü aktiv",
     legendBackForHub = "Zurück für Hub",
     puckSourcePrefix = { lbl -> "Quelle: $lbl" },
     virtualDistance = { m -> "Virtuelle Distanz: $m m" },
     roomControlUpper = "RAUM-STEUERUNG",
-    puckBtnLabel = "Puck",
+    puckBtnLabel = "Quelle",
     orbitStateLabel = { on -> "Orbit: ${if (on) "An" else "Aus"}" },
     stateOn = "An",
     stateOff = "Aus",
@@ -352,8 +352,8 @@ val StringsDe = AppStrings(
             icon = Icons.Rounded.SurroundSound,
             bullets = listOf(
                 "Einzellautsprecher-Test" to "Prüfe jeden Kanal isoliert auf korrekte Verkabelung mit Pink Noise, Sinuston oder eigenen Tracks.",
-                "Frequenz- & Preset-Generator" to "Durchfahre 20 Hz – 20 kHz, finde dröhnende Raummoden und kontrolliere deinen Subwoofer.",
-                "2D-Raum-Puck" to "Schiebe ein virtuelles Sound-Objekt oder Fokuspunkt in Echtzeit durch den Raum.",
+                "Frequenzgenerator" to "Durchfahre 20 Hz – 20 kHz, finde dröhnende Raummoden und kontrolliere deinen Subwoofer.",
+                "2D-Klangbühne" to "Schiebe ein virtuelles Sound-Objekt oder Fokuspunkt in Echtzeit durch den Raum.",
                 "Raummoden & Einmessung" to "Miss per Handy-Mikrofon automatisch den Frequenzgang an mehreren Hörpositionen, vergleiche Aufstellungen und exportiere DIN-A4-PDFs."
             )
         ),
@@ -447,7 +447,7 @@ val StringsDe = AppStrings(
         micPermissionBtn = "Mikrofon freigeben",
         micErrorMsg = "Mikrofon konnte nicht initialisiert werden. Bitte Berechtigung prüfen.",
         levelCheckTitle = "Vorab-Pegelcheck",
-        levelCheckDesc = "Prüfe kurz, ob deine Anlagen-Lautstärke für das Mikrofon sauber lesbar ist:",
+        levelCheckDesc = "Prüfe kurz, ob deine Anlagen-Lautstärke für das Mikrofon sauber lesbar ist. Tipp: Ein kurzer Check weckt auch Subwoofer mit Abschaltautomatik vorab auf, sodass während der Messung keine Punkte verloren gehen.",
         levelCheckStartBtn = "Testton prüfen",
         levelCheckStopBtn = "Prüfung stoppen",
         levelAmbientLabel = { db -> "Raumrauschen: $db dBFS" },
@@ -460,12 +460,12 @@ val StringsDe = AppStrings(
         speakersSectionTitle = "Lautsprecher-Auswahl",
         speakerPresetHint = { preset ->
             when (preset) {
-                GeneratorPreset.P2_0 -> "Optimal bei AVR-Einstellung ‚Small / Klein‘ (aktives Bass-Management): Realistischster Musik- & Übergangstest ohne Bass-Dopplung. Stehen die Fronts auf ‚Large‘ und der Sub bleibt stumm, wähle 0.1 oder 2.1."
-                GeneratorPreset.P0_1_SUB -> "Misst ausschließlich den Subwoofer – ideal zum Finden von Bass-Raummoden und zum Vergleichen neuer Sub-Standorte."
-                GeneratorPreset.P2_1 -> "Sendet gleichzeitig an Fronts + LFE (gut für ‚Large‘-Fronts oder Anlagen ohne AVR-Bassmanagement; bei ‚Small‘-Boxen unter dem Crossover etwas lauter)."
-                GeneratorPreset.ALL_WITHOUT_SUB -> "Prüft alle Satellitenkanäle ohne separaten LFE-Kanal (bei aktivem AVR-Bassmanagement spielt der Sub unter dem Crossover trotzdem mit)."
-                GeneratorPreset.ALL_ACTIVE -> "Steuert alle aktiven Lautsprecher gleichzeitig an (nützlich für maximalen Gesamtpegel; zwischen mehreren Boxen können Phasen-Auslöschungen entstehen)."
-                GeneratorPreset.CUSTOM -> "Freie Kanalwahl – z. B. gezielt nur einen einzelnen Lautsprecher oder Front L/R + Center getrennt prüfen."
+                GeneratorPreset.P2_0 -> "Sinnvoll im reinen Bassbereich (20–200 Hz), um die gemeinsame Tiefton-Summierung oder L/R-Auslöschungen zu prüfen. Ab ca. 300 Hz entstehen zwischen zwei Boxen jedoch Kammfilter-Effekte am Mikrofon – für Vollspektrum-Messungen daher lieber nur einen einzelnen Lautsprecher (FL oder FR) messen."
+                GeneratorPreset.P0_1_SUB -> "Misst ausschließlich den Subwoofer (.1 LFE) – ideal zum Finden reiner Bass-Raummoden (20–120 Hz) und zum Vergleichen neuer Sub-Standorte."
+                GeneratorPreset.P2_1 -> "Sendet gleichzeitig an Fronts + LFE (gut für ‚Large‘-Fronts oder Anlagen ohne AVR-Bassmanagement; bei ‚Small‘-Boxen unter dem Crossover etwas lauter, im Hochton Kammfilter-Effekte möglich)."
+                GeneratorPreset.ALL_WITHOUT_SUB -> "Prüft alle Satellitenkanäle ohne separaten LFE-Kanal (bei aktivem AVR-Bassmanagement spielt der Sub unter dem Crossover mit; zwischen mehreren Boxen entstehen im Hochton Kammfilter-Effekte)."
+                GeneratorPreset.ALL_ACTIVE -> "Steuert alle aktiven Lautsprecher gleichzeitig an (nützlich für maximalen Gesamtpegel; zwischen mehreren Boxen entstehen ab ca. 200 Hz jedoch Kammfilter- und Phasen-Auslöschungen)."
+                GeneratorPreset.CUSTOM -> "Empfohlener Mess-Standard (einzelner Lautsprecher, z. B. nur FL oder FR): Vermeidet Kammfilter-Auslöschungen im Mittel-/Hochton. Zeigt bei ‚Small‘-Boxen den realen Übergang zum Subwoofer (AVR leitet Bass um) und bei ‚Large‘-Boxen die reine Tiefton- & Vollbereichskurve samt Raummoden."
             }
         },
         presetSectionTitle = "Frequenzbereich & Schrittgröße",
@@ -487,6 +487,9 @@ val StringsDe = AppStrings(
         positionNameLabel = "Name dieser Hörposition",
         defaultPositionName = { idx -> "Hörposition $idx" },
         startSweepBtn = "Messung starten",
+        localPlaybackHint = "Wiedergabe erfolgt über dieses Handy (kein TV verbunden)",
+        micSelectorLabel = "Mikrofon",
+        micPhoneDefault = "Handy-Mikrofon (Standard)",
         addPositionSweepBtn = "Hörposition einmessen",
         countdownLabel = { sec -> "Bitte still halten… Start in $sec" },
         silenceCalibLabel = "Messe Grundrauschen im Raum…",
@@ -524,6 +527,8 @@ val StringsDe = AppStrings(
         pdfLayoutDialogTitle = "PDF-Seitenformat wählen",
         pdfLayoutDialogBody = "Für breite Messungen (z. B. 20 Hz – 20 kHz) ist das Querformat besonders übersichtlich.",
         pdfPortraitDefaultBtn = "Hochformat (Standard)",
-        pdfLandscapeWideBtn = "Querformat (Breitbild)"
+        pdfLandscapeWideBtn = "Querformat (Breitbild)",
+        pdfExportConfigTitle = "PDF-Export konfigurieren",
+        pdfExportActionBtn = "PDF exportieren"
     )
 )

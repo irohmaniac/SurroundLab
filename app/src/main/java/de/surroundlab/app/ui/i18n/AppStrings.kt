@@ -362,6 +362,9 @@ data class RoomMeasurementStrings(
     val positionNameLabel: String,
     val defaultPositionName: (index: Int) -> String,
     val startSweepBtn: String,
+    val localPlaybackHint: String,
+    val micSelectorLabel: String,
+    val micPhoneDefault: String,
     val addPositionSweepBtn: String,
     // Active Sweep Progress
     val countdownLabel: (sec: Int) -> String,
@@ -402,7 +405,9 @@ data class RoomMeasurementStrings(
     val pdfLayoutDialogTitle: String,
     val pdfLayoutDialogBody: String,
     val pdfPortraitDefaultBtn: String,
-    val pdfLandscapeWideBtn: String
+    val pdfLandscapeWideBtn: String,
+    val pdfExportConfigTitle: String,
+    val pdfExportActionBtn: String
 )
 
 data class TvInstallStrings(

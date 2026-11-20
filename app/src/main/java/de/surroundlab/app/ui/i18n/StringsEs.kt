@@ -111,7 +111,7 @@ val StringsEs = AppStrings(
 
     roomTvFront = "FRENTE TV",
     roomSweetSpotDesc = "Punto de escucha",
-    roomSoundPuckDesc = "Puck espacial",
+    roomSoundPuckDesc = "Escena 2D",
 
     tvTopologyBadge = "TOPOLOGÍA TV",
     setupTvSubtitle = "Elige la configuración de altavoces y vincula móvil / navegador",
@@ -165,7 +165,7 @@ val StringsEs = AppStrings(
     mode2MobileDesc = "Rueda táctil con háptica, tonos senoidales, ruido rosa y presets de corte para subwoofer.",
     mode2Footer = "Banda 20 Hz – 20 kHz",
     mode3Badge = "MODO 03",
-    mode3Title = "Puck espacial 2D",
+    mode3Title = "Escena sonora 2D",
     mode3TvDesc = "Paneador en tiempo real. Mueve la fuente sonora entre altavoces con cruceta u Órbita automática.",
     mode3MobileDesc = "Paneador de sala en vivo. Desliza un objeto virtual o enfoca altavoces con toque y Órbita automática.",
     mode3Footer = "Objeto virtual y Enfoque de altavoz",
@@ -176,7 +176,7 @@ val StringsEs = AppStrings(
     mode4Footer = "Barrido por micrófono y PDF",
     mobileConnConnected = { host -> "Conectado: $host" },
     mobileConnConnecting = "Conectando al TV...",
-    mobileConnLocal = "Modo local (2.0)",
+    mobileConnLocal = "Modo local (2.0) · Sin conexión",
     mobileRoleRemote = "Control remoto de TV",
     mobileRoleLocal = "Calibrador acústico (Estéreo)",
     mobileCard1FooterLeft = { count -> "$count canales" },
@@ -250,16 +250,16 @@ val StringsEs = AppStrings(
     freqDialogTitle = "Introducir frecuencia",
     freqDialogRangeLabel = "Frecuencia (20 – 20.000 Hz)",
 
-    puckTitle = "Puck espacial 2D",
+    puckTitle = "Escena sonora 2D",
     puckMobileSubtitle = "PANEADOR EN VIVO",
     puckTvSubtitle = { mode, az, hint -> "$mode • Azimut ${az}° • $hint" },
-    legendMovePuck = "Mover Puck",
+    legendMovePuck = "Mover fuente",
     legendSideMenuActive = "Menú lateral activo",
     legendBackForHub = "Atrás al inicio",
     puckSourcePrefix = { lbl -> "Fuente: $lbl" },
     virtualDistance = { m -> "Distancia virtual: $m m" },
     roomControlUpper = "CONTROL ESPACIAL",
-    puckBtnLabel = "Puck",
+    puckBtnLabel = "Fuente",
     orbitStateLabel = { on -> "Órbita: ${if (on) "Sí" else "No"}" },
     stateOn = "Sí",
     stateOff = "No",
@@ -352,7 +352,7 @@ val StringsEs = AppStrings(
             bullets = listOf(
                 "Prueba de altavoz individual" to "Aísla cada canal para verificar el cableado con ruido rosa, onda senoidal o tus propios audios.",
                 "Generador de frecuencias" to "Recorre de 20 Hz a 20 kHz, detecta resonancias de la sala y ajusta el subwoofer.",
-                "Puck espacial 2D" to "Desplaza un objeto sonoro virtual o enfoca altavoces en tiempo real por la sala.",
+                "Escena sonora 2D" to "Desplaza un objeto sonoro virtual o enfoca altavoces en tiempo real por la sala.",
                 "Modos de sala y Barrido" to "Usa el micrófono de tu móvil Android para medir la respuesta en frecuencia en varios asientos, comparar ubicaciones y exportar PDF A4."
             )
         ),
@@ -446,7 +446,7 @@ val StringsEs = AppStrings(
         micPermissionBtn = "Permitir micrófono",
         micErrorMsg = "No se pudo abrir el micrófono. Revisa el permiso.",
         levelCheckTitle = "Comprobación previa de nivel",
-        levelCheckDesc = "Comprueba que el volumen sea claramente audible sobre el ruido ambiente:",
+        levelCheckDesc = "Comprueba que el volumen sea claramente audible sobre el ruido ambiente. Consejo: una prueba breve también despierta los subwoofers con auto-apagado para no perder puntos al inicio.",
         levelCheckStartBtn = "Probar tono",
         levelCheckStopBtn = "Detener prueba",
         levelAmbientLabel = { db -> "Ruido ambiente: $db dBFS" },
@@ -459,12 +459,12 @@ val StringsEs = AppStrings(
         speakersSectionTitle = "Selección de altavoces",
         speakerPresetHint = { preset ->
             when (preset) {
-                GeneratorPreset.P2_0 -> "Óptimo con altavoces en «Small» en el AVR (gestión activa de graves): prueba más realista para música y cruce sin duplicar graves. Si están en «Large» y el sub no suena, elige 0.1 o 2.1."
-                GeneratorPreset.P0_1_SUB -> "Mide solo el subwoofer (.1 LFE), ideal para detectar resonancias de graves y comparar ubicaciones."
-                GeneratorPreset.P2_1 -> "Envía señal a frontales + LFE a la vez (útil sin gestión de graves del AVR o con frontales Large; en altavoces Small suma graves bajo el cruce)."
-                GeneratorPreset.ALL_WITHOUT_SUB -> "Prueba todos los satélites sin canal LFE separado (el subwoofer seguirá actuando si el AVR desvía graves)."
-                GeneratorPreset.ALL_ACTIVE -> "Activa todos los altavoces a la vez (máximo nivel, aunque pueden producirse cancelaciones de fase entre cajas)."
-                GeneratorPreset.CUSTOM -> "Selección libre de canales (por ejemplo, comprobar un solo altavoz o el canal central)."
+                GeneratorPreset.P2_0 -> "Útil en graves (20–200 Hz) para comprobar la suma L+R o cancelaciones de fase. Por encima de ~300 Hz, dos cajas con la misma señal crean filtro peine en el micro: para rango completo, mide un solo altavoz (FL o FR)."
+                GeneratorPreset.P0_1_SUB -> "Mide solo el subwoofer (.1 LFE), ideal para detectar resonancias de graves (20–120 Hz) y comparar ubicaciones."
+                GeneratorPreset.P2_1 -> "Envía señal a frontales + LFE a la vez (útil sin gestión de graves o en Large; en Small suma graves bajo el cruce y puede generar filtro peine en agudos)."
+                GeneratorPreset.ALL_WITHOUT_SUB -> "Prueba todos los satélites sin LFE separado (el sub actúa si el AVR desvía graves; varias cajas a la vez producen filtro peine en medios/agudos)."
+                GeneratorPreset.ALL_ACTIVE -> "Activa todos los altavoces a la vez (máximo nivel, aunque aparecen cancelaciones de fase y filtro peine por encima de ~200 Hz)."
+                GeneratorPreset.CUSTOM -> "Estándar acústico recomendado (un solo altavoz, p. ej. solo FL o FR): evita cancelaciones en medios/agudos. Muestra el cruce real con el sub en «Small» o la curva de graves y modos en «Large»."
             }
         },
         presetSectionTitle = "Rango de frecuencias y paso",
@@ -486,6 +486,9 @@ val StringsEs = AppStrings(
         positionNameLabel = "Nombre de esta posición",
         defaultPositionName = { idx -> "Posición $idx" },
         startSweepBtn = "Iniciar medición",
+        localPlaybackHint = "El audio se reproduce en este teléfono (sin TV conectada)",
+        micSelectorLabel = "Micrófono",
+        micPhoneDefault = "Micrófono del teléfono",
         addPositionSweepBtn = "Medir posición",
         countdownLabel = { sec -> "Mantén quietud y silencio… inicia en $sec" },
         silenceCalibLabel = "Midiendo ruido de fondo…",
@@ -523,6 +526,8 @@ val StringsEs = AppStrings(
         pdfLayoutDialogTitle = "Elegir orientación del PDF",
         pdfLayoutDialogBody = "El formato horizontal ofrece mayor claridad en barridos amplios (p. ej. 20 Hz – 20 kHz).",
         pdfPortraitDefaultBtn = "Vertical (Predeterminado)",
-        pdfLandscapeWideBtn = "Horizontal (Panorámico)"
+        pdfLandscapeWideBtn = "Horizontal (Panorámico)",
+        pdfExportConfigTitle = "Configurar exportación PDF",
+        pdfExportActionBtn = "Exportar PDF"
     )
 )

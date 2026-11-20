@@ -165,7 +165,7 @@ val StringsFr = AppStrings(
     mode2MobileDesc = "Molette tactile haptique avec ondes sinusoïdales, bruit rose et préréglages de fréquences caisson.",
     mode2Footer = "Spectre 20 Hz – 20 kHz",
     mode3Badge = "MODE 03",
-    mode3Title = "Spatialisation 2D (Puck)",
+    mode3Title = "Scène sonore 2D",
     mode3TvDesc = "Panner spatial temps réel. Déplacez la source autour de la pièce au D-Pad ou en Auto-Orbite.",
     mode3MobileDesc = "Panner temps réel. Glissez la source ou ciblez chaque enceinte au doigt et en Auto-Orbite.",
     mode3Footer = "Objet virtuel & Focus enceinte",
@@ -176,7 +176,7 @@ val StringsFr = AppStrings(
     mode4Footer = "Balayage micro & Rapport PDF",
     mobileConnConnected = { host -> "Connecté : $host" },
     mobileConnConnecting = "Connexion au téléviseur...",
-    mobileConnLocal = "Mode local (2.0)",
+    mobileConnLocal = "Mode local (2.0) · Non connecté",
     mobileRoleRemote = "Télécommande TV",
     mobileRoleLocal = "Calibrateur sonore (Stéréo)",
     mobileCard1FooterLeft = { count -> "$count canaux" },
@@ -250,7 +250,7 @@ val StringsFr = AppStrings(
     freqDialogTitle = "Saisir la fréquence directement",
     freqDialogRangeLabel = "Fréquence (20 – 20 000 Hz)",
 
-    puckTitle = "Spatialisation 2D (Puck)",
+    puckTitle = "Scène sonore 2D",
     puckMobileSubtitle = "PANNER SPATIAL TEMPS RÉEL",
     puckTvSubtitle = { mode, az, hint -> "$mode • Azimut ${az}° • $hint" },
     legendMovePuck = "Déplacer",
@@ -352,7 +352,7 @@ val StringsFr = AppStrings(
             bullets = listOf(
                 "Test par enceinte" to "Isolez chaque canal pour vérifier le câblage réel avec bruit rose, sinus ou pistes audio.",
                 "Générateur de fréquences" to "Explorez de 20 Hz à 20 kHz, repérez les résonances et réglez le raccord du caisson.",
-                "Spatialisation 2D (Puck)" to "Déplacez une source virtuelle ou ciblez chaque enceinte en temps réel autour du salon.",
+                "Scène sonore 2D" to "Déplacez une source virtuelle ou ciblez chaque enceinte en temps réel autour du salon.",
                 "Modes de pièce & Mesure" to "Mesurez la réponse en fréquence avec le micro de votre mobile Android sur plusieurs places, comparez vos placements et exportez en PDF A4."
             )
         ),
@@ -446,7 +446,7 @@ val StringsFr = AppStrings(
         micPermissionBtn = "Autoriser le micro",
         micErrorMsg = "Impossible d'ouvrir le microphone. Vérifiez l'autorisation.",
         levelCheckTitle = "Test de niveau préalable",
-        levelCheckDesc = "Vérifiez que le volume est bien supérieur au bruit ambiant :",
+        levelCheckDesc = "Vérifiez que le volume est bien supérieur au bruit ambiant. Astuce : ce test rapide réveille aussi les caissons en veille automatique afin de ne rater aucune mesure.",
         levelCheckStartBtn = "Tester le niveau",
         levelCheckStopBtn = "Arrêter le test",
         levelAmbientLabel = { db -> "Bruit ambiant : $db dBFS" },
@@ -459,12 +459,12 @@ val StringsFr = AppStrings(
         speakersSectionTitle = "Enceintes mesurées",
         speakerPresetHint = { preset ->
             when (preset) {
-                GeneratorPreset.P2_0 -> "Idéal avec l'ampli réglé sur enceintes « Small » (bass-management actif) : test le plus réaliste pour la musique et le raccord sans doublon de graves. En « Large » (caisson muet), passez en 0.1 ou 2.1."
-                GeneratorPreset.P0_1_SUB -> "Mesure uniquement le caisson (.1 LFE) — idéal pour repérer les résonances graves et comparer ses emplacements."
-                GeneratorPreset.P2_1 -> "Envoie aux enceintes avant + LFE ensemble (utile sans bass-management AVR ou en Large ; renforce les graves sous la coupure en Small)."
-                GeneratorPreset.ALL_WITHOUT_SUB -> "Teste les satellites sans canal LFE séparé (le caisson joue tout de même si le bass-management de l'ampli est actif)."
-                GeneratorPreset.ALL_ACTIVE -> "Active toutes les enceintes simultanément (niveau global élevé, mais des annulations de phase peuvent apparaître)."
-                GeneratorPreset.CUSTOM -> "Choix libre des canaux (par ex. pour isoler la centrale ou une enceinte précise)."
+                GeneratorPreset.P2_0 -> "Utile dans les graves (20–200 Hz) pour vérifier la somme G+D ou les annulations de phase. Au-dessus de ~300 Hz, deux enceintes créent un filtrage en peigne au micro : pour le spectre complet, mesurez une seule enceinte (FL ou FR)."
+                GeneratorPreset.P0_1_SUB -> "Mesure uniquement le caisson (.1 LFE) — idéal pour repérer les résonances graves (20–120 Hz) et comparer ses emplacements."
+                GeneratorPreset.P2_1 -> "Envoie aux enceintes avant + LFE ensemble (utile sans bass-management ou en Large ; renforce les graves sous la coupure en Small)."
+                GeneratorPreset.ALL_WITHOUT_SUB -> "Teste les satellites sans LFE séparé (le caisson joue si le bass-management est actif ; filtrage en peigne possible dans les médiums/aigus)."
+                GeneratorPreset.ALL_ACTIVE -> "Active toutes les enceintes simultanément (niveau global élevé, mais des annulations de phase apparaissent au-dessus de ~200 Hz)."
+                GeneratorPreset.CUSTOM -> "Standard acoustique recommandé (une seule enceinte, ex. FL ou FR) : évite le filtrage en peigne. Révèle le raccord réel avec le caisson en « Small » ou la courbe complète et les modes en « Large »."
             }
         },
         presetSectionTitle = "Plage & pas de fréquence",
@@ -486,6 +486,9 @@ val StringsFr = AppStrings(
         positionNameLabel = "Nom de cette position",
         defaultPositionName = { idx -> "Position $idx" },
         startSweepBtn = "Lancer la mesure",
+        localPlaybackHint = "Lecture audio via ce téléphone (aucun TV connecté)",
+        micSelectorLabel = "Microphone",
+        micPhoneDefault = "Micro du téléphone",
         addPositionSweepBtn = "Mesurer la position",
         countdownLabel = { sec -> "Restez calme et immobile… début dans $sec" },
         silenceCalibLabel = "Mesure du bruit de fond…",
@@ -523,6 +526,8 @@ val StringsFr = AppStrings(
         pdfLayoutDialogTitle = "Format de page PDF",
         pdfLayoutDialogBody = "Le mode paysage offre plus de lisibilité sur les balayages larges (ex. 20 Hz – 20 kHz).",
         pdfPortraitDefaultBtn = "Portrait (Défaut)",
-        pdfLandscapeWideBtn = "Paysage (Large)"
+        pdfLandscapeWideBtn = "Paysage (Large)",
+        pdfExportConfigTitle = "Configurer l’export PDF",
+        pdfExportActionBtn = "Exporter en PDF"
     )
 )

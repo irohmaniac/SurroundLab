@@ -34,6 +34,13 @@ object RoomPdfExporter {
     private const val FOOTER_H = 26f
     private const val SESSIONS_PER_PAGE_PORTRAIT = 3
 
+    data class SessionExportConfig(
+        val session: RoomMeasurementSession,
+        val includedPositionIds: Set<String>,
+        val showMeanCurve: Boolean,
+        val smoothCurves: Boolean
+    )
+
     data class ExportLabels(
         val reportTitle: String,
         val generatedPrefix: String,
@@ -45,21 +52,19 @@ object RoomPdfExporter {
 
     fun exportToPdfUri(
         context: Context,
-        sessions: List<RoomMeasurementSession>,
+        configs: List<SessionExportConfig>,
         scaleMode: DbScaleMode,
-        showMeanCurve: Boolean,
-        smoothCurves: Boolean,
         landscapeSinglePerPage: Boolean = false,
         labels: ExportLabels
     ): Result<Uri> = runCatching {
-        require(sessions.isNotEmpty()) { "No sessions selected for export." }
+        require(configs.isNotEmpty()) { "No sessions selected for export." }
 
         val pageWidth = if (landscapeSinglePerPage) A4_LONG else A4_SHORT
         val pageHeight = if (landscapeSinglePerPage) A4_SHORT else A4_LONG
         val perPage = if (landscapeSinglePerPage) 1 else SESSIONS_PER_PAGE_PORTRAIT
 
         val pdf = PdfDocument()
-        val totalPages = ceil(sessions.size.toDouble() / perPage).toInt().coerceAtLeast(1)
+        val totalPages = ceil(configs.size.toDouble() / perPage).toInt().coerceAtLeast(1)
         val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
         val nowStr = dateFormat.format(Date())
 
@@ -77,20 +82,18 @@ object RoomPdfExporter {
                 drawPageHeader(canvas, pageWidth, nowStr, labels)
 
                 val from = pageIndex * perPage
-                val to = minOf(sessions.size, from + perPage)
+                val to = minOf(configs.size, from + perPage)
                 for (i in from until to) {
                     val slot = i - from
                     val topY = TOP_HEADER_H + slot * (cardHeight + cardGap)
                     drawSessionCard(
                         canvas = canvas,
-                        session = sessions[i],
+                        config = configs[i],
                         left = MARGIN_X,
                         top = topY,
                         width = pageWidth - 2 * MARGIN_X,
                         height = cardHeight,
                         scaleMode = scaleMode,
-                        showMeanCurve = showMeanCurve,
-                        smoothCurves = smoothCurves,
                         dateFormat = dateFormat,
                         labels = labels
                     )
@@ -160,17 +163,18 @@ object RoomPdfExporter {
 
     private fun drawSessionCard(
         canvas: Canvas,
-        session: RoomMeasurementSession,
+        config: SessionExportConfig,
         left: Float,
         top: Float,
         width: Float,
         height: Float,
         scaleMode: DbScaleMode,
-        showMeanCurve: Boolean,
-        smoothCurves: Boolean,
         dateFormat: SimpleDateFormat,
         labels: ExportLabels
     ) {
+        val session = config.session
+        val visibleIndexed = session.positions.withIndex().filter { it.value.id in config.includedPositionIds }
+        val visiblePositions = visibleIndexed.map { it.value }
         val borderPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = 0xFFD5DFDE.toInt()
             style = Paint.Style.STROKE
@@ -219,13 +223,14 @@ object RoomPdfExporter {
         drawFrequencyGraph(
             canvas = canvas,
             session = session,
+            visibleIndexed = visibleIndexed,
             gLeft = graphLeft,
             gTop = graphTop,
             gRight = graphRight,
             gBottom = graphBottom,
             scaleMode = scaleMode,
-            showMeanCurve = showMeanCurve,
-            smoothCurves = smoothCurves
+            showMeanCurve = config.showMeanCurve,
+            smoothCurves = config.smoothCurves
         )
 
         // Legend row at bottom of card
@@ -236,16 +241,16 @@ object RoomPdfExporter {
             color = 0xFF1E2625.toInt()
             textSize = 8f
         }
-        session.positions.forEachIndexed { idx, pos ->
+        visibleIndexed.forEach { (idx, pos) ->
             val col = RoomGraphUtils.pdfColorForIndex(idx)
             dotPaint.color = col
             canvas.drawCircle(cursorX + 3.5f, legendY - 2.5f, 3.5f, dotPaint)
             val label = pos.name.take(20)
             canvas.drawText(label, cursorX + 10f, legendY, legendTextPaint)
             cursorX += 14f + legendTextPaint.measureText(label) + 10f
-            if (cursorX > left + width - 110f) return@forEachIndexed
+            if (cursorX > left + width - 110f) return@forEach
         }
-        if (showMeanCurve && session.positions.size >= 2 && cursorX < left + width - 70f) {
+        if (config.showMeanCurve && visiblePositions.size >= 2 && cursorX < left + width - 70f) {
             val dashPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
                 color = 0xFF111717.toInt()
                 strokeWidth = 1.6f
@@ -259,6 +264,7 @@ object RoomPdfExporter {
     private fun drawFrequencyGraph(
         canvas: Canvas,
         session: RoomMeasurementSession,
+        visibleIndexed: List<IndexedValue<de.surroundlab.app.domain.model.ListeningPositionTrace>>,
         gLeft: Float,
         gTop: Float,
         gRight: Float,
@@ -270,11 +276,12 @@ object RoomPdfExporter {
         val gWidth = (gRight - gLeft).coerceAtLeast(10f)
         val gHeight = (gBottom - gTop).coerceAtLeast(10f)
 
-        val allSeries = session.positions.map { pos ->
+        val visiblePositions = visibleIndexed.map { it.value }
+        val allSeries = visibleIndexed.map { (origIdx, pos) ->
             val raw = pos.points.map { it.frequencyHz to RoomGraphUtils.valueForScale(it, scaleMode) }
-            if (smoothCurves) RoomGraphUtils.smoothCurve(raw) else raw
+            origIdx to (if (smoothCurves) RoomGraphUtils.smoothCurve(raw) else raw)
         }
-        val allVals = allSeries.flatten().map { it.second }
+        val allVals = allSeries.flatMap { it.second }.map { it.second }
         val minVal = allVals.minOrNull() ?: -60f
         val maxVal = allVals.maxOrNull() ?: -10f
         val yMin = (floor((minVal - 4f) / 10f) * 10f).coerceAtLeast(-90f)
@@ -314,10 +321,10 @@ object RoomPdfExporter {
         }
 
         // Position polylines
-        allSeries.forEachIndexed { idx, pts ->
-            if (pts.isEmpty()) return@forEachIndexed
+        allSeries.forEach { (origIdx, pts) ->
+            if (pts.isEmpty()) return@forEach
             val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                color = RoomGraphUtils.pdfColorForIndex(idx)
+                color = RoomGraphUtils.pdfColorForIndex(origIdx)
                 style = Paint.Style.STROKE
                 strokeWidth = 1.6f
                 strokeJoin = Paint.Join.ROUND
@@ -335,8 +342,8 @@ object RoomPdfExporter {
         }
 
         // Spatial average dashed overlay
-        if (showMeanCurve && session.positions.size >= 2) {
-            val rawMean = RoomGraphUtils.computeMeanCurve(session.positions, scaleMode)
+        if (showMeanCurve && visiblePositions.size >= 2) {
+            val rawMean = RoomGraphUtils.computeMeanCurve(visiblePositions, scaleMode)
             val meanPts = if (smoothCurves) RoomGraphUtils.smoothCurve(rawMean) else rawMean
             if (meanPts.isNotEmpty()) {
                 val meanPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {

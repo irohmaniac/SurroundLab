@@ -20,9 +20,9 @@
       connect: 'Verbinden',
       mode1Title: 'Einzellautsprecher-Test',
       mode1Desc: 'Isoliere einzelne Kanäle, prüfe die Verkabelung und wähle Rauschen, Sinuston oder eigene Tracks.',
-      mode2Title: 'Frequenz- & Preset-Generator',
+      mode2Title: 'Frequenzgenerator',
       mode2Desc: '20 Hz – 20 kHz Sinuston oder Rosa Rauschen auf gewählten Kanälen & Subwoofer-Presets.',
-      mode3Title: '2D-Raum-Puck',
+      mode3Title: '2D-Klangbühne',
       mode3Desc: 'Live-Raumpanner per Touch/Maus mit Virtuellem Objekt, Lautsprecher-Fokus und Auto-Orbit.',
       mode4Title: 'Raummoden & Einmessung',
       mode4DisabledDesc: 'Nur in der Android-App verfügbar – Browser blockieren Mikrofonzugriff über lokales HTTP im WLAN.',
@@ -90,9 +90,9 @@
       connect: 'Connect',
       mode1Title: 'Single Speaker Test',
       mode1Desc: 'Isolate individual channels, verify wiring, and choose pink noise, sine wave, or custom tracks.',
-      mode2Title: 'Frequency & Preset Generator',
+      mode2Title: 'Frequency Generator',
       mode2Desc: '20 Hz – 20 kHz sine wave or pink noise on selected channels & subwoofer presets.',
-      mode3Title: '2D Spatial Sound Puck',
+      mode3Title: '2D Spatial Sound Stage',
       mode3Desc: 'Real-time spatial panner via touch/mouse with Virtual Object, Speaker Focus, and Auto-Orbit.',
       mode4Title: 'Room Modes & Sweep',
       mode4DisabledDesc: 'Android app only — browsers block microphone access over local Wi-Fi HTTP.',
@@ -162,7 +162,7 @@
       mode1Desc: 'Aísla cada canal, comprueba el cableado y elige ruido rosa, onda senoidal o pistas propias.',
       mode2Title: 'Generador de frecuencias',
       mode2Desc: 'Onda senoidal 20 Hz – 20 kHz o ruido rosa en canales elegidos y corte de subwoofer.',
-      mode3Title: 'Puck espacial 2D',
+      mode3Title: 'Escena sonora 2D',
       mode3Desc: 'Panner espacial en tiempo real táctil/ratón con Objeto virtual, Foco en altavoz y Auto-Órbita.',
       mode4Title: 'Modos de sala y Barrido',
       mode4DisabledDesc: 'Solo disponible en la app Android: los navegadores bloquean el micrófono por HTTP en red local.',
@@ -232,7 +232,7 @@
       mode1Desc: 'Isolez chaque canal, vérifiez le câblage et choisissez bruit rose, sinus ou vos propres pistes.',
       mode2Title: 'Générateur de fréquences',
       mode2Desc: 'Sinusoïde 20 Hz – 20 kHz ou bruit rose sur les canaux choisis & préréglages caisson.',
-      mode3Title: 'Spatialisation 2D (Puck)',
+      mode3Title: 'Scène sonore 2D',
       mode3Desc: 'Panner spatial temps réel tactile/souris avec Objet virtuel, Focus enceinte et Auto-Orbite.',
       mode4Title: 'Modes de pièce & Mesure',
       mode4DisabledDesc: 'Uniquement dans l’app Android : les navigateurs bloquent le micro sur HTTP en Wi-Fi local.',
@@ -302,7 +302,7 @@
       mode1Desc: 'Isole cada canal, confira a fiação e escolha ruído rosa, senoide ou faixas próprias.',
       mode2Title: 'Gerador de Frequências',
       mode2Desc: 'Senoide 20 Hz – 20 kHz ou ruído rosa nos canais selecionados e cortes de subwoofer.',
-      mode3Title: 'Puck Espacial 2D',
+      mode3Title: 'Palco sonoro 2D',
       mode3Desc: 'Panner espacial em tempo real por toque/mouse com Objeto virtual, Foco na caixa e Auto-Órbita.',
       mode4Title: 'Modos de Sala & Varredura',
       mode4DisabledDesc: 'Apenas no app Android — navegadores bloqueiam o microfone via HTTP na rede local.',
@@ -370,9 +370,9 @@
       connect: '接続',
       mode1Title: '単体スピーカーテスト',
       mode1Desc: '各チャンネルを個別に鳴らし、配線チェックやピンクノイズ・サイン波・音声切替を行えます。',
-      mode2Title: '周波数・プリセット発信器',
+      mode2Title: '周波数ジェネレーター',
       mode2Desc: '20 Hz 〜 20 kHz のサイン波・ピンクノイズおよびサブウーファープリセット。',
-      mode3Title: '2D 空間サウンドパック',
+      mode3Title: '2D 空間サウンドステージ',
       mode3Desc: 'タッチ・マウス操作対応のリアルタイム空間パンナー＆自動オービット。',
       mode4Title: 'ルーム音響・自動測定',
       mode4DisabledDesc: 'Android アプリ専用機能です（ブラウザはローカル HTTP 環境でマイク利用をブロックします）。',
@@ -782,9 +782,13 @@
       btn.classList.toggle('active', btn.dataset.sig === (gen.signalType || 'SINE'));
     });
 
+    const isPink = (gen.signalType || 'SINE') === 'PINK_NOISE';
+    const freqBox = document.querySelector('#viewGenerator .freq-box');
+    if (freqBox) freqBox.classList.toggle('hidden', isPink);
+
     const hz = gen.frequencyHz || 400;
     el('genFreqSlider').value = hz;
-    el('genFreqDisplay').textContent = gen.signalType === 'PINK_NOISE' ? 'PINK' : `${hz} Hz`;
+    el('genFreqDisplay').textContent = isPink ? 'PINK' : `${hz} Hz`;
 
     const playBtn = el('genPlayBtn');
     playBtn.textContent = gen.playing

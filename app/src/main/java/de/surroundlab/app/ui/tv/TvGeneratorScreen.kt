@@ -70,11 +70,13 @@ fun TvGeneratorScreen(
 
     val s = LocalAppStrings.current
     val stepperFocus = remember { FocusRequester() }
+    val playFocus = remember { FocusRequester() }
     val gen = state.generator
+    val isSine = gen.signalType == SignalSourceType.SINE
     val activeChannels = gen.preset.resolveChannels(state.setup, gen.customChannels)
 
     LaunchedEffect(Unit) {
-        stepperFocus.requestFocus()
+        if (isSine) stepperFocus.requestFocus() else playFocus.requestFocus()
     }
 
     Column(
@@ -115,7 +117,9 @@ fun TvGeneratorScreen(
             }
 
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                TvKeyLegendPill("▲/▼", s.legendFreq)
+                if (isSine) {
+                    TvKeyLegendPill("▲/▼", s.legendFreq)
+                }
                 TvKeyLegendPill("OK", "${s.startAction} / ${s.pauseAction}")
             }
         }
@@ -223,87 +227,87 @@ fun TvGeneratorScreen(
                     }
                 }
 
-                // Central D-Pad Frequency Stepper Card (Initial Focus!)
-                TvCardSurface(
-                    onClick = { onUpdateGenerator(null, null, null, null, !gen.playing) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .focusRequester(stepperFocus)
-                        .onPreviewKeyEvent { evt ->
-                            if (evt.type == KeyEventType.KeyDown) {
-                                val repeat = evt.nativeKeyEvent.repeatCount
-                                val step = when {
-                                    repeat > 25 -> 100
-                                    repeat > 12 -> 25
-                                    repeat > 4 -> 5
-                                    else -> 1
-                                }
-                                when (evt.key) {
-                                    Key.DirectionUp -> {
-                                        onUpdateGenerator(
-                                            null, null, null,
-                                            (gen.frequencyHz + step).coerceIn(20, 20000),
-                                            null
-                                        )
-                                        true
-                                    }
-                                    Key.DirectionDown -> {
-                                        onUpdateGenerator(
-                                            null, null, null,
-                                            (gen.frequencyHz - step).coerceIn(20, 20000),
-                                            null
-                                        )
-                                        true
-                                    }
-                                    else -> false
-                                }
-                            } else false
-                        },
-                    containerColor = SurroundColors.SurfaceContainerHigh,
-                    focusedContainerColor = SurroundColors.SurfaceContainerHigh,
-                    selected = gen.playing
-                ) {
-                    Column(
+                if (isSine) {
+                    // Central D-Pad Frequency Stepper Card (Initial Focus!)
+                    TvCardSurface(
+                        onClick = { onUpdateGenerator(null, null, null, null, !gen.playing) },
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(24.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .focusRequester(stepperFocus)
+                            .onPreviewKeyEvent { evt ->
+                                if (evt.type == KeyEventType.KeyDown) {
+                                    val repeat = evt.nativeKeyEvent.repeatCount
+                                    val step = when {
+                                        repeat > 25 -> 100
+                                        repeat > 12 -> 25
+                                        repeat > 4 -> 5
+                                        else -> 1
+                                    }
+                                    when (evt.key) {
+                                        Key.DirectionUp -> {
+                                            onUpdateGenerator(
+                                                null, null, null,
+                                                (gen.frequencyHz + step).coerceIn(20, 20000),
+                                                null
+                                            )
+                                            true
+                                        }
+                                        Key.DirectionDown -> {
+                                            onUpdateGenerator(
+                                                null, null, null,
+                                                (gen.frequencyHz - step).coerceIn(20, 20000),
+                                                null
+                                            )
+                                            true
+                                        }
+                                        else -> false
+                                    }
+                                } else false
+                            },
+                        containerColor = SurroundColors.SurfaceContainerHigh,
+                        focusedContainerColor = SurroundColors.SurfaceContainerHigh,
+                        selected = gen.playing
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(24.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
                         ) {
-                            Icon(
-                                Icons.Rounded.KeyboardArrowUp,
-                                contentDescription = null,
-                                tint = SurroundColors.Primary,
-                                modifier = Modifier.size(28.dp)
-                            )
-                            Text(
-                                text = s.upStepHint,
-                                fontFamily = MonoFontFamily,
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = SurroundColors.Primary
-                            )
-                        }
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                Icon(
+                                    Icons.Rounded.KeyboardArrowUp,
+                                    contentDescription = null,
+                                    tint = SurroundColors.Primary,
+                                    modifier = Modifier.size(28.dp)
+                                )
+                                Text(
+                                    text = s.upStepHint,
+                                    fontFamily = MonoFontFamily,
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = SurroundColors.Primary
+                                )
+                            }
 
-                        Spacer(Modifier.height(10.dp))
+                            Spacer(Modifier.height(10.dp))
 
-                        Row(
-                            verticalAlignment = Alignment.Bottom,
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            Text(
-                                text = if (gen.signalType == SignalSourceType.PINK_NOISE) "PINK" else "${gen.frequencyHz}",
-                                fontFamily = MonoFontFamily,
-                                fontSize = 72.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = SurroundColors.Primary
-                            )
-                            if (gen.signalType == SignalSourceType.SINE) {
+                            Row(
+                                verticalAlignment = Alignment.Bottom,
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                Text(
+                                    text = "${gen.frequencyHz}",
+                                    fontFamily = MonoFontFamily,
+                                    fontSize = 72.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = SurroundColors.Primary
+                                )
                                 Text(
                                     text = "Hz",
                                     fontFamily = MonoFontFamily,
@@ -313,35 +317,39 @@ fun TvGeneratorScreen(
                                     modifier = Modifier.padding(bottom = 12.dp)
                                 )
                             }
-                        }
 
-                        Spacer(Modifier.height(10.dp))
+                            Spacer(Modifier.height(10.dp))
 
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
-                        ) {
-                            Icon(
-                                Icons.Rounded.KeyboardArrowDown,
-                                contentDescription = null,
-                                tint = SurroundColors.Primary,
-                                modifier = Modifier.size(28.dp)
-                            )
-                            Text(
-                                text = s.downStepHint(gen.playing),
-                                fontFamily = MonoFontFamily,
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = SurroundColors.Primary
-                            )
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                Icon(
+                                    Icons.Rounded.KeyboardArrowDown,
+                                    contentDescription = null,
+                                    tint = SurroundColors.Primary,
+                                    modifier = Modifier.size(28.dp)
+                                )
+                                Text(
+                                    text = s.downStepHint(gen.playing),
+                                    fontFamily = MonoFontFamily,
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = SurroundColors.Primary
+                                )
+                            }
                         }
                     }
+                } else {
+                    Spacer(Modifier.weight(1f))
                 }
 
                 // Play/Pause Pill CTA
                 TvPillSurface(
                     onClick = { onUpdateGenerator(null, null, null, null, !gen.playing) },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRequester(playFocus),
                     containerColor = if (gen.playing) SurroundColors.Secondary else SurroundColors.Primary,
                     focusedContainerColor = if (gen.playing) SurroundColors.Secondary else SurroundColors.Primary,
                     contentColor = if (gen.playing) SurroundColors.OnSecondary else SurroundColors.OnPrimary,
@@ -373,16 +381,17 @@ fun TvGeneratorScreen(
                 }
             }
 
-            // Right Column (4 cols): Quick Frequency Presets
-            Column(
-                modifier = Modifier
-                    .weight(0.34f)
-                    .fillMaxHeight()
-                    .clip(RoundedCornerShape(28.dp))
-                    .background(SurroundColors.SurfaceContainer)
-                    .padding(24.dp),
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
+            // Right Column (4 cols): Quick Frequency Presets (Sine only)
+            if (isSine) {
+                Column(
+                    modifier = Modifier
+                        .weight(0.34f)
+                        .fillMaxHeight()
+                        .clip(RoundedCornerShape(28.dp))
+                        .background(SurroundColors.SurfaceContainer)
+                        .padding(24.dp),
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -463,6 +472,7 @@ fun TvGeneratorScreen(
                         color = SurroundColors.Primary
                     )
                 }
+            }
             }
         }
     }

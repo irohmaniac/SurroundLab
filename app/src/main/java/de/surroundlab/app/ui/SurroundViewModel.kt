@@ -13,6 +13,7 @@ import de.surroundlab.app.domain.model.AudioSyncStatus
 import de.surroundlab.app.domain.model.ConnectionStatus
 import de.surroundlab.app.domain.model.CustomAudioTrack
 import de.surroundlab.app.domain.model.DiscoveredHost
+import de.surroundlab.app.domain.model.ExternalMicOption
 import de.surroundlab.app.domain.model.FrequencyMeasurementPoint
 import de.surroundlab.app.domain.model.GeneratorPreset
 import de.surroundlab.app.domain.model.ListeningPositionTrace
@@ -56,6 +57,8 @@ class SurroundViewModel(application: Application) : AndroidViewModel(application
     val roomSessions: StateFlow<List<RoomMeasurementSession>> = repo.roomSessions
     val roomLevelCheckState: StateFlow<RoomLevelCheckState> = repo.roomLevelCheckState
     val roomMeasurementProgress: StateFlow<MeasurementRunProgress> = repo.roomMeasurementProgress
+    val roomExternalMics: StateFlow<List<ExternalMicOption>> = repo.roomExternalMics
+    val roomSelectedMicId: StateFlow<Int?> = repo.roomSelectedMicId
 
     fun selectSetup(setup: SpeakerSetup, markCompleted: Boolean = true) =
         repo.selectSetup(setup, markCompleted)
@@ -143,6 +146,8 @@ class SurroundViewModel(application: Application) : AndroidViewModel(application
     ) = repo.startRoomLevelCheck(preset, customChannels, testHz, withTone)
 
     fun stopRoomLevelCheck() = repo.stopRoomLevelCheck()
+
+    fun selectRoomMicrophone(deviceId: Int?) = repo.selectRoomMicrophone(deviceId)
 
     fun startRoomSweep(
         preset: GeneratorPreset,

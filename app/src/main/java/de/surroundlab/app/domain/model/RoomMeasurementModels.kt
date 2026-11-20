@@ -83,6 +83,12 @@ enum class LevelCheckVerdict {
     CLIPPING
 }
 
+data class ExternalMicOption(
+    val id: Int,
+    val name: String,
+    val transportTag: String
+)
+
 data class RoomLevelCheckState(
     val running: Boolean = false,
     val playingTestTone: Boolean = false,

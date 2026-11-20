@@ -15,6 +15,7 @@ import de.surroundlab.app.domain.model.AudioSyncStatus
 import de.surroundlab.app.domain.model.ConnectionStatus
 import de.surroundlab.app.domain.model.CustomAudioTrack
 import de.surroundlab.app.domain.model.DiscoveredHost
+import de.surroundlab.app.domain.model.ExternalMicOption
 import de.surroundlab.app.domain.model.FrequencyMeasurementPoint
 import de.surroundlab.app.domain.model.GeneratorPreset
 import de.surroundlab.app.domain.model.ListeningPositionTrace
@@ -167,6 +168,8 @@ class SurroundRepository(context: Context) {
     val roomSessions: StateFlow<List<RoomMeasurementSession>> = roomMeasurementRepo.sessions
     val roomLevelCheckState: StateFlow<RoomLevelCheckState> = roomCoordinator.levelCheckState
     val roomMeasurementProgress: StateFlow<MeasurementRunProgress> = roomCoordinator.runProgress
+    val roomExternalMics: StateFlow<List<ExternalMicOption>> = roomCoordinator.externalMics
+    val roomSelectedMicId: StateFlow<Int?> = roomCoordinator.selectedMicId
 
     private var hostStarted = false
     private var orbitJob: Job? = null
@@ -357,6 +360,10 @@ class SurroundRepository(context: Context) {
 
     fun stopRoomLevelCheck() {
         roomCoordinator.stopLevelCheck()
+    }
+
+    fun selectRoomMicrophone(deviceId: Int?) {
+        roomCoordinator.selectMicrophone(deviceId)
     }
 
     fun startRoomSweep(
